@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="320" viewBox="0 0 1120 320" fill="none">
+  <rect x="24" y="24" width="272" height="272" rx="76" fill="#8B5CF6"/>
+  <path d="M126 96C126 87.163 135.637 81.727 143.186 86.316L243.214 147.116C250.485 151.536 250.485 162.064 243.214 166.484L143.186 227.284C135.637 231.873 126 226.437 126 217.6V96Z" fill="#F8FAFC"/>
+  <path d="M70 190H112L130 152L161 230L194 114L224 190H274" stroke="#22D3EE" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="342" y="190" fill="#F8FAFC" font-size="118" font-family="Inter, Arial, sans-serif" font-weight="800">CinePulse</text>
+  <text x="348" y="242" fill="#94A3B8" font-size="30" font-family="Inter, Arial, sans-serif" font-weight="500">ASSISTA • AVALIE • CONECTE</text>
+</svg>
