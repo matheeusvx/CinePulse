@@ -47,14 +47,14 @@ Jovens e adultos de aproximadamente 16 a 35 anos que consomem filmes e séries c
 - **Texto secundário:** `#94A3B8`.
 - **Tipografia recomendada:** Space Grotesk (títulos) + Inter (corpo).
 
-Arquivos de logo em `assets/brand/`.
+Arquivos de logo e ícones em `assets/brand/`, mockups visuais em `docs/assets/` e [Figma Oficial do CinePulse](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1).
 
 ## Integrantes e papéis no CP4
 
-| Integrante | Papel principal | Entregas sugeridas |
+| Integrante | Papel principal | Entregas sugeridas / Realizadas |
 |---|---|---|
 | **Matheus Morelli** | Tech Lead / Integração Flutter | Criar/organizar repositório, consolidar branches, revisar estrutura Flutter, rodar build final e garantir README atualizado. |
-| **Cauã Ferreira Muniz** | Brand & UI Designer | Refinar logo, paleta, tipografia, componentes e montar identidade visual/tela no Figma seguindo `docs/04-identidade-visual.md`. |
+| **Cauã Ferreira Muniz** | Brand & UI Designer | Identidade visual completa, variações de logo/ícone de app (`assets/brand/`), especificação de UI Kit, mockups das 5 telas e [Figma Oficial](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1) (detalhes em `docs/04-identidade-visual.md`). |
 | **Rafael Ferreira** | Product / UX | Validar problema, público-alvo, personas, jornada, user stories, priorização do MVP e wireframes. |
 | **Victor Nicolas** | Flutter Developer | Implementar/refinar a home e navegação do protótipo Flutter, responsividade e componentes visuais. |
 | **Henrique Nicolas** | Documentação, Pitch & QA | Organizar documentação GitHub, preparar pitch, revisar critérios do professor, testar execução e registrar evidências. |

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#4C1D95"/>
+    </linearGradient>
+    <linearGradient id="pulseGrad" x1="90" y1="256" x2="420" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <filter id="glow" x="60" y="150" width="390" height="210" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- App Icon Background Squircle with Shadow -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#bgGrad)" filter="url(#dropShadow)"/>
+  <rect x="16" y="16" width="480" height="480" rx="112" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+
+  <!-- Subtle Ambient Glow -->
+  <circle cx="256" cy="256" r="140" fill="#22D3EE" opacity="0.12" filter="blur(30px)"/>
+
+  <!-- Play Symbol (Audiovisual) -->
+  <path d="M205 158C205 146.954 217.046 140.159 226.482 145.895L351.516 221.895C360.604 227.42 360.604 240.58 351.516 246.105L226.482 322.105C217.046 327.841 205 321.046 205 310V158Z" fill="#F8FAFC"/>
+
+  <!-- Pulse Wave with Neon Glow (Gosto, Comunidade e Afinidade) -->
+  <path d="M94 278H147L169 230L207 328L248 184L286 278H418" stroke="url(#pulseGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+</svg>

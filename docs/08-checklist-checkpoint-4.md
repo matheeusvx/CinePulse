@@ -28,11 +28,12 @@
 ### Identidade visual
 
 - [x] Conceito de logo definido.
-- [x] Logo-base em SVG incluído.
-- [x] Paleta definida.
+- [x] Logo-base, ícone mobile (`app_icon.svg`), variações monocromática e badge em SVG incluídos.
+- [x] Paleta e tokens definidos.
 - [x] Tipografia definida.
 - [x] Identidade visual consolidada em documentação + SVGs + UI Flutter inicial.
-- [ ] Opcional: refinar no Figma e inserir o link no README para apresentação.
+- [x] Mockups de alta fidelidade das 5 telas em SVG (`docs/assets/`) importados e prontos no Figma.
+- [x] Link público do Figma inserido no README e doc 04: [Figma do CinePulse](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1).
 
 ### Ideia de venda / pitch
 

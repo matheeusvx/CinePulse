@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" fill="none">
+  <defs>
+    <linearGradient id="reviewBg" x1="195" y1="0" x2="195" y2="844" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0E1424"/>
+      <stop offset="40%" stop-color="#090D18"/>
+      <stop offset="100%" stop-color="#060912"/>
+    </linearGradient>
+    <linearGradient id="publishGrad" x1="0" y1="0" x2="350" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+    <clipPath id="reviewClip">
+      <rect width="390" height="844" rx="44"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#reviewClip)">
+    <!-- Base Background -->
+    <rect width="390" height="844" fill="url(#reviewBg)"/>
+
+    <!-- Top Bar Navigation (Modal style) -->
+    <g transform="translate(20, 48)">
+      <text x="0" y="22" fill="#94A3B8" font-size="14" font-family="Inter, sans-serif" font-weight="600">Cancelar</text>
+      <text x="175" y="22" text-anchor="middle" fill="#F8FAFC" font-size="16" font-family="Space Grotesk, sans-serif" font-weight="700">Avaliar &amp; Review</text>
+      <!-- Mini logo -->
+      <circle cx="340" cy="18" r="6" fill="#8B5CF6"/>
+    </g>
+
+    <!-- Movie Mini Preview Card -->
+    <g transform="translate(20, 92)">
+      <rect width="350" height="66" rx="16" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+      <rect x="10" y="10" width="36" height="46" rx="6" fill="#2D1B69"/>
+      <text x="58" y="30" fill="#F8FAFC" font-size="14" font-family="Space Grotesk, sans-serif" font-weight="700">Duna: Parte 2 (2024)</text>
+      <text x="58" y="48" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif">Dir. Denis Villeneuve • Ficção Científica</text>
+    </g>
+
+    <!-- General Rating Stars -->
+    <g transform="translate(20, 176)">
+      <text x="0" y="14" fill="#94A3B8" font-size="12" font-family="Inter, sans-serif" font-weight="600">SUA NOTA GERAL</text>
+      
+      <!-- 5 Stars centered -->
+      <g transform="translate(55, 26)">
+        <text x="0" y="30" fill="#FBBF24" font-size="32">★</text>
+        <text x="48" y="30" fill="#FBBF24" font-size="32">★</text>
+        <text x="96" y="30" fill="#FBBF24" font-size="32">★</text>
+        <text x="144" y="30" fill="#FBBF24" font-size="32">★</text>
+        <text x="192" y="30" fill="#334155" font-size="32">★</text>
+      </g>
+      <text x="175" y="80" text-anchor="middle" fill="#F8FAFC" font-size="14" font-family="Space Grotesk, sans-serif" font-weight="700">4.0 / 5.0 — Muito Bom</text>
+    </g>
+
+    <!-- MoodTags Picker -->
+    <g transform="translate(20, 276)">
+      <text x="0" y="14" fill="#94A3B8" font-size="12" font-family="Inter, sans-serif" font-weight="600">SELECIONE AS MOODTAGS</text>
+      
+      <g transform="translate(0, 24)">
+        <!-- Selected Tag 1 -->
+        <rect width="84" height="30" rx="15" fill="#1A2238" stroke="#22D3EE" stroke-width="1.2"/>
+        <text x="12" y="19" fill="#22D3EE" font-size="11" font-family="Inter, sans-serif" font-weight="600">⚡ Tenso</text>
+
+        <!-- Selected Tag 2 -->
+        <rect x="92" width="80" height="30" rx="15" fill="#1A2238" stroke="#8B5CF6" stroke-width="1.2"/>
+        <text x="104" y="19" fill="#C4B5FD" font-size="11" font-family="Inter, sans-serif" font-weight="600">🔥 Épico</text>
+
+        <!-- Unselected Tag 3 -->
+        <rect x="180" width="76" height="30" rx="15" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+        <text x="192" y="19" fill="#64748B" font-size="11" font-family="Inter, sans-serif">💡 Reflexivo</text>
+
+        <!-- Unselected Tag 4 -->
+        <rect x="264" width="72" height="30" rx="15" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+        <text x="276" y="19" fill="#64748B" font-size="11" font-family="Inter, sans-serif">☕ Leve</text>
+      </g>
+    </g>
+
+    <!-- Review Text Area -->
+    <g transform="translate(20, 356)">
+      <text x="0" y="14" fill="#94A3B8" font-size="12" font-family="Inter, sans-serif" font-weight="600">SUA OPINIÃO / REVIEW</text>
+
+      <rect y="24" width="350" height="130" rx="16" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+      <text x="16" y="52" fill="#F8FAFC" font-size="13" font-family="Inter, sans-serif">Obra-prima audiovisual incontestável. A direção de</text>
+      <text x="16" y="74" fill="#F8FAFC" font-size="13" font-family="Inter, sans-serif">som nos vermes de areia e o arco de Paul Atreides</text>
+      <text x="16" y="96" fill="#F8FAFC" font-size="13" font-family="Inter, sans-serif">elevam a ficção científica a outro patamar...</text>
+      <text x="330" y="140" text-anchor="end" fill="#64748B" font-size="11" font-family="Inter, sans-serif">148/500</text>
+    </g>
+
+    <!-- DIFFERENTIAL: SPOILER SAFE CARD -->
+    <g transform="translate(20, 532)">
+      <rect width="350" height="84" rx="18" fill="#16152B" stroke="#8B5CF6" stroke-width="1.2"/>
+      
+      <!-- Icon shield -->
+      <rect x="16" y="18" width="48" height="48" rx="14" fill="#1E1B4B"/>
+      <path d="M40 28l-8 4v8c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11v-8l-8-4z" fill="#8B5CF6"/>
+      <text x="36" y="44" fill="#FFFFFF" font-size="12" font-weight="bold">!</text>
+
+      <text x="74" y="38" fill="#F8FAFC" font-size="14" font-family="Space Grotesk, sans-serif" font-weight="700">Spoiler Safe™ Ativo</text>
+      <text x="74" y="54" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif">Esta review contém reviravoltas ou final?</text>
+
+      <!-- Toggle Switch ON (Cyan active) -->
+      <g transform="translate(284, 30)">
+        <rect width="50" height="26" rx="13" fill="#22D3EE"/>
+        <circle cx="37" cy="13" r="10" fill="#090D18"/>
+      </g>
+    </g>
+
+    <!-- Publish CTA Button -->
+    <g transform="translate(20, 646)">
+      <rect width="350" height="52" rx="16" fill="url(#publishGrad)"/>
+      <text x="175" y="32" text-anchor="middle" fill="#090D18" font-size="15" font-family="Space Grotesk, sans-serif" font-weight="700" letter-spacing="0.5">Publicar no Diário</text>
+    </g>
+
+    <!-- Note -->
+    <text x="195" y="725" text-anchor="middle" fill="#64748B" font-size="11" font-family="Inter, sans-serif">Sua avaliação impactará o PulseScore da comunidade.</text>
+
+    <!-- Home Indicator -->
+    <rect x="125" y="828" width="140" height="4" rx="2" fill="#334155"/>
+  </g>
+</svg>

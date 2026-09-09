@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" fill="none">
+  <defs>
+    <linearGradient id="profileBg" x1="195" y1="0" x2="195" y2="844" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0E1424"/>
+      <stop offset="35%" stop-color="#090D18"/>
+      <stop offset="100%" stop-color="#060912"/>
+    </linearGradient>
+    <linearGradient id="avatarGrad" x1="0" y1="0" x2="72" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="matchRing" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <clipPath id="profileClip">
+      <rect width="390" height="844" rx="44"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#profileClip)">
+    <!-- Base Background -->
+    <rect width="390" height="844" fill="url(#profileBg)"/>
+
+    <!-- Status Bar -->
+    <text x="36" y="38" fill="#F8FAFC" font-size="14" font-family="Inter, sans-serif" font-weight="600">09:41</text>
+    <g transform="translate(320, 26)">
+      <path d="M0 12h3V8H0v4zm5 0h3V5H5v7zm5 0h3V2h-3v10zm5 0h3V0h-3v12z" fill="#F8FAFC"/>
+      <rect x="22" y="2" width="22" height="11" rx="3" stroke="#F8FAFC" stroke-width="1.5" fill="none"/>
+      <rect x="24" y="4" width="14" height="7" rx="1.5" fill="#22D3EE"/>
+      <path d="M45 5.5v4" stroke="#F8FAFC" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Header Actions (Settings) -->
+    <g transform="translate(20, 52)">
+      <text x="0" y="22" fill="#F8FAFC" font-size="20" font-family="Space Grotesk, sans-serif" font-weight="700">Meu Perfil</text>
+      <!-- Settings gear -->
+      <circle cx="340" cy="18" r="16" fill="#121829" stroke="#1A2238"/>
+      <circle cx="340" cy="18" r="4" stroke="#94A3B8" stroke-width="1.8" fill="none"/>
+    </g>
+
+    <!-- User Info Card -->
+    <g transform="translate(20, 88)">
+      <!-- Avatar with Gradient Ring -->
+      <circle cx="36" cy="36" r="34" fill="none" stroke="url(#avatarGrad)" stroke-width="2.5"/>
+      <circle cx="36" cy="36" r="30" fill="#1E1B4B"/>
+      <text x="24" y="42" fill="#FFFFFF" font-size="16" font-family="Space Grotesk, sans-serif" font-weight="700">CM</text>
+
+      <g transform="translate(82, 16)">
+        <text x="0" y="16" fill="#F8FAFC" font-size="17" font-family="Space Grotesk, sans-serif" font-weight="700">Cauã Ferreira Muniz</text>
+        <text x="0" y="32" fill="#94A3B8" font-size="12" font-family="Inter, sans-serif">@caua.muniz • Brand &amp; UI Designer</text>
+      </g>
+
+      <!-- Stats Bar -->
+      <g transform="translate(0, 84)">
+        <rect width="350" height="60" rx="16" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+        
+        <g transform="translate(36, 16)">
+          <text x="0" y="16" text-anchor="middle" fill="#F8FAFC" font-size="16" font-family="Space Grotesk, sans-serif" font-weight="700">142</text>
+          <text x="0" y="30" text-anchor="middle" fill="#94A3B8" font-size="10" font-family="Inter, sans-serif">ASSISTIDOS</text>
+        </g>
+        
+        <line x1="116" y1="14" x2="116" y2="46" stroke="#1A2238" stroke-width="1"/>
+
+        <g transform="translate(175, 16)">
+          <text x="0" y="16" text-anchor="middle" fill="#F8FAFC" font-size="16" font-family="Space Grotesk, sans-serif" font-weight="700">38</text>
+          <text x="0" y="30" text-anchor="middle" fill="#94A3B8" font-size="10" font-family="Inter, sans-serif">REVIEWS</text>
+        </g>
+
+        <line x1="234" y1="14" x2="234" y2="46" stroke="#1A2238" stroke-width="1"/>
+
+        <g transform="translate(295, 16)">
+          <text x="0" y="16" text-anchor="middle" fill="#F8FAFC" font-size="16" font-family="Space Grotesk, sans-serif" font-weight="700">6</text>
+          <text x="0" y="30" text-anchor="middle" fill="#94A3B8" font-size="10" font-family="Inter, sans-serif">LISTAS</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- DIFFERENTIAL: PulseMatch / Afinidade Social Card -->
+    <g transform="translate(20, 246)">
+      <rect width="350" height="126" rx="20" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+      
+      <!-- Circular Progress PulseMatch Gauge -->
+      <g transform="translate(18, 18)">
+        <circle cx="45" cy="45" r="38" fill="none" stroke="#1A2238" stroke-width="7"/>
+        <circle cx="45" cy="45" r="38" fill="none" stroke="url(#matchRing)" stroke-width="7" stroke-dasharray="210 240" stroke-linecap="round" transform="rotate(-90 45 45)"/>
+        <text x="45" y="44" text-anchor="middle" fill="#F8FAFC" font-size="15" font-family="Space Grotesk, sans-serif" font-weight="700">88%</text>
+        <text x="45" y="56" text-anchor="middle" fill="#22D3EE" font-size="9" font-family="Inter, sans-serif" font-weight="700">MATCH</text>
+      </g>
+
+      <g transform="translate(120, 24)">
+        <rect width="84" height="20" rx="10" fill="#8B5CF6" fill-opacity="0.2"/>
+        <text x="12" y="14" fill="#C4B5FD" font-size="10" font-family="Inter, sans-serif" font-weight="700">PULSE MATCH™</text>
+        
+        <text x="0" y="44" fill="#F8FAFC" font-size="14" font-family="Space Grotesk, sans-serif" font-weight="700">Alta afinidade na rede</text>
+        <text x="0" y="62" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif">Combina com Rafael, Matheus e Victor</text>
+        <text x="0" y="78" fill="#22D3EE" font-size="11" font-family="Inter, sans-serif" font-weight="600">em Ficção Científica e Suspense</text>
+      </g>
+    </g>
+
+    <!-- Tabs: Diário, Listas, Estatísticas -->
+    <g transform="translate(20, 388)">
+      <text x="0" y="18" fill="#8B5CF6" font-size="14" font-family="Space Grotesk, sans-serif" font-weight="700">Diário Recente</text>
+      <line x1="0" y1="26" x2="88" y2="26" stroke="#8B5CF6" stroke-width="2.5"/>
+
+      <text x="115" y="18" fill="#94A3B8" font-size="14" font-family="Inter, sans-serif" font-weight="500">Minhas Listas</text>
+      <text x="235" y="18" fill="#94A3B8" font-size="14" font-family="Inter, sans-serif" font-weight="500">Estatísticas</text>
+    </g>
+
+    <!-- Feed / Diário Items with Spoiler Safe demonstration -->
+    <g transform="translate(20, 430)">
+      <!-- Item 1: Duna com Spoiler Safe flag -->
+      <rect width="350" height="96" rx="16" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+      <rect x="12" y="12" width="50" height="72" rx="8" fill="#1E1B4B"/>
+      
+      <g transform="translate(74, 18)">
+        <text x="0" y="14" fill="#F8FAFC" font-size="13" font-family="Space Grotesk, sans-serif" font-weight="700">Duna: Parte 2</text>
+        <text x="96" y="14" fill="#FBBF24" font-size="11">★★★★☆</text>
+        
+        <!-- Spoiler Safe Badge -->
+        <rect x="0" y="24" width="96" height="18" rx="9" fill="#16152B" stroke="#8B5CF6" stroke-width="0.8"/>
+        <text x="8" y="37" fill="#C4B5FD" font-size="9" font-family="Inter, sans-serif" font-weight="700">🛡️ SPOILER SAFE</text>
+        
+        <text x="0" y="58" fill="#64748B" font-size="11" font-family="Inter, sans-serif">Review oculta. Toque para revelar o conteúdo...</text>
+      </g>
+
+      <!-- Item 2: Interestelar -->
+      <g transform="translate(0, 108)">
+        <rect width="350" height="96" rx="16" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+        <rect x="12" y="12" width="50" height="72" rx="8" fill="#134E4A"/>
+        
+        <g transform="translate(74, 18)">
+          <text x="0" y="14" fill="#F8FAFC" font-size="13" font-family="Space Grotesk, sans-serif" font-weight="700">Interestelar (2014)</text>
+          <text x="125" y="14" fill="#FBBF24" font-size="11">★★★★★</text>
+
+          <text x="0" y="38" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif">"A trilha sonora de Hans Zimmer e a viagem no</text>
+          <text x="0" y="54" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif">buraco de minhoca continuam insuperáveis."</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Bottom Navigation Bar (Active on Perfil) -->
+    <g transform="translate(0, 752)">
+      <rect width="390" height="92" fill="#121829" stroke="#1A2238" stroke-width="1"/>
+      
+      <!-- Nav Item 1: Descobrir -->
+      <g transform="translate(24, 12)">
+        <circle cx="35" cy="14" r="7" stroke="#94A3B8" stroke-width="1.8" fill="none"/>
+        <path d="M35 10L37 14L35 18L33 14Z" fill="#94A3B8"/>
+        <text x="35" y="44" text-anchor="middle" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif" font-weight="500">Descobrir</text>
+      </g>
+
+      <!-- Nav Item 2: Diário -->
+      <g transform="translate(118, 12)">
+        <rect x="24" y="6" width="16" height="18" rx="3" stroke="#94A3B8" stroke-width="1.8" fill="none"/>
+        <path d="M28 11h8M28 15h8M28 19h5" stroke="#94A3B8" stroke-width="1.5" stroke-linecap="round"/>
+        <text x="32" y="44" text-anchor="middle" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif" font-weight="500">Diário</text>
+      </g>
+
+      <!-- Nav Item 3: Listas -->
+      <g transform="translate(212, 12)">
+        <path d="M24 8h16M24 14h16M24 20h10" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"/>
+        <text x="32" y="44" text-anchor="middle" fill="#94A3B8" font-size="11" font-family="Inter, sans-serif" font-weight="500">Listas</text>
+      </g>
+
+      <!-- Nav Item 4: Perfil (Ativo) -->
+      <g transform="translate(306, 12)">
+        <rect x="9" y="0" width="46" height="28" rx="14" fill="#1A2238"/>
+        <circle cx="32" cy="12" r="6" stroke="#8B5CF6" stroke-width="2" fill="none"/>
+        <path d="M22 24c0-3.5 4.5-5.5 10-5.5s10 2 10 5.5" stroke="#8B5CF6" stroke-width="2" fill="none"/>
+        <text x="32" y="44" text-anchor="middle" fill="#8B5CF6" font-size="11" font-family="Inter, sans-serif" font-weight="700">Perfil</text>
+      </g>
+
+      <!-- Home Indicator -->
+      <rect x="125" y="78" width="140" height="4" rx="2" fill="#334155"/>
+    </g>
+  </g>
+</svg>

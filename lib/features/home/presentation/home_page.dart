@@ -2,16 +2,35 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/media_poster.dart';
+import '../../../core/widgets/mood_tag_chip.dart';
+import '../../../core/widgets/pulse_score_card.dart';
 import '../../../core/widgets/section_title.dart';
+import '../../../core/widgets/spoiler_safe_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedMoodIndex = 0;
+
+  final List<({String label, IconData icon})> _moods = const [
+    (label: 'Tenso', icon: Icons.bolt_rounded),
+    (label: 'Leve', icon: Icons.coffee_rounded),
+    (label: 'Reflexivo', icon: Icons.lightbulb_outline_rounded),
+    (label: 'Épico', icon: Icons.local_fire_department_rounded),
+    (label: 'Emocionante', icon: Icons.favorite_rounded),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
       children: [
+        // App Bar Header
         Row(
           children: [
             Container(
@@ -20,8 +39,15 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-              child: const Icon(Icons.play_arrow_rounded),
+              child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 28),
             ),
             const SizedBox(width: 12),
             const Expanded(
@@ -33,6 +59,7 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
                     ),
                   ),
                   Text(
@@ -48,11 +75,30 @@ class HomePage extends StatelessWidget {
             IconButton(
               tooltip: 'Notificações',
               onPressed: () {},
-              icon: const Icon(Icons.notifications_none_rounded),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  const Icon(Icons.notifications_none_rounded),
+                  Positioned(
+                    top: -2,
+                    right: -2,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.secondary,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 22),
+
+        // Search Field
         TextField(
           readOnly: true,
           onTap: () {
@@ -62,39 +108,96 @@ class HomePage extends StatelessWidget {
               ),
             );
           },
-          decoration: const InputDecoration(
-            hintText: 'Buscar filmes, séries ou pessoas',
-            prefixIcon: Icon(Icons.search_rounded),
+          decoration: InputDecoration(
+            hintText: 'Buscar filmes, séries ou pessoas...',
+            prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary),
+            filled: true,
+            fillColor: AppColors.surface,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide.none,
+            ),
           ),
         ),
-        const SizedBox(height: 26),
+        const SizedBox(height: 24),
+
+        // Hero Banner
         Container(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
             gradient: const LinearGradient(
-              colors: [AppColors.primary, Color(0xFF5B21B6)],
+              colors: [Color(0xFF2D1B69), Color(0xFF1E1B4B)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
+            border: Border.all(color: const Color(0xFF312E81)),
           ),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.25),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'PULSE MATCH',
+                  style: TextStyle(
+                    color: Color(0xFFC4B5FD),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
                 'Seu gosto, além das estrelas.',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
+                  letterSpacing: -0.3,
                 ),
               ),
-              SizedBox(height: 8),
-              Text(
-                'No CinePulse, a nota pode considerar história, atuação, visual e trilha — e ainda comparar afinidade com seus amigos.',
-                style: TextStyle(height: 1.4),
+              const SizedBox(height: 6),
+              const Text(
+                'Avalie por história, atuação, visual e trilha — e conecte sua afinidade com a comunidade.',
+                style: TextStyle(height: 1.4, color: AppColors.textSecondary, fontSize: 13),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 26),
+
+        // MoodTags Section
+        const SectionTitle(title: 'Para o seu humor'),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 38,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: _moods.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            itemBuilder: (context, index) {
+              final mood = _moods[index];
+              return MoodTagChip(
+                label: mood.label,
+                icon: mood.icon,
+                isSelected: _selectedMoodIndex == index,
+                onTap: () {
+                  setState(() {
+                    _selectedMoodIndex = index;
+                  });
+                },
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 26),
+
+        // Em alta na comunidade
         const SectionTitle(title: 'Em alta na comunidade'),
         const SizedBox(height: 14),
         SizedBox(
@@ -103,111 +206,54 @@ class HomePage extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: const [
               MediaPoster(
-                title: 'Horizonte Zero',
+                title: 'Duna: Parte 2',
                 subtitle: 'Filme • Ficção científica',
                 icon: Icons.rocket_launch_rounded,
-                score: 4.4,
+                score: 4.8,
               ),
               SizedBox(width: 14),
               MediaPoster(
-                title: 'Último Ato',
-                subtitle: 'Série • Drama',
+                title: 'Severance',
+                subtitle: 'Série • Suspense',
                 icon: Icons.theater_comedy_rounded,
                 score: 4.7,
               ),
               SizedBox(width: 14),
               MediaPoster(
-                title: 'Neon City',
-                subtitle: 'Filme • Thriller',
+                title: 'Interestelar',
+                subtitle: 'Filme • Ficção / Drama',
                 icon: Icons.apartment_rounded,
-                score: 4.2,
+                score: 4.9,
               ),
             ],
           ),
         ),
         const SizedBox(height: 26),
-        const SectionTitle(title: 'Diferenciais do MVP'),
+
+        // Destaque PulseScore
+        const SectionTitle(title: 'Destaque PulseScore™'),
         const SizedBox(height: 12),
-        const _FeatureTile(
-          icon: Icons.tune_rounded,
-          title: 'PulseScore',
-          description: 'Avaliação por critérios, não só uma nota isolada.',
+        const PulseScoreCard(
+          title: 'Duna: Parte 2 — Médias',
+          average: '9.6',
+          story: 0.96,
+          acting: 0.98,
+          visual: 1.0,
+          soundtrack: 0.94,
         ),
-        const _FeatureTile(
-          icon: Icons.people_alt_outlined,
-          title: 'PulseMatch',
-          description: 'Compatibilidade de gosto entre amigos e perfis.',
-        ),
-        const _FeatureTile(
-          icon: Icons.mood_rounded,
-          title: 'MoodTags',
-          description: 'Descoberta por clima: leve, tenso, emocionante e mais.',
-        ),
-        const _FeatureTile(
-          icon: Icons.visibility_off_outlined,
-          title: 'Spoiler Safe',
-          description: 'Reviews com conteúdo sensível oculto por padrão.',
+        const SizedBox(height: 26),
+
+        // Destaque Spoiler Safe
+        const SectionTitle(title: 'Review com Spoiler Safe™'),
+        const SizedBox(height: 12),
+        const SpoilerSafeCard(
+          movieTitle: 'Duna: Parte 2 (2024)',
+          reviewAuthor: 'Por Cauã Ferreira Muniz (@caua.muniz)',
+          rating: 4.8,
+          spoilerText:
+              'A sequência da batalha final em Arrakis e a ascensão ao trono imperial encerram o arco de Paul de maneira avassaladora e sombria.',
         ),
       ],
-    );
-  }
-}
-
-class _FeatureTile extends StatelessWidget {
-  const _FeatureTile({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-
-  final IconData icon;
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceStrong,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppColors.secondary),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    height: 1.35,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
