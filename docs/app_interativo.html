@@ -39,14 +39,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 30px 16px;
+      padding: 24px 16px;
       overflow-x: hidden;
     }
 
-    /* Top Bar Controls */
     .top-panel {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .top-panel .badge {
@@ -60,12 +59,12 @@
       border-radius: 999px;
       font-size: 13px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .top-panel h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       background: linear-gradient(135deg, #F8FAFC 40%, #22D3EE 100%);
       -webkit-background-clip: text;
@@ -74,7 +73,7 @@
 
     .top-panel p {
       color: var(--text-secondary);
-      font-size: 14px;
+      font-size: 13px;
       margin-top: 4px;
     }
 
@@ -110,6 +109,7 @@
       align-items: center;
       justify-content: flex-end;
       padding-right: 12px;
+      cursor: pointer;
     }
 
     .dynamic-island .camera {
@@ -151,7 +151,6 @@
       display: none;
     }
 
-    /* Views */
     .view {
       display: none;
       padding: 12px 18px 90px 18px;
@@ -172,7 +171,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+      position: relative;
     }
 
     .brand-logo-small {
@@ -211,12 +211,13 @@
       justify-content: center;
       cursor: pointer;
       position: relative;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
 
     .icon-btn:hover {
       color: var(--text-primary);
       border-color: var(--primary);
+      transform: scale(1.05);
     }
 
     .notification-dot {
@@ -230,33 +231,94 @@
       box-shadow: 0 0 8px var(--secondary);
     }
 
-    /* Search Bar */
-    .search-box {
+    /* Popover de Notificações */
+    .notif-dropdown {
+      position: absolute;
+      top: 48px;
+      right: 0;
+      width: 280px;
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.7);
+      z-index: 800;
+      display: none;
+      animation: fadeIn 0.2s;
+    }
+
+    .notif-dropdown.open {
+      display: block;
+    }
+
+    .notif-item {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--surface-strong);
+      font-size: 11px;
+    }
+    .notif-item:last-child {
+      border-bottom: none;
+    }
+    .notif-item strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .notif-item small {
+      color: var(--text-secondary);
+    }
+
+    /* Search Input Interativo */
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .search-input {
+      width: 100%;
       background: var(--surface);
       border: 1px solid var(--surface-strong);
       border-radius: 16px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-secondary);
+      padding: 12px 16px 12px 40px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
       font-size: 13px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: 0.2s;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .search-box:hover {
+    .search-input:focus {
       border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
     }
 
-    /* Banner Hero */
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* Hero Banner */
     .hero-banner {
       background: linear-gradient(135deg, #2D1B69 0%, #171536 100%);
       border: 1px solid #3B2A82;
       border-radius: 20px;
       padding: 18px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       position: relative;
       overflow: hidden;
     }
@@ -297,6 +359,24 @@
       color: var(--text-secondary);
       font-size: 12px;
       line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, var(--primary), #6D28D9);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px);
     }
 
     /* Section Title */
@@ -327,7 +407,7 @@
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 4px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       scrollbar-width: none;
     }
 
@@ -363,13 +443,13 @@
       box-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
     }
 
-    /* Trending Posters */
+    /* Movie Cards */
     .posters-scroll {
       display: flex;
       gap: 12px;
       overflow-x: auto;
       padding-bottom: 8px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       scrollbar-width: none;
     }
 
@@ -384,12 +464,17 @@
       border-radius: 16px;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: all 0.2s ease;
     }
 
     .movie-card:hover {
       transform: translateY(-4px);
       border-color: var(--primary);
+      box-shadow: 0 10px 24px rgba(139, 92, 246, 0.2);
+    }
+
+    .movie-card.hidden {
+      display: none;
     }
 
     .movie-poster-box {
@@ -444,7 +529,7 @@
       font-weight: 700;
     }
 
-    /* PulseScore Widget */
+    /* PulseScore Component */
     .pulsescore-card {
       background: var(--surface);
       border: 1px solid var(--surface-strong);
@@ -520,7 +605,8 @@
       border: 1px solid var(--surface-strong);
       border-radius: 18px;
       padding: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
     }
 
     .spoiler-card-header {
@@ -581,10 +667,10 @@
       display: block;
     }
 
-    /* PulseMatch Gauge in Profile */
+    /* Profile Styles */
     .profile-card {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .profile-avatar {
@@ -617,7 +703,16 @@
       border: 1px solid var(--surface-strong);
       border-radius: 18px;
       padding: 14px;
-      margin-top: 18px;
+      margin-top: 16px;
+    }
+
+    .profile-stat-col {
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .profile-stat-col:hover {
+      transform: scale(1.05);
     }
 
     .profile-stat-col strong {
@@ -642,6 +737,12 @@
       align-items: center;
       gap: 16px;
       margin-bottom: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .pulsematch-gauge-card:hover {
+      border-color: var(--secondary);
     }
 
     .gauge-circle {
@@ -694,17 +795,17 @@
       font-weight: 800;
     }
 
-    /* Modal de Avaliação & Review */
+    /* Modais */
     .modal-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(9, 13, 24, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(9, 13, 24, 0.96);
+      backdrop-filter: blur(10px);
       z-index: 500;
-      padding: 48px 18px 24px 18px;
+      padding: 50px 18px 24px 18px;
       display: none;
       flex-direction: column;
       overflow-y: auto;
@@ -725,7 +826,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .modal-header span {
@@ -772,7 +873,7 @@
 
     .review-textarea {
       width: 100%;
-      height: 100px;
+      height: 90px;
       background: var(--surface);
       border: 1px solid var(--surface-strong);
       border-radius: 14px;
@@ -781,7 +882,7 @@
       font-family: 'Inter', sans-serif;
       font-size: 13px;
       resize: none;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       outline: none;
     }
 
@@ -798,7 +899,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .switch-info strong {
@@ -838,6 +939,51 @@
     .toggle-switch.on .toggle-circle {
       transform: translateX(22px);
       background: #090D18;
+    }
+
+    /* Action Buttons in Detail */
+    .action-btn-pill {
+      flex: 1;
+      padding: 11px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .action-btn-pill.outline {
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 1px solid var(--surface-strong);
+    }
+
+    .action-btn-pill.outline:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+    }
+
+    .action-btn-pill.active {
+      background: var(--surface-strong);
+      border: 1.2px solid var(--secondary);
+      color: var(--secondary);
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+    }
+
+    .action-btn-pill.primary {
+      flex: 1.2;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #090D18;
+      border: none;
+    }
+
+    .action-btn-pill.primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
     }
 
     /* Primary CTA Button */
@@ -933,10 +1079,10 @@
       top: 60px;
       left: 50%;
       transform: translateX(-50%) translateY(-20px);
-      background: var(--surface-strong);
-      border: 1px solid var(--success);
-      color: var(--success);
-      padding: 10px 18px;
+      background: #1A2238;
+      border: 1px solid var(--secondary);
+      color: #F8FAFC;
+      padding: 10px 20px;
       border-radius: 12px;
       font-size: 12px;
       font-weight: 700;
@@ -945,25 +1091,56 @@
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 1200;
       white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
 
     .toast-msg.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* Input Modal */
+    .prompt-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(9, 13, 24, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 900;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .prompt-modal.open {
+      display: flex;
+    }
+
+    .prompt-box {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 320px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
   </style>
 </head>
 <body>
 
   <div class="top-panel">
-    <div class="badge">CP4 • Protótipo Interativo Funcional</div>
+    <div class="badge">CP4 • Protótipo 100% Interativo</div>
     <h1>CinePulse Mobile Simulator</h1>
-    <p>Clique, navegue entre as abas, teste as <strong>MoodTags</strong>, revele os <strong>Spoilers</strong> e avalie no modal!</p>
+    <p>Todos os botões funcionam: busque títulos, filtre por clima, abra detalhes, adicione à watchlist e publique reviews!</p>
   </div>
 
   <div class="phone-wrapper">
     <!-- Dynamic Island -->
-    <div class="dynamic-island">
+    <div class="dynamic-island" onclick="showToast('Dynamic Island: CinePulse rodando em tempo real')">
       <div class="camera"></div>
     </div>
 
@@ -977,7 +1154,7 @@
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="toast-msg">✓ Publicado com sucesso no Diário!</div>
+    <div id="toast" class="toast-msg">✓ Mensagem</div>
 
     <!-- Screen Content Scroll -->
     <div class="screen-content">
@@ -994,43 +1171,65 @@
               <small style="color: var(--text-secondary); font-size: 11px;">O que vale a próxima sessão?</small>
             </div>
           </div>
-          <div class="icon-btn" onclick="showToast('Você tem 2 recomendações da comunidade!')">
+          <div class="icon-btn" onclick="toggleNotifications()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             <div class="notification-dot"></div>
           </div>
+
+          <!-- Dropdown de Notificações -->
+          <div id="notif-dropdown" class="notif-dropdown">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <strong style="font-size:13px;">Notificações</strong>
+              <small style="color:var(--secondary); cursor:pointer;" onclick="clearNotifications()">Limpar</small>
+            </div>
+            <div id="notif-list">
+              <div class="notif-item">
+                <strong>Rafael Ferreira avaliou Duna 2</strong>
+                <small>Deu nota 5.0 e elogiou os vermes de areia.</small>
+              </div>
+              <div class="notif-item">
+                <strong>Novo PulseMatch: 88% com Victor</strong>
+                <small>Vocês combinam em Suspense e Sci-Fi.</small>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="search-box" onclick="showToast('A busca será conectada ao catálogo real no CP5!')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          Buscar filmes, séries ou amigos...
+        <!-- Campo de Busca Interativo -->
+        <div class="search-wrapper">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input id="search-input" type="text" class="search-input" placeholder="Buscar por título ou gênero..." oninput="handleSearch(this.value)">
+          <span id="clear-search-btn" class="clear-search" onclick="clearSearch()">&times;</span>
         </div>
 
         <div class="hero-banner">
           <span class="hero-badge">PULSE MATCH</span>
           <h3>Seu gosto além das estrelas.</h3>
           <p>Avalie por história, visual, trilha e atuação — e conecte sua afinidade.</p>
+          <button class="hero-btn" onclick="openDetail('Duna: Parte 2')">Explorar Título do Momento &rarr;</button>
         </div>
 
         <div class="section-title">
           <h4>Para o seu humor</h4>
-          <a onclick="showToast('Filtrando MoodTags...')">Ver todas</a>
+          <a onclick="resetMoodFilter()">Mostrar todos</a>
         </div>
 
         <div class="mood-scroll">
-          <div class="mood-chip active" onclick="selectMood(this, '⚡ Tenso')">⚡ Tenso</div>
-          <div class="mood-chip" onclick="selectMood(this, '☕ Leve')">☕ Leve</div>
-          <div class="mood-chip" onclick="selectMood(this, '💡 Reflexivo')">💡 Reflexivo</div>
-          <div class="mood-chip" onclick="selectMood(this, '🔥 Épico')">🔥 Épico</div>
-          <div class="mood-chip" onclick="selectMood(this, '🌌 Imersivo')">🌌 Imersivo</div>
+          <div class="mood-chip active" onclick="filterByMood(this, 'all')">🌟 Todos</div>
+          <div class="mood-chip" onclick="filterByMood(this, 'tenso')">⚡ Tenso</div>
+          <div class="mood-chip" onclick="filterByMood(this, 'epico')">🔥 Épico</div>
+          <div class="mood-chip" onclick="filterByMood(this, 'reflexivo')">💡 Reflexivo</div>
+          <div class="mood-chip" onclick="filterByMood(this, 'leve')">☕ Leve</div>
         </div>
 
         <div class="section-title">
           <h4>Em alta na comunidade</h4>
-          <small style="color: var(--text-secondary); font-size: 11px;">Toque para ver detalhes</small>
+          <small id="results-count" style="color: var(--text-secondary); font-size: 11px;">3 títulos</small>
         </div>
 
-        <div class="posters-scroll">
-          <div class="movie-card" onclick="openDetail('Duna: Parte 2', '2024 • Ficção, Aventura • 2h 46m', '4.8', '96%')">
+        <div id="movies-container" class="posters-scroll">
+          <!-- Card 1 -->
+          <div class="movie-card" data-title="duna: parte 2" data-mood="tenso epico" onclick="openDetail('Duna: Parte 2')">
             <div class="movie-poster-box dune">
               <div class="movie-badge-score">★ 4.8</div>
               <strong style="font-family:'Space Grotesk'; font-size: 16px; color:#C4B5FD;">DUNA 2</strong>
@@ -1041,7 +1240,8 @@
             </div>
           </div>
 
-          <div class="movie-card" onclick="openDetail('Severance', '2022 • Série • Suspense Psicológico', '4.7', '92%')">
+          <!-- Card 2 -->
+          <div class="movie-card" data-title="severance ruptura" data-mood="tenso reflexivo" onclick="openDetail('Severance')">
             <div class="movie-poster-box severance">
               <div class="movie-badge-score">★ 4.7</div>
               <strong style="font-family:'Space Grotesk'; font-size: 16px; color:#99F6E4;">RUPTURA</strong>
@@ -1052,7 +1252,8 @@
             </div>
           </div>
 
-          <div class="movie-card" onclick="openDetail('Interestelar', '2014 • Ficção, Drama • 2h 49m', '4.9', '98%')">
+          <!-- Card 3 -->
+          <div class="movie-card" data-title="interestelar interstellar" data-mood="epico reflexivo" onclick="openDetail('Interestelar')">
             <div class="movie-poster-box interstellar">
               <div class="movie-badge-score">★ 4.9</div>
               <strong style="font-family:'Space Grotesk'; font-size: 14px; color:#FBCFE8;">INTERSTELLAR</strong>
@@ -1133,42 +1334,45 @@
       <div id="view-diary" class="view">
         <div class="app-header">
           <h3 style="font-family:'Space Grotesk'; font-size: 20px;">Meu Diário</h3>
-          <span style="font-size: 12px; color: var(--text-secondary);">142 registrados</span>
+          <span id="diary-counter" style="font-size: 12px; color: var(--text-secondary);">142 registrados</span>
         </div>
 
-        <div class="spoiler-card">
-          <div class="spoiler-card-header">
-            <div>
-              <strong>Duna: Parte 2</strong>
-              <small>Assistido em 08 de Setembro, 2026</small>
+        <!-- Lista dinâmica do diário -->
+        <div id="diary-list">
+          <div class="spoiler-card">
+            <div class="spoiler-card-header">
+              <div>
+                <strong>Duna: Parte 2</strong>
+                <small>Assistido em 08 de Setembro, 2026</small>
+              </div>
+              <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
             </div>
-            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+              "Obra-prima audiovisual incontestável. Hans Zimmer e Greig Fraser no ápice."
+            </p>
+            <div class="spoiler-box" onclick="toggleSpoiler(this)">
+              <div class="spoiler-locked-msg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                SPOILER DA CENA FINAL • Toque para ler
+              </div>
+              <div class="spoiler-text-content">
+                A luta de facas com Feyd-Rautha é visualmente impecável e o desfecho com a princesa Irulan fecha o arco de maneira épica.
+              </div>
+            </div>
           </div>
-          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
-            "Obra-prima audiovisual incontestável. Hans Zimmer e Greig Fraser no ápice."
-          </p>
-          <div class="spoiler-box" onclick="toggleSpoiler(this)">
-            <div class="spoiler-locked-msg">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              SPOILER DA CENA FINAL • Toque para ler
-            </div>
-            <div class="spoiler-text-content">
-              A luta de facas com Feyd-Rautha é visualmente impecável e o desfecho com a princesa Irulan fecha o arco de maneira épica.
-            </div>
-          </div>
-        </div>
 
-        <div class="spoiler-card">
-          <div class="spoiler-card-header">
-            <div>
-              <strong>Interestelar</strong>
-              <small>Assistido em 02 de Setembro, 2026</small>
+          <div class="spoiler-card">
+            <div class="spoiler-card-header">
+              <div>
+                <strong>Interestelar</strong>
+                <small>Assistido em 02 de Setembro, 2026</small>
+              </div>
+              <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 5.0</div>
             </div>
-            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 5.0</div>
+            <p style="font-size: 12px; color: var(--text-primary); line-height: 1.4;">
+              "A cena do relógio e as ondas de Miller continuam me arrepiando toda vez que revejo."
+            </p>
           </div>
-          <p style="font-size: 12px; color: var(--text-primary); line-height: 1.4;">
-            "A cena do relógio e as ondas de Miller continuam me arrepiando toda vez que revejo."
-          </p>
         </div>
       </div>
 
@@ -1176,11 +1380,22 @@
       <div id="view-lists" class="view">
         <div class="app-header">
           <h3 style="font-family:'Space Grotesk'; font-size: 20px;">Minhas Listas</h3>
-          <div class="icon-btn" onclick="showToast('Criar nova lista')">+</div>
+          <div class="icon-btn" onclick="openNewListPrompt()" title="Criar nova lista">+</div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <div class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Abrindo lista Sci-Fi...')">
+        <div id="lists-container" style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Watchlist Dinâmica -->
+          <div id="watchlist-card" class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Sua Watchlist contém Duna 2')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="font-size:14px;">⏱️ Minha Watchlist (Para Assistir)</strong>
+                <small id="watchlist-count" style="display:block; color:var(--text-secondary); margin-top:3px;">1 título • Privada</small>
+              </div>
+              <span style="color:var(--secondary); font-size:12px;">Ver &rarr;</span>
+            </div>
+          </div>
+
+          <div class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Abrindo Melhores Ficções Científicas...')">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
                 <strong style="font-size:14px;">🌌 Melhores Ficções Científicas</strong>
@@ -1190,11 +1405,11 @@
             </div>
           </div>
 
-          <div class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Abrindo Watchlist...')">
+          <div class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Abrindo Thrillers Psicológicos...')">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <div>
-                <strong style="font-size:14px;">⏱️ Para Assistir no Fim de Semana</strong>
-                <small style="display:block; color:var(--text-secondary); margin-top:3px;">6 títulos • Privada</small>
+                <strong style="font-size:14px;">🧠 Thrillers Psicológicos &amp; Mente</strong>
+                <small style="display:block; color:var(--text-secondary); margin-top:3px;">8 títulos • Pública</small>
               </div>
               <span style="color:var(--secondary); font-size:12px;">Ver &rarr;</span>
             </div>
@@ -1204,6 +1419,13 @@
 
       <!-- ================= VIEW 4: PERFIL ================= -->
       <div id="view-profile" class="view">
+        <div class="app-header">
+          <h3 style="font-family:'Space Grotesk'; font-size: 20px;">Meu Perfil</h3>
+          <div class="icon-btn" onclick="openSettingsModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </div>
+        </div>
+
         <div class="profile-card">
           <div class="profile-avatar">
             <div class="profile-avatar-inner">CM</div>
@@ -1212,32 +1434,32 @@
           <small style="color: var(--text-secondary); font-size: 12px;">@caua.muniz • Brand &amp; UI Designer</small>
 
           <div class="profile-stats-bar">
-            <div class="profile-stat-col">
-              <strong>142</strong>
+            <div class="profile-stat-col" onclick="showToast('Total de filmes assistidos por você')">
+              <strong id="stat-watched">142</strong>
               <span>ASSISTIDOS</span>
             </div>
             <div style="width: 1px; background: var(--surface-strong);"></div>
-            <div class="profile-stat-col">
-              <strong>38</strong>
+            <div class="profile-stat-col" onclick="showToast('Total de reviews detalhadas escritas')">
+              <strong id="stat-reviews">38</strong>
               <span>REVIEWS</span>
             </div>
             <div style="width: 1px; background: var(--surface-strong);"></div>
-            <div class="profile-stat-col">
-              <strong>6</strong>
+            <div class="profile-stat-col" onclick="showToast('Listas personalizadas criadas')">
+              <strong id="stat-lists">6</strong>
               <span>LISTAS</span>
             </div>
           </div>
         </div>
 
         <!-- PulseMatch Gauge -->
-        <div class="pulsematch-gauge-card">
+        <div class="pulsematch-gauge-card" onclick="showToast('PulseMatch calculado com base em 142 títulos em comum!')">
           <div class="gauge-circle">
             <svg viewBox="0 0 74 74">
               <circle class="gauge-bg" cx="37" cy="37" r="30" />
-              <circle class="gauge-fill" cx="37" cy="37" r="30" />
+              <circle id="profile-gauge" class="gauge-fill" cx="37" cy="37" r="30" />
             </svg>
             <div class="gauge-label">
-              <strong>88%</strong>
+              <strong id="match-percent">88%</strong>
               <span>MATCH</span>
             </div>
           </div>
@@ -1251,14 +1473,23 @@
         </div>
 
         <div class="section-title">
-          <h4>Minhas Reviews</h4>
+          <h4>Minhas Reviews Recentes</h4>
         </div>
         <div class="spoiler-card">
           <div class="spoiler-card-header">
             <strong>Duna: Parte 2</strong>
             <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
           </div>
-          <small style="color: var(--text-secondary); display:block; margin-bottom:6px;">Nota por critérios: História 4.8 • Visual 5.0</small>
+          <small style="color: var(--text-secondary); display:block; margin-bottom:6px;">História 4.8 • Visual 5.0 • Trilha 4.7</small>
+          <div class="spoiler-box" onclick="toggleSpoiler(this)">
+            <div class="spoiler-locked-msg">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              SPOILER SAFE • Toque para ler
+            </div>
+            <div class="spoiler-text-content">
+              Paul Atreides atinge o status messiânico e o silêncio após o golpe em Feyd-Rautha é arrebatador.
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1269,7 +1500,7 @@
       <div class="modal-header">
         <span onclick="closeDetail()">&larr; Voltar</span>
         <h4 id="detail-title">Duna: Parte 2</h4>
-        <span onclick="showToast('Adicionado aos favoritos!')">★</span>
+        <span id="fav-btn" onclick="toggleFav(this)" style="font-size:20px; cursor:pointer;">☆</span>
       </div>
 
       <div style="text-align: center; margin-bottom: 16px;">
@@ -1280,44 +1511,45 @@
         <small id="detail-meta" style="color: var(--text-secondary); font-size: 12px;">2024 • Ficção, Aventura • 2h 46m</small>
       </div>
 
+      <!-- Botões de Ação com Toggle Real -->
       <div style="display: flex; gap: 8px; margin-bottom: 20px;">
-        <button class="cta-btn" style="flex:1; padding: 10px; background: var(--surface); color: var(--text-primary); border: 1px solid var(--surface-strong); font-size: 12px;" onclick="showToast('Adicionado à Watchlist!')">+ Watchlist</button>
-        <button class="cta-btn" style="flex:1; padding: 10px; background: var(--surface-strong); color: var(--secondary); border: 1px solid var(--secondary); font-size: 12px;" onclick="showToast('Marcado como assistido!')">&#10003; Assistido</button>
-        <button class="cta-btn" style="flex:1.2; padding: 10px; font-size: 12px;" onclick="openReviewModal()">★ Avaliar</button>
+        <div id="btn-watchlist" class="action-btn-pill outline" onclick="toggleWatchlist(this)">+ Watchlist</div>
+        <div id="btn-watched" class="action-btn-pill active" onclick="toggleWatched(this)">&#10003; Assistido</div>
+        <div class="action-btn-pill primary" onclick="openReviewModal()">★ Avaliar</div>
       </div>
 
       <div class="pulsescore-card">
-        <h5 style="font-family:'Space Grotesk'; font-size: 14px; margin-bottom: 10px;">Sinopse</h5>
-        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-          Paul Atreides se une a Chani e aos Fremen enquanto busca vingança contra os conspiradores que destruíram sua família. Diante de uma escolha entre o amor de sua vida e o destino do universo, ele deve evitar um futuro terrível que só ele pode prever.
+        <h5 style="font-family:'Space Grotesk'; font-size: 14px; margin-bottom: 8px;">Sinopse</h5>
+        <p id="detail-synopsis" style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          Paul Atreides se une a Chani e aos Fremen enquanto busca vingança contra os conspiradores que destruíram sua família.
         </p>
       </div>
 
       <div class="pulsescore-card">
         <div class="pulsescore-header">
           <h5>PulseScore™ Detalhado</h5>
-          <div class="badge-score">9.6 / 10</div>
+          <div id="detail-score-badge" class="badge-score">9.6 / 10</div>
         </div>
         <div class="criterion-item">
-          <div class="criterion-header"><span>História &amp; Roteiro</span><span>4.8 ★</span></div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 96%;"></div></div>
+          <div class="criterion-header"><span>História &amp; Roteiro</span><span id="score-story">4.8 ★</span></div>
+          <div class="progress-bar-bg"><div id="bar-story" class="progress-bar-fill" style="width: 96%;"></div></div>
         </div>
         <div class="criterion-item">
-          <div class="criterion-header"><span>Atuação &amp; Elenco</span><span>4.9 ★</span></div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 98%;"></div></div>
+          <div class="criterion-header"><span>Atuação &amp; Elenco</span><span id="score-acting">4.9 ★</span></div>
+          <div class="progress-bar-bg"><div id="bar-acting" class="progress-bar-fill" style="width: 98%;"></div></div>
         </div>
         <div class="criterion-item">
-          <div class="criterion-header"><span>Direção Visual</span><span>5.0 ★</span></div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+          <div class="criterion-header"><span>Direção Visual</span><span id="score-visual">5.0 ★</span></div>
+          <div class="progress-bar-bg"><div id="bar-visual" class="progress-bar-fill" style="width: 100%;"></div></div>
         </div>
         <div class="criterion-item">
-          <div class="criterion-header"><span>Trilha Sonora</span><span>4.7 ★</span></div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 94%;"></div></div>
+          <div class="criterion-header"><span>Trilha Sonora</span><span id="score-audio">4.7 ★</span></div>
+          <div class="progress-bar-bg"><div id="bar-audio" class="progress-bar-fill" style="width: 94%;"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ================= MODAL: ESCOLHER NOTA & REVIEW ================= -->
+    <!-- ================= MODAL: AVALIAR & REVIEW ================= -->
     <div id="review-modal" class="modal-overlay" style="z-index: 600;">
       <div class="modal-header">
         <span onclick="closeReviewModal()">Cancelar</span>
@@ -1362,6 +1594,37 @@
       <button class="cta-btn" onclick="publishReview()">Publicar no Diário</button>
     </div>
 
+    <!-- ================= MODAL: CRIAR LISTA ================= -->
+    <div id="prompt-modal" class="prompt-modal">
+      <div class="prompt-box">
+        <h4 style="font-family:'Space Grotesk'; font-size:16px; margin-bottom:12px;">Criar Nova Lista</h4>
+        <input id="new-list-input" type="text" class="search-input" style="padding-left:14px; margin-bottom:14px;" placeholder="Ex: Favoritos de Suspense 2026">
+        <div style="display:flex; gap:8px;">
+          <button class="action-btn-pill outline" onclick="closeNewListPrompt()">Cancelar</button>
+          <button class="action-btn-pill primary" onclick="confirmNewList()">Salvar Lista</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MODAL: CONFIGURAÇÕES ================= -->
+    <div id="settings-modal" class="prompt-modal">
+      <div class="prompt-box">
+        <h4 style="font-family:'Space Grotesk'; font-size:16px; margin-bottom:14px;">Preferências do Usuário</h4>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span style="font-size:12px;">Spoiler Safe Ativo</span>
+          <div class="toggle-switch on" onclick="this.classList.toggle('on'); showToast('Preferência salva!')"><div class="toggle-circle"></div></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span style="font-size:12px;">Alertas de PulseMatch</span>
+          <div class="toggle-switch on" onclick="this.classList.toggle('on'); showToast('Preferência salva!')"><div class="toggle-circle"></div></div>
+        </div>
+
+        <button class="cta-btn" style="padding:10px; font-size:13px; margin-top:6px;" onclick="document.getElementById('settings-modal').classList.remove('open'); showToast('Configurações atualizadas!')">Fechar</button>
+      </div>
+    </div>
+
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
       <div class="nav-item active" onclick="switchNav('home', this)">
@@ -1398,6 +1661,48 @@
   </div>
 
   <script>
+    // Banco de dados local dos filmes para interação total
+    const moviesData = {
+      'Duna: Parte 2': {
+        title: 'Duna: Parte 2',
+        tag: 'DUNA 2',
+        meta: '2024 • Ficção, Aventura • 2h 46m',
+        score: '9.6',
+        story: '4.8 ★', storyPct: '96%',
+        acting: '4.9 ★', actingPct: '98%',
+        visual: '5.0 ★', visualPct: '100%',
+        audio: '4.7 ★', audioPct: '94%',
+        bg: 'linear-gradient(135deg, #2D1B69, #1E1B4B)',
+        synopsis: 'Paul Atreides se une a Chani e aos Fremen enquanto busca vingança contra os conspiradores que destruíram sua família. Diante do destino do universo, ele deve enfrentar dilemas messiânicos.'
+      },
+      'Severance': {
+        title: 'Severance (Ruptura)',
+        tag: 'RUPTURA',
+        meta: '2022 • Série • Suspense Psicológico • T1',
+        score: '9.4',
+        story: '4.9 ★', storyPct: '98%',
+        acting: '4.8 ★', actingPct: '96%',
+        visual: '4.7 ★', visualPct: '94%',
+        audio: '4.6 ★', audioPct: '92%',
+        bg: 'linear-gradient(135deg, #0F766E, #134E4A)',
+        synopsis: 'Mark lidera uma equipe de funcionários de escritório cujas memórias foram divididas cirurgicamente entre a vida no trabalho e a pessoal.'
+      },
+      'Interestelar': {
+        title: 'Interestelar',
+        tag: 'INTERSTELLAR',
+        meta: '2014 • Ficção Científica, Drama • 2h 49m',
+        score: '9.8',
+        story: '4.7 ★', storyPct: '94%',
+        acting: '4.8 ★', actingPct: '96%',
+        visual: '4.9 ★', visualPct: '98%',
+        audio: '5.0 ★', audioPct: '100%',
+        bg: 'linear-gradient(135deg, #831843, #4C0519)',
+        synopsis: 'Com as reservas naturais da Terra esgotadas, um grupo de astronautas é enviado para investigar planetas habitáveis através de um buraco de minhoca.'
+      }
+    };
+
+    let currentMovie = 'Duna: Parte 2';
+
     // Navegação entre abas
     function switchNav(viewId, element) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -1405,26 +1710,93 @@
 
       const target = document.getElementById('view-' + viewId);
       if (target) target.classList.add('active');
-      element.classList.add('active');
+      if (element) element.classList.add('active');
     }
 
-    // Seleção de MoodTags
-    function selectMood(el, moodName) {
-      document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
+    // Busca Interativa em Tempo Real
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      const clearBtn = document.getElementById('clear-search-btn');
+      clearBtn.style.display = q ? 'block' : 'none';
+
+      const cards = document.querySelectorAll('#movies-container .movie-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const title = card.getAttribute('data-title') || '';
+        if (title.includes(q)) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      document.getElementById('results-count').innerText = `${visible} títulos encontrados`;
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('search-input');
+      input.value = '';
+      handleSearch('');
+      input.focus();
+    }
+
+    // Filtro por MoodTags
+    function filterByMood(el, mood) {
+      document.querySelectorAll('.mood-scroll .mood-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-      showToast('Filtrando títulos com clima: ' + moodName);
+
+      const cards = document.querySelectorAll('#movies-container .movie-card');
+      let count = 0;
+      cards.forEach(card => {
+        const moods = card.getAttribute('data-mood') || '';
+        if (mood === 'all' || moods.includes(mood)) {
+          card.classList.remove('hidden');
+          count++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      document.getElementById('results-count').innerText = `${count} títulos`;
+      showToast(`Filtrado por: ${el.innerText}`);
     }
 
-    // Toggle de spoiler no card
+    function resetMoodFilter() {
+      const first = document.querySelector('.mood-scroll .mood-chip');
+      filterByMood(first, 'all');
+    }
+
+    // Toggle de Spoiler no Card
     function toggleSpoiler(el) {
       el.classList.toggle('revealed');
+      const isRevealed = el.classList.contains('revealed');
+      showToast(isRevealed ? 'Spoiler revelado!' : 'Spoiler protegido e ocultado!');
     }
 
-    // Modal de Detalhe
-    function openDetail(title, meta, score, pulse) {
-      document.getElementById('detail-title').innerText = title;
-      document.getElementById('detail-movie-name').innerText = title;
-      document.getElementById('detail-meta').innerText = meta;
+    // Modal de Detalhe com dados reais
+    function openDetail(movieName) {
+      const movie = moviesData[movieName] || moviesData['Duna: Parte 2'];
+      currentMovie = movie.title;
+
+      document.getElementById('detail-title').innerText = movie.title;
+      document.getElementById('detail-movie-name').innerText = movie.title;
+      document.getElementById('detail-tag').innerText = movie.tag;
+      document.getElementById('detail-meta').innerText = movie.meta;
+      document.getElementById('detail-synopsis').innerText = movie.synopsis;
+      document.getElementById('detail-score-badge').innerText = `${movie.score} / 10`;
+      document.getElementById('detail-poster-box').style.background = movie.bg;
+
+      document.getElementById('score-story').innerText = movie.story;
+      document.getElementById('bar-story').style.width = movie.storyPct;
+
+      document.getElementById('score-acting').innerText = movie.acting;
+      document.getElementById('bar-acting').style.width = movie.actingPct;
+
+      document.getElementById('score-visual').innerText = movie.visual;
+      document.getElementById('bar-visual').style.width = movie.visualPct;
+
+      document.getElementById('score-audio').innerText = movie.audio;
+      document.getElementById('bar-audio').style.width = movie.audioPct;
+
       document.getElementById('detail-modal').classList.add('open');
     }
 
@@ -1432,7 +1804,38 @@
       document.getElementById('detail-modal').classList.remove('open');
     }
 
-    // Modal de Avaliação
+    // Toggle Watchlist & Assistido no detalhe
+    function toggleWatchlist(btn) {
+      const isActive = btn.classList.toggle('active');
+      btn.innerText = isActive ? '✓ Na Watchlist' : '+ Watchlist';
+      showToast(isActive ? 'Adicionado à sua Watchlist!' : 'Removido da sua Watchlist!');
+      updateWatchlistCount(isActive ? 1 : -1);
+    }
+
+    let watchlistTotal = 1;
+    function updateWatchlistCount(diff) {
+      watchlistTotal = Math.max(0, watchlistTotal + diff);
+      const counter = document.getElementById('watchlist-count');
+      if (counter) counter.innerText = `${watchlistTotal} títulos • Privada`;
+    }
+
+    function toggleWatched(btn) {
+      const isActive = btn.classList.toggle('active');
+      btn.innerText = isActive ? '✓ Assistido' : 'Marcar Assistido';
+      const stat = document.getElementById('stat-watched');
+      let val = parseInt(stat.innerText) || 142;
+      stat.innerText = isActive ? val + 1 : Math.max(0, val - 1);
+      showToast(isActive ? 'Marcado como Assistido!' : 'Desmarcado!');
+    }
+
+    function toggleFav(star) {
+      const isFav = star.innerText === '★';
+      star.innerText = isFav ? '☆' : '★';
+      star.style.color = isFav ? 'var(--text-secondary)' : 'var(--warning)';
+      showToast(isFav ? 'Removido dos favoritos' : '★ Salvo nos Favoritos!');
+    }
+
+    // Modal de Avaliação & Review
     function openReviewModal() {
       document.getElementById('review-modal').classList.add('open');
     }
@@ -1479,15 +1882,133 @@
       }
     }
 
-    // Publicar Avaliação
+    // Publicar Avaliação DINÂMICA
     function publishReview() {
+      const text = document.getElementById('review-input').value.trim() || 'Sem comentários adicionais.';
       closeReviewModal();
-      showToast('✓ Avaliação publicada com sucesso no Diário!');
-      // Switch to diary tab to see effect
+      closeDetail();
+
+      // Incrementar contador no perfil
+      const statRev = document.getElementById('stat-reviews');
+      if (statRev) {
+        statRev.innerText = (parseInt(statRev.innerText) || 38) + 1;
+      }
+
+      // Adicionar novo card no Diário
+      const diaryList = document.getElementById('diary-list');
+      const newCard = document.createElement('div');
+      newCard.className = 'spoiler-card';
+      newCard.style.animation = 'fadeIn 0.4s ease';
+
+      let spoilerContentHtml = '';
+      if (spoilerSafeOn) {
+        spoilerContentHtml = `
+          <div class="spoiler-box" onclick="toggleSpoiler(this)">
+            <div class="spoiler-locked-msg">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              SPOILER SAFE • Toque para revelar sua review
+            </div>
+            <div class="spoiler-text-content">
+              "${text}"
+            </div>
+          </div>
+        `;
+      } else {
+        spoilerContentHtml = `
+          <p style="font-size: 12px; color: var(--text-primary); line-height: 1.45;">
+            "${text}"
+          </p>
+        `;
+      }
+
+      newCard.innerHTML = `
+        <div class="spoiler-card-header">
+          <div>
+            <strong>${currentMovie}</strong>
+            <small>Publicado agora mesmo por Cauã</small>
+          </div>
+          <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ ${currentRating}.0</div>
+        </div>
+        ${spoilerContentHtml}
+      `;
+
+      diaryList.prepend(newCard);
+
+      // Atualizar contador do diário
+      const diaryCount = document.getElementById('diary-counter');
+      if (diaryCount) {
+        const cur = parseInt(diaryCount.innerText) || 142;
+        diaryCount.innerText = `${cur + 1} registrados`;
+      }
+
+      showToast('✓ Publicado com sucesso no Diário!');
+
+      // Redirecionar para a aba do diário
       setTimeout(() => {
         const diaryNav = document.querySelectorAll('.nav-item')[1];
         switchNav('diary', diaryNav);
-      }, 700);
+      }, 500);
+    }
+
+    // Notificações Dropdown
+    function toggleNotifications() {
+      const drop = document.getElementById('notif-dropdown');
+      drop.classList.toggle('open');
+    }
+
+    function clearNotifications() {
+      document.getElementById('notif-list').innerHTML = '<div style="text-align:center; padding:12px; font-size:11px; color:var(--text-secondary);">Nenhuma notificação nova.</div>';
+      document.querySelector('.notification-dot').style.display = 'none';
+      showToast('Notificações limpas!');
+    }
+
+    // Criar Nova Lista
+    function openNewListPrompt() {
+      document.getElementById('prompt-modal').classList.add('open');
+      document.getElementById('new-list-input').focus();
+    }
+
+    function closeNewListPrompt() {
+      document.getElementById('prompt-modal').classList.remove('open');
+    }
+
+    function confirmNewList() {
+      const name = document.getElementById('new-list-input').value.trim();
+      if (!name) {
+        showToast('Digite um nome para a lista!');
+        return;
+      }
+      closeNewListPrompt();
+      document.getElementById('new-list-input').value = '';
+
+      const container = document.getElementById('lists-container');
+      const newListCard = document.createElement('div');
+      newListCard.className = 'pulsescore-card';
+      newListCard.style.cursor = 'pointer';
+      newListCard.onclick = () => showToast(`Abrindo lista "${name}"`);
+      newListCard.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="font-size:14px;">📁 ${name}</strong>
+            <small style="display:block; color:var(--text-secondary); margin-top:3px;">0 títulos • Criada agora</small>
+          </div>
+          <span style="color:var(--secondary); font-size:12px;">Ver &rarr;</span>
+        </div>
+      `;
+      container.appendChild(newListCard);
+
+      // Incrementar stat
+      const statLists = document.getElementById('stat-lists');
+      if (statLists) {
+        statLists.innerText = (parseInt(statLists.innerText) || 6) + 1;
+      }
+
+      showToast(`✓ Lista "${name}" criada com sucesso!`);
+    }
+
+    // Modal de Configurações
+    function openSettingsModal() {
+      document.getElementById('settings-modal').classList.add('open');
     }
 
     // Toast genérico
@@ -1499,7 +2020,7 @@
       clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
-      }, 2500);
+      }, 2400);
     }
   </script>
 </body>
