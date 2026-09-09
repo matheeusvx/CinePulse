@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="844" viewBox="0 0 390 844" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="195" y1="0" x2="195" y2="844" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0E1424"/>
+      <stop offset="50%" stop-color="#090D18"/>
+      <stop offset="100%" stop-color="#060912"/>
+    </linearGradient>
+    <linearGradient id="logoBg" x1="0" y1="0" x2="140" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="pulseGlow" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <filter id="ambientViolet" x="-50" y="150" width="490" height="400" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="80"/>
+    </filter>
+    <filter id="neonPulseGlow" x="0" y="0" width="200" height="200" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="390" height="844" rx="44" fill="url(#bgGrad)"/>
+  <rect width="390" height="844" rx="44" stroke="#1E293B" stroke-width="2"/>
+
+  <!-- Ambient Ambient Glows -->
+  <circle cx="195" cy="380" r="130" fill="#8B5CF6" opacity="0.22" filter="url(#ambientViolet)"/>
+  <circle cx="195" cy="420" r="90" fill="#22D3EE" opacity="0.15" filter="url(#ambientViolet)"/>
+
+  <!-- Status Bar (Mobile iOS/Android) -->
+  <text x="36" y="38" fill="#F8FAFC" font-size="14" font-family="Inter, sans-serif" font-weight="600">09:41</text>
+  <g transform="translate(320, 26)">
+    <!-- Signal -->
+    <path d="M0 12h3V8H0v4zm5 0h3V5H5v7zm5 0h3V2h-3v10zm5 0h3V0h-3v12z" fill="#F8FAFC"/>
+    <!-- Battery -->
+    <rect x="22" y="2" width="22" height="11" rx="3" stroke="#F8FAFC" stroke-width="1.5" fill="none"/>
+    <rect x="24" y="4" width="14" height="7" rx="1.5" fill="#22D3EE"/>
+    <path d="M45 5.5v4" stroke="#F8FAFC" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Centered Brand Block -->
+  <g transform="translate(125, 290)">
+    <!-- Logo Box with Shadow -->
+    <rect width="140" height="140" rx="36" fill="url(#logoBg)"/>
+    <rect width="140" height="140" rx="36" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+
+    <!-- Play Icon -->
+    <path d="M55 42C55 38.5 59 36.5 62 38.5L98 59.5C101 61.2 101 65.8 98 67.5L62 88.5C59 90.5 55 88.5 55 85V42Z" fill="#F8FAFC"/>
+    <!-- Cyan Pulse Line -->
+    <path d="M26 76H41L47 62L57 89L68 50L78 76H114" stroke="#22D3EE" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#neonPulseGlow)"/>
+  </g>
+
+  <!-- Typography -->
+  <text x="195" y="485" text-anchor="middle" fill="#F8FAFC" font-size="34" font-family="Space Grotesk, Inter, sans-serif" font-weight="700" letter-spacing="-0.5">CinePulse</text>
+  
+  <text x="195" y="515" text-anchor="middle" fill="#94A3B8" font-size="14" font-family="Inter, sans-serif" font-weight="500" letter-spacing="1.5">ASSISTA • AVALIE • CONECTE</text>
+
+  <!-- Bottom Pulse Loader & Tag -->
+  <g transform="translate(135, 730)">
+    <rect width="120" height="4" rx="2" fill="#1A2238"/>
+    <rect width="55" height="4" rx="2" fill="url(#pulseGlow)"/>
+  </g>
+
+  <text x="195" y="760" text-anchor="middle" fill="#64748B" font-size="12" font-family="Inter, sans-serif">v1.0.0 • Checkpoint 4</text>
+
+  <!-- Home Indicator -->
+  <rect x="125" y="828" width="140" height="4" rx="2" fill="#334155"/>
+</svg>
