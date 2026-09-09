@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CinePulse — Protótipo Interativo Mobile (CP4)</title>
+  <title>CinePulse — Protótipo Interativo Mobile com Login e Imagens</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
@@ -443,7 +443,7 @@
       box-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
     }
 
-    /* Movie Cards */
+    /* Movie Cards com Imagens Reais */
     .posters-scroll {
       display: flex;
       gap: 12px;
@@ -458,19 +458,21 @@
     }
 
     .movie-card {
-      flex: 0 0 130px;
+      flex: 0 0 136px;
       background: var(--surface);
       border: 1px solid var(--surface-strong);
       border-radius: 16px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
 
     .movie-card:hover {
       transform: translateY(-4px);
       border-color: var(--primary);
-      box-shadow: 0 10px 24px rgba(139, 92, 246, 0.2);
+      box-shadow: 0 12px 26px rgba(139, 92, 246, 0.25);
     }
 
     .movie-card.hidden {
@@ -478,36 +480,36 @@
     }
 
     .movie-poster-box {
-      height: 160px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      height: 180px;
       position: relative;
+      overflow: hidden;
+      background: #1A2238;
     }
 
-    .movie-poster-box.dune {
-      background: linear-gradient(135deg, #2D1B69, #1E1B4B);
+    .movie-poster-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
     }
 
-    .movie-poster-box.severance {
-      background: linear-gradient(135deg, #0F766E, #134E4A);
-    }
-
-    .movie-poster-box.interstellar {
-      background: linear-gradient(135deg, #831843, #4C0519);
+    .movie-card:hover .movie-poster-box img {
+      transform: scale(1.05);
     }
 
     .movie-badge-score {
       position: absolute;
       top: 8px;
       left: 8px;
-      background: rgba(9, 13, 24, 0.85);
-      border: 1px solid rgba(251, 191, 36, 0.3);
+      background: rgba(9, 13, 24, 0.88);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(251, 191, 36, 0.35);
       color: var(--warning);
       padding: 3px 8px;
       border-radius: 8px;
       font-size: 11px;
       font-weight: 700;
+      z-index: 2;
     }
 
     .movie-info {
@@ -773,7 +775,7 @@
       stroke: var(--secondary);
       stroke-linecap: round;
       stroke-dasharray: 188;
-      stroke-dashoffset: 22; /* 88% */
+      stroke-dashoffset: 22;
       transition: stroke-dashoffset 1s ease;
     }
 
@@ -826,7 +828,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .modal-header span {
@@ -840,6 +842,52 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 16px;
       font-weight: 700;
+    }
+
+    /* Movie Detail Backdrop */
+    .detail-backdrop-box {
+      width: 100%;
+      height: 180px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 16px;
+      background: #1A2238;
+    }
+
+    .detail-backdrop-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .detail-backdrop-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(9, 13, 24, 0.2) 0%, rgba(9, 13, 24, 0.9) 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+      gap: 14px;
+    }
+
+    .detail-poster-thumb {
+      width: 64px;
+      height: 94px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      flex-shrink: 0;
+    }
+
+    .detail-poster-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .stars-selector {
@@ -1099,48 +1147,150 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Input Modal */
-    .prompt-modal {
+    /* ================= TELA DE LOGIN ================= */
+    .login-screen {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(9, 13, 24, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 900;
-      display: none;
+      background: radial-gradient(circle at center, #1E173E 0%, #090D18 100%);
+      z-index: 1100;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 24px 30px 24px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
+    }
+
+    .login-screen.hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), #6D28D9);
+      border-radius: 24px;
+      margin: 0 auto 16px auto;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      box-shadow: 0 10px 28px rgba(139, 92, 246, 0.4);
     }
 
-    .prompt-modal.open {
+    .login-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .login-header p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .login-tabs {
       display: flex;
-    }
-
-    .prompt-box {
       background: var(--surface);
       border: 1px solid var(--surface-strong);
-      border-radius: 20px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+
+    .login-tab-btn {
+      flex: 1;
+      padding: 9px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .login-tab-btn.active {
+      background: var(--surface-strong);
+      color: var(--text-primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .login-field {
+      margin-bottom: 16px;
+    }
+
+    .login-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .login-field input {
       width: 100%;
-      max-width: 320px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 14px;
+      padding: 13px 16px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .login-field input:focus {
+      border-color: var(--primary);
+    }
+
+    .social-login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 14px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .social-login-btn:hover {
+      background: var(--surface-strong);
+      border-color: var(--primary);
     }
   </style>
 </head>
 <body>
 
   <div class="top-panel">
-    <div class="badge">CP4 • Protótipo 100% Interativo</div>
+    <div class="badge">CP4 • Com Imagens Reais &amp; Tela de Login</div>
     <h1>CinePulse Mobile Simulator</h1>
-    <p>Todos os botões funcionam: busque títulos, filtre por clima, abra detalhes, adicione à watchlist e publique reviews!</p>
+    <p>Pôsteres reais do TMDB, tela completa de Login/Cadastro e 100% dos botões e navegação interativos!</p>
   </div>
 
   <div class="phone-wrapper">
     <!-- Dynamic Island -->
-    <div class="dynamic-island" onclick="showToast('Dynamic Island: CinePulse rodando em tempo real')">
+    <div class="dynamic-island" onclick="showToast('Dynamic Island: CinePulse v1.0.0')">
       <div class="camera"></div>
     </div>
 
@@ -1155,6 +1305,55 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast-msg">✓ Mensagem</div>
+
+    <!-- ================= TELA DE LOGIN / CADASTRO ================= -->
+    <div id="login-screen" class="login-screen hidden">
+      <div class="login-header">
+        <div class="login-logo">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <h2>CinePulse</h2>
+        <p>Assista. Avalie. Conecte.</p>
+      </div>
+
+      <div class="login-tabs">
+        <div id="tab-login" class="login-tab-btn active" onclick="setLoginTab('login')">Entrar</div>
+        <div id="tab-signup" class="login-tab-btn" onclick="setLoginTab('signup')">Cadastre-se</div>
+      </div>
+
+      <div id="field-name" class="login-field" style="display:none;">
+        <label>SEU NOME COMPLETO</label>
+        <input type="text" id="login-input-name" value="Cauã Ferreira Muniz" placeholder="Ex: Cauã Muniz">
+      </div>
+
+      <div class="login-field">
+        <label>E-MAIL</label>
+        <input type="email" id="login-input-email" value="caua.muniz@email.com" placeholder="seu@email.com">
+      </div>
+
+      <div class="login-field">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <label style="margin:0;">SENHA</label>
+          <small style="color:var(--secondary); cursor:pointer;" onclick="showToast('Link de recuperação enviado ao seu e-mail!')">Esqueceu?</small>
+        </div>
+        <input type="password" id="login-input-pass" value="••••••••" placeholder="Sua senha secreta">
+      </div>
+
+      <button id="login-submit-btn" class="cta-btn" style="margin-top: 8px;" onclick="performLogin()">Entrar no CinePulse</button>
+
+      <div style="text-align: center; margin: 16px 0 8px 0; font-size: 11px; color: var(--text-secondary);">
+        OU CONTINUE COM
+      </div>
+
+      <button class="social-login-btn" onclick="performLogin('Google')">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.3 0 10.1 0 12s.6 3.7 1.6 5.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 15.9C3.5 19.7 7.4 23 12 23z"/></svg>
+        Entrar com Google
+      </button>
+
+      <p style="margin-top:auto; text-align:center; font-size:11px; color:var(--text-secondary);">
+        Ao continuar, você concorda com nossos <a style="color:var(--secondary); text-decoration:none;">Termos</a> e <a style="color:var(--secondary); text-decoration:none;">Privacidade</a>.
+      </p>
+    </div>
 
     <!-- Screen Content Scroll -->
     <div class="screen-content">
@@ -1224,15 +1423,16 @@
 
         <div class="section-title">
           <h4>Em alta na comunidade</h4>
-          <small id="results-count" style="color: var(--text-secondary); font-size: 11px;">3 títulos</small>
+          <small id="results-count" style="color: var(--text-secondary); font-size: 11px;">5 títulos</small>
         </div>
 
+        <!-- Carrossel de Pôsteres Reais -->
         <div id="movies-container" class="posters-scroll">
-          <!-- Card 1 -->
-          <div class="movie-card" data-title="duna: parte 2" data-mood="tenso epico" onclick="openDetail('Duna: Parte 2')">
-            <div class="movie-poster-box dune">
+          <!-- Card 1: Duna 2 -->
+          <div class="movie-card" data-title="duna: parte 2 dune" data-mood="tenso epico" onclick="openDetail('Duna: Parte 2')">
+            <div class="movie-poster-box">
               <div class="movie-badge-score">★ 4.8</div>
-              <strong style="font-family:'Space Grotesk'; font-size: 16px; color:#C4B5FD;">DUNA 2</strong>
+              <img src="https://image.tmdb.org/t/p/w500/1pdfLvk8sM42T0qUuTq75m1YgXQ.jpg" alt="Duna: Parte 2" onerror="this.src='https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80'">
             </div>
             <div class="movie-info">
               <h5>Duna: Parte 2</h5>
@@ -1240,11 +1440,11 @@
             </div>
           </div>
 
-          <!-- Card 2 -->
+          <!-- Card 2: Severance -->
           <div class="movie-card" data-title="severance ruptura" data-mood="tenso reflexivo" onclick="openDetail('Severance')">
-            <div class="movie-poster-box severance">
+            <div class="movie-poster-box">
               <div class="movie-badge-score">★ 4.7</div>
-              <strong style="font-family:'Space Grotesk'; font-size: 16px; color:#99F6E4;">RUPTURA</strong>
+              <img src="https://image.tmdb.org/t/p/w500/lCFMJJ7SfjQLMJjkdcy6KOzqgZa.jpg" alt="Severance" onerror="this.src='https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80'">
             </div>
             <div class="movie-info">
               <h5>Severance</h5>
@@ -1252,15 +1452,39 @@
             </div>
           </div>
 
-          <!-- Card 3 -->
+          <!-- Card 3: Interestelar -->
           <div class="movie-card" data-title="interestelar interstellar" data-mood="epico reflexivo" onclick="openDetail('Interestelar')">
-            <div class="movie-poster-box interstellar">
+            <div class="movie-poster-box">
               <div class="movie-badge-score">★ 4.9</div>
-              <strong style="font-family:'Space Grotesk'; font-size: 14px; color:#FBCFE8;">INTERSTELLAR</strong>
+              <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interestelar" onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80'">
             </div>
             <div class="movie-info">
               <h5>Interestelar</h5>
               <span>98% Pulse</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Oppenheimer -->
+          <div class="movie-card" data-title="oppenheimer" data-mood="tenso epico" onclick="openDetail('Oppenheimer')">
+            <div class="movie-poster-box">
+              <div class="movie-badge-score">★ 4.9</div>
+              <img src="https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" alt="Oppenheimer" onerror="this.src='https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80'">
+            </div>
+            <div class="movie-info">
+              <h5>Oppenheimer</h5>
+              <span>97% Pulse</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Blade Runner 2049 -->
+          <div class="movie-card" data-title="blade runner 2049" data-mood="reflexivo tenso" onclick="openDetail('Blade Runner 2049')">
+            <div class="movie-poster-box">
+              <div class="movie-badge-score">★ 4.6</div>
+              <img src="https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg" alt="Blade Runner 2049" onerror="this.src='https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80'">
+            </div>
+            <div class="movie-info">
+              <h5>Blade Runner</h5>
+              <span>94% Pulse</span>
             </div>
           </div>
         </div>
@@ -1337,41 +1561,50 @@
           <span id="diary-counter" style="font-size: 12px; color: var(--text-secondary);">142 registrados</span>
         </div>
 
-        <!-- Lista dinâmica do diário -->
+        <!-- Lista dinâmica do diário com pôsteres -->
         <div id="diary-list">
-          <div class="spoiler-card">
-            <div class="spoiler-card-header">
-              <div>
-                <strong>Duna: Parte 2</strong>
-                <small>Assistido em 08 de Setembro, 2026</small>
-              </div>
-              <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
+          <div class="spoiler-card" style="display:flex; gap:12px;">
+            <div style="width:54px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
+              <img src="https://image.tmdb.org/t/p/w500/1pdfLvk8sM42T0qUuTq75m1YgXQ.jpg" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
-              "Obra-prima audiovisual incontestável. Hans Zimmer e Greig Fraser no ápice."
-            </p>
-            <div class="spoiler-box" onclick="toggleSpoiler(this)">
-              <div class="spoiler-locked-msg">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                SPOILER DA CENA FINAL • Toque para ler
+            <div style="flex:1;">
+              <div class="spoiler-card-header" style="margin-bottom:4px;">
+                <div>
+                  <strong>Duna: Parte 2</strong>
+                  <small>08 de Setembro, 2026</small>
+                </div>
+                <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
               </div>
-              <div class="spoiler-text-content">
-                A luta de facas com Feyd-Rautha é visualmente impecável e o desfecho com a princesa Irulan fecha o arco de maneira épica.
+              <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">
+                "Obra-prima audiovisual incontestável. Hans Zimmer no ápice."
+              </p>
+              <div class="spoiler-box" onclick="toggleSpoiler(this)" style="padding:8px 10px;">
+                <div class="spoiler-locked-msg" style="font-size:10px;">
+                  SPOILER DA CENA FINAL • Revelar
+                </div>
+                <div class="spoiler-text-content" style="font-size:11px;">
+                  A luta de facas com Feyd-Rautha é visualmente impecável e o desfecho fecha o arco de maneira épica.
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="spoiler-card">
-            <div class="spoiler-card-header">
-              <div>
-                <strong>Interestelar</strong>
-                <small>Assistido em 02 de Setembro, 2026</small>
-              </div>
-              <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 5.0</div>
+          <div class="spoiler-card" style="display:flex; gap:12px;">
+            <div style="width:54px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
+              <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <p style="font-size: 12px; color: var(--text-primary); line-height: 1.4;">
-              "A cena do relógio e as ondas de Miller continuam me arrepiando toda vez que revejo."
-            </p>
+            <div style="flex:1;">
+              <div class="spoiler-card-header" style="margin-bottom:4px;">
+                <div>
+                  <strong>Interestelar</strong>
+                  <small>02 de Setembro, 2026</small>
+                </div>
+                <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 5.0</div>
+              </div>
+              <p style="font-size: 11px; color: var(--text-primary); line-height: 1.4;">
+                "A cena do relógio e as ondas de Miller continuam me arrepiando toda vez que revejo."
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -1421,8 +1654,8 @@
       <div id="view-profile" class="view">
         <div class="app-header">
           <h3 style="font-family:'Space Grotesk'; font-size: 20px;">Meu Perfil</h3>
-          <div class="icon-btn" onclick="openSettingsModal()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <div class="icon-btn" onclick="openLoginScreen()" title="Sair / Trocar Conta">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           </div>
         </div>
 
@@ -1430,8 +1663,8 @@
           <div class="profile-avatar">
             <div class="profile-avatar-inner">CM</div>
           </div>
-          <h3 style="font-family:'Space Grotesk'; font-size: 18px; font-weight:800;">Cauã Ferreira Muniz</h3>
-          <small style="color: var(--text-secondary); font-size: 12px;">@caua.muniz • Brand &amp; UI Designer</small>
+          <h3 id="user-display-name" style="font-family:'Space Grotesk'; font-size: 18px; font-weight:800;">Cauã Ferreira Muniz</h3>
+          <small id="user-display-tag" style="color: var(--text-secondary); font-size: 12px;">@caua.muniz • Brand &amp; UI Designer</small>
 
           <div class="profile-stats-bar">
             <div class="profile-stat-col" onclick="showToast('Total de filmes assistidos por você')">
@@ -1472,30 +1705,15 @@
           </div>
         </div>
 
-        <div class="section-title">
-          <h4>Minhas Reviews Recentes</h4>
-        </div>
-        <div class="spoiler-card">
-          <div class="spoiler-card-header">
-            <strong>Duna: Parte 2</strong>
-            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
-          </div>
-          <small style="color: var(--text-secondary); display:block; margin-bottom:6px;">História 4.8 • Visual 5.0 • Trilha 4.7</small>
-          <div class="spoiler-box" onclick="toggleSpoiler(this)">
-            <div class="spoiler-locked-msg">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              SPOILER SAFE • Toque para ler
-            </div>
-            <div class="spoiler-text-content">
-              Paul Atreides atinge o status messiânico e o silêncio após o golpe em Feyd-Rautha é arrebatador.
-            </div>
-          </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="font-family:'Space Grotesk'; font-size:16px;">Conta Conectada</h4>
+          <button style="background:transparent; border:1px solid var(--surface-strong); color:var(--secondary); padding:4px 10px; border-radius:8px; font-size:11px; cursor:pointer;" onclick="openLoginScreen()">Trocar Conta</button>
         </div>
       </div>
 
     </div>
 
-    <!-- ================= MODAL: DETALHE DO FILME ================= -->
+    <!-- ================= MODAL: DETALHE DO FILME COM BACKDROP REAL ================= -->
     <div id="detail-modal" class="modal-overlay">
       <div class="modal-header">
         <span onclick="closeDetail()">&larr; Voltar</span>
@@ -1503,12 +1721,18 @@
         <span id="fav-btn" onclick="toggleFav(this)" style="font-size:20px; cursor:pointer;">☆</span>
       </div>
 
-      <div style="text-align: center; margin-bottom: 16px;">
-        <div id="detail-poster-box" style="width: 110px; height: 160px; margin: 0 auto 12px auto; border-radius: 16px; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #2D1B69, #1E1B4B); border:1px solid #3B2A82;">
-          <strong id="detail-tag" style="font-family:'Space Grotesk'; font-size: 16px; color:#C4B5FD;">DUNA 2</strong>
+      <!-- Backdrop Cinematográfico Real -->
+      <div class="detail-backdrop-box">
+        <img id="detail-backdrop-img" src="https://image.tmdb.org/t/p/w780/xOMo8BRK7PfcJv9JCnx7s520DRq.jpg" alt="Backdrop">
+        <div class="detail-backdrop-overlay">
+          <div class="detail-poster-thumb">
+            <img id="detail-poster-thumb-img" src="https://image.tmdb.org/t/p/w500/1pdfLvk8sM42T0qUuTq75m1YgXQ.jpg" alt="Poster">
+          </div>
+          <div>
+            <h3 id="detail-movie-name" style="font-family:'Space Grotesk'; font-size: 18px; font-weight:800; line-height:1.2;">Duna: Parte 2</h3>
+            <small id="detail-meta" style="color: var(--text-secondary); font-size: 11px; display:block; margin-top:3px;">2024 • Ficção, Aventura • 2h 46m</small>
+          </div>
         </div>
-        <h3 id="detail-movie-name" style="font-family:'Space Grotesk'; font-size: 20px; font-weight:800;">Duna: Parte 2</h3>
-        <small id="detail-meta" style="color: var(--text-secondary); font-size: 12px;">2024 • Ficção, Aventura • 2h 46m</small>
       </div>
 
       <!-- Botões de Ação com Toggle Real -->
@@ -1594,37 +1818,6 @@
       <button class="cta-btn" onclick="publishReview()">Publicar no Diário</button>
     </div>
 
-    <!-- ================= MODAL: CRIAR LISTA ================= -->
-    <div id="prompt-modal" class="prompt-modal">
-      <div class="prompt-box">
-        <h4 style="font-family:'Space Grotesk'; font-size:16px; margin-bottom:12px;">Criar Nova Lista</h4>
-        <input id="new-list-input" type="text" class="search-input" style="padding-left:14px; margin-bottom:14px;" placeholder="Ex: Favoritos de Suspense 2026">
-        <div style="display:flex; gap:8px;">
-          <button class="action-btn-pill outline" onclick="closeNewListPrompt()">Cancelar</button>
-          <button class="action-btn-pill primary" onclick="confirmNewList()">Salvar Lista</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= MODAL: CONFIGURAÇÕES ================= -->
-    <div id="settings-modal" class="prompt-modal">
-      <div class="prompt-box">
-        <h4 style="font-family:'Space Grotesk'; font-size:16px; margin-bottom:14px;">Preferências do Usuário</h4>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <span style="font-size:12px;">Spoiler Safe Ativo</span>
-          <div class="toggle-switch on" onclick="this.classList.toggle('on'); showToast('Preferência salva!')"><div class="toggle-circle"></div></div>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <span style="font-size:12px;">Alertas de PulseMatch</span>
-          <div class="toggle-switch on" onclick="this.classList.toggle('on'); showToast('Preferência salva!')"><div class="toggle-circle"></div></div>
-        </div>
-
-        <button class="cta-btn" style="padding:10px; font-size:13px; margin-top:6px;" onclick="document.getElementById('settings-modal').classList.remove('open'); showToast('Configurações atualizadas!')">Fechar</button>
-      </div>
-    </div>
-
     <!-- Bottom Navigation Bar -->
     <div class="bottom-nav">
       <div class="nav-item active" onclick="switchNav('home', this)">
@@ -1661,47 +1854,94 @@
   </div>
 
   <script>
-    // Banco de dados local dos filmes para interação total
+    // Banco de dados com imagens reais oficiais (TMDB)
     const moviesData = {
       'Duna: Parte 2': {
         title: 'Duna: Parte 2',
-        tag: 'DUNA 2',
         meta: '2024 • Ficção, Aventura • 2h 46m',
         score: '9.6',
         story: '4.8 ★', storyPct: '96%',
         acting: '4.9 ★', actingPct: '98%',
         visual: '5.0 ★', visualPct: '100%',
         audio: '4.7 ★', audioPct: '94%',
-        bg: 'linear-gradient(135deg, #2D1B69, #1E1B4B)',
+        poster: 'https://image.tmdb.org/t/p/w500/1pdfLvk8sM42T0qUuTq75m1YgXQ.jpg',
+        backdrop: 'https://image.tmdb.org/t/p/w780/xOMo8BRK7PfcJv9JCnx7s520DRq.jpg',
         synopsis: 'Paul Atreides se une a Chani e aos Fremen enquanto busca vingança contra os conspiradores que destruíram sua família. Diante do destino do universo, ele deve enfrentar dilemas messiânicos.'
       },
       'Severance': {
         title: 'Severance (Ruptura)',
-        tag: 'RUPTURA',
         meta: '2022 • Série • Suspense Psicológico • T1',
         score: '9.4',
         story: '4.9 ★', storyPct: '98%',
         acting: '4.8 ★', actingPct: '96%',
         visual: '4.7 ★', visualPct: '94%',
         audio: '4.6 ★', audioPct: '92%',
-        bg: 'linear-gradient(135deg, #0F766E, #134E4A)',
+        poster: 'https://image.tmdb.org/t/p/w500/lCFMJJ7SfjQLMJjkdcy6KOzqgZa.jpg',
+        backdrop: 'https://image.tmdb.org/t/p/w780/9faGSFi5jam6pDWGNd0p8JcJgXQ.jpg',
         synopsis: 'Mark lidera uma equipe de funcionários de escritório cujas memórias foram divididas cirurgicamente entre a vida no trabalho e a pessoal.'
       },
       'Interestelar': {
         title: 'Interestelar',
-        tag: 'INTERSTELLAR',
         meta: '2014 • Ficção Científica, Drama • 2h 49m',
         score: '9.8',
         story: '4.7 ★', storyPct: '94%',
         acting: '4.8 ★', actingPct: '96%',
         visual: '4.9 ★', visualPct: '98%',
         audio: '5.0 ★', audioPct: '100%',
-        bg: 'linear-gradient(135deg, #831843, #4C0519)',
+        poster: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
+        backdrop: 'https://image.tmdb.org/t/p/w780/xJHokMbljvjADYdit5fK5VQsXEG.jpg',
         synopsis: 'Com as reservas naturais da Terra esgotadas, um grupo de astronautas é enviado para investigar planetas habitáveis através de um buraco de minhoca.'
+      },
+      'Oppenheimer': {
+        title: 'Oppenheimer',
+        meta: '2023 • Biografia, Drama, História • 3h',
+        score: '9.7',
+        story: '4.9 ★', storyPct: '98%',
+        acting: '5.0 ★', actingPct: '100%',
+        visual: '4.8 ★', visualPct: '96%',
+        audio: '4.9 ★', audioPct: '98%',
+        poster: 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
+        backdrop: 'https://image.tmdb.org/t/p/w780/fm6K9vY92v8j9Te9tG09W6A611o.jpg',
+        synopsis: 'A história do físico americano J. Robert Oppenheimer, seu papel no Projeto Manhattan e o desenvolvimento da primeira bomba atômica.'
+      },
+      'Blade Runner 2049': {
+        title: 'Blade Runner 2049',
+        meta: '2017 • Ficção Científica, Mistério • 2h 44m',
+        score: '9.5',
+        story: '4.6 ★', storyPct: '92%',
+        acting: '4.7 ★', actingPct: '94%',
+        visual: '5.0 ★', visualPct: '100%',
+        audio: '4.8 ★', audioPct: '96%',
+        poster: 'https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg',
+        backdrop: 'https://image.tmdb.org/t/p/w780/ilRyazdMJwN05exqhwK4TKvd009.jpg',
+        synopsis: 'Trinta anos após os acontecimentos do primeiro filme, um novo Blade Runner, o policial K, desenterra um segredo há muito enterrado que tem o potencial de mergulhar o que resta da sociedade no caos.'
       }
     };
 
     let currentMovie = 'Duna: Parte 2';
+
+    // TELA DE LOGIN CONTROLS
+    function openLoginScreen() {
+      document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    function closeLoginScreen() {
+      document.getElementById('login-screen').classList.add('hidden');
+    }
+
+    function setLoginTab(tab) {
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+      document.getElementById('field-name').style.display = tab === 'signup' ? 'block' : 'none';
+      document.getElementById('login-submit-btn').innerText = tab === 'signup' ? 'Criar Conta Grátis' : 'Entrar no CinePulse';
+    }
+
+    function performLogin(provider) {
+      const name = document.getElementById('login-input-name').value.trim() || 'Cauã Ferreira Muniz';
+      document.getElementById('user-display-name').innerText = name;
+      closeLoginScreen();
+      showToast(provider ? `✓ Conectado via ${provider} como ${name}!` : `✓ Bem-vindo de volta, ${name}!`);
+    }
 
     // Navegação entre abas
     function switchNav(viewId, element) {
@@ -1772,18 +2012,20 @@
       showToast(isRevealed ? 'Spoiler revelado!' : 'Spoiler protegido e ocultado!');
     }
 
-    // Modal de Detalhe com dados reais
+    // Modal de Detalhe com dados reais e imagens TMDB
     function openDetail(movieName) {
       const movie = moviesData[movieName] || moviesData['Duna: Parte 2'];
       currentMovie = movie.title;
 
       document.getElementById('detail-title').innerText = movie.title;
       document.getElementById('detail-movie-name').innerText = movie.title;
-      document.getElementById('detail-tag').innerText = movie.tag;
       document.getElementById('detail-meta').innerText = movie.meta;
       document.getElementById('detail-synopsis').innerText = movie.synopsis;
       document.getElementById('detail-score-badge').innerText = `${movie.score} / 10`;
-      document.getElementById('detail-poster-box').style.background = movie.bg;
+
+      // Atualiza imagens reais
+      document.getElementById('detail-backdrop-img').src = movie.backdrop;
+      document.getElementById('detail-poster-thumb-img').src = movie.poster;
 
       document.getElementById('score-story').innerText = movie.story;
       document.getElementById('bar-story').style.width = movie.storyPct;
@@ -1894,42 +2136,51 @@
         statRev.innerText = (parseInt(statRev.innerText) || 38) + 1;
       }
 
-      // Adicionar novo card no Diário
+      // Adicionar novo card no Diário com imagem real do filme atual
       const diaryList = document.getElementById('diary-list');
       const newCard = document.createElement('div');
       newCard.className = 'spoiler-card';
+      newCard.style.display = 'flex';
+      newCard.style.gap = '12px';
       newCard.style.animation = 'fadeIn 0.4s ease';
+
+      const curMovieObj = moviesData[currentMovie] || moviesData['Duna: Parte 2'];
 
       let spoilerContentHtml = '';
       if (spoilerSafeOn) {
         spoilerContentHtml = `
-          <div class="spoiler-box" onclick="toggleSpoiler(this)">
-            <div class="spoiler-locked-msg">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              SPOILER SAFE • Toque para revelar sua review
+          <div class="spoiler-box" onclick="toggleSpoiler(this)" style="padding:8px 10px;">
+            <div class="spoiler-locked-msg" style="font-size:10px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              SPOILER SAFE • Toque para ler
             </div>
-            <div class="spoiler-text-content">
+            <div class="spoiler-text-content" style="font-size:11px;">
               "${text}"
             </div>
           </div>
         `;
       } else {
         spoilerContentHtml = `
-          <p style="font-size: 12px; color: var(--text-primary); line-height: 1.45;">
+          <p style="font-size: 11px; color: var(--text-primary); line-height: 1.4;">
             "${text}"
           </p>
         `;
       }
 
       newCard.innerHTML = `
-        <div class="spoiler-card-header">
-          <div>
-            <strong>${currentMovie}</strong>
-            <small>Publicado agora mesmo por Cauã</small>
-          </div>
-          <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ ${currentRating}.0</div>
+        <div style="width:54px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0;">
+          <img src="${curMovieObj.poster}" style="width:100%; height:100%; object-fit:cover;">
         </div>
-        ${spoilerContentHtml}
+        <div style="flex:1;">
+          <div class="spoiler-card-header" style="margin-bottom:4px;">
+            <div>
+              <strong>${currentMovie}</strong>
+              <small>Publicado agora mesmo por Cauã</small>
+            </div>
+            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ ${currentRating}.0</div>
+          </div>
+          ${spoilerContentHtml}
+        </div>
       `;
 
       diaryList.prepend(newCard);
@@ -2004,11 +2255,6 @@
       }
 
       showToast(`✓ Lista "${name}" criada com sucesso!`);
-    }
-
-    // Modal de Configurações
-    function openSettingsModal() {
-      document.getElementById('settings-modal').classList.add('open');
     }
 
     // Toast genérico
