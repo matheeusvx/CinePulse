@@ -55,7 +55,7 @@ Arquivos de logo e ícones em `assets/brand/`, mockups visuais em `docs/assets/`
 |---|---|---|
 | **Matheus Morelli** | Tech Lead / Integração Flutter | Criar/organizar repositório, consolidar branches, revisar estrutura Flutter, rodar build final e garantir README atualizado. |
 | **Cauã Ferreira Muniz** | Brand & UI Designer | Identidade visual completa, variações de logo/ícone de app (`assets/brand/`), especificação de UI Kit, mockups das 5 telas e [Figma Oficial](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1) (detalhes em `docs/04-identidade-visual.md`). |
-| **Rafael Ferreira** | Product / UX | Validar problema, público-alvo, personas, jornada, user stories, priorização do MVP e wireframes. |
+| **Rafael Ferreira** | Product / UX | Validação do problema com dados de mercado, hipóteses e benchmark (`docs/01`), segmentação, 3 personas, antipersona e mapa de jornada (`docs/02`), 20 user stories com critérios de aceite + priorização RICE/MoSCoW (`docs/03`), arquitetura de informação, fluxos e 12 wireframes lo-fi em SVG (`docs/06` + `docs/assets/wireframes/`), plano de pesquisa e validação (`docs/10`) e o [dossiê navegável de Product/UX](docs/dossie-product-ux.html). |
 | **Victor Nicolas** | Flutter Developer | Implementar/refinar a home e navegação do protótipo Flutter, responsividade e componentes visuais. |
 | **Henrique Nicolas** | Documentação, Pitch & QA | Organizar documentação GitHub, preparar pitch, revisar critérios do professor, testar execução e registrar evidências. |
 
@@ -158,4 +158,23 @@ chore: prepara entrega do checkpoint 4
 
 ## Documentação complementar
 
-Veja a pasta `docs/` para a documentação completa do Checkpoint 4 e o planejamento de evolução para CP5/CP6.
+A pasta `docs/` reúne a documentação completa do Checkpoint 4 e o planejamento de evolução para CP5/CP6.
+
+| Documento | Conteúdo |
+|---|---|
+| [01 — Visão do produto](docs/01-visao-produto.md) | Problema com dados de mercado, hipóteses, proposta de valor, benchmark, posicionamento, métricas e riscos |
+| [02 — Público, personas e jornada](docs/02-publico-personas-e-jornada.md) | Segmentação comportamental, 3 personas, antipersona, mapa de jornada e princípios de UX |
+| [03 — MVP e requisitos](docs/03-mvp-e-requisitos.md) | 20 user stories com critérios de aceite, priorização RICE e MoSCoW, requisitos não funcionais e DoD |
+| [04 — Identidade visual](docs/04-identidade-visual.md) | Marca, paleta, tipografia, UI kit e mockups de alta fidelidade |
+| [05 — Pitch e modelo de negócio](docs/05-pitch-e-modelo-de-negocio.md) | Pitch de 30 s e 1 min, modelo de negócio e diferenciais competitivos |
+| [06 — Wireframes e fluxos](docs/06-wireframes-e-fluxos.md) | Arquitetura da informação, fluxo principal e 12 wireframes lo-fi em SVG |
+| [07 — Divisão da equipe](docs/07-divisao-da-equipe.md) | Papéis, responsabilidades e evidências por integrante |
+| [08 — Checklist do CP4](docs/08-checklist-checkpoint-4.md) | Conferência item a item contra a rubrica |
+| [09 — Roadmap CP5/CP6](docs/09-roadmap-cp5-cp6.md) | Evolução planejada até o produto instalável |
+| [10 — Pesquisa e validação](docs/10-pesquisa-e-validacao.md) | Questionário, roteiro de entrevista e plano de teste de usabilidade |
+
+**Materiais para apresentação**
+
+- [Dossiê navegável de Product/UX](docs/dossie-product-ux.html) — página única com problema, personas, jornada, priorização e wireframes.
+- [Protótipo interativo mobile](docs/app_interativo.html) — simulador clicável do app.
+- [Wireframes lo-fi](docs/assets/wireframes/) — 12 arquivos SVG anotados, prontos para importar no Figma.

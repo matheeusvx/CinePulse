@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CinePulse — Dossiê de Product / UX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#8B5CF6; --primary-soft:rgba(139,92,246,.14); --primary-line:rgba(139,92,246,.38);
+  --secondary:#22D3EE; --secondary-soft:rgba(34,211,238,.12);
+  --bg:#090D18; --surface:#121829; --surface-2:#1A2238; --line:rgba(148,163,184,.18);
+  --text:#F8FAFC; --muted:#94A3B8; --dim:#64748B;
+  --ok:#34D399; --warn:#FBBF24; --bad:#F87171;
+  --sidebar:248px; --maxw:1020px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Space Grotesk',Inter,sans-serif;line-height:1.2;letter-spacing:-.02em}
+a{color:var(--secondary);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--surface-2);padding:2px 6px;border-radius:5px;color:#C4B5FD}
+
+/* ---------- navegacao ---------- */
+#nav{position:fixed;inset:0 auto 0 0;width:var(--sidebar);background:#070A13;border-right:1px solid var(--line);padding:26px 18px;overflow-y:auto;z-index:20}
+#nav .brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+#nav .brand .mark{width:26px;height:26px;flex:none}
+#nav .brand b{font-family:'Space Grotesk';font-size:16px;letter-spacing:-.02em}
+#nav .role{font-size:11px;color:var(--dim);margin-bottom:22px;padding-left:36px;margin-top:-4px}
+#nav a{display:block;color:var(--muted);font-size:13px;padding:7px 12px;border-radius:8px;border-left:2px solid transparent;text-decoration:none;transition:.15s}
+#nav a:hover{color:var(--text);background:var(--surface)}
+#nav a.on{color:#C4B5FD;background:var(--primary-soft);border-left-color:var(--primary);font-weight:600}
+#nav .navsep{font-size:10px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;margin:20px 0 8px 12px;font-weight:700}
+#nav .foot{margin-top:28px;padding:12px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);line-height:1.6}
+
+main{margin-left:var(--sidebar);padding:0 40px 120px}
+.wrap{max-width:var(--maxw);margin:0 auto}
+section{padding:64px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+
+/* ---------- capa ---------- */
+.hero{padding:76px 0 56px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--primary-soft);border:1px solid var(--primary-line);color:#C4B5FD;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.02em}
+.hero h1{font-size:clamp(34px,5vw,52px);margin:22px 0 14px}
+.hero .tag{color:var(--secondary);font-size:15px;font-weight:600;letter-spacing:.04em;margin-bottom:20px}
+.hero p.lead{color:var(--muted);font-size:17px;max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.meta span{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 13px;font-size:12.5px;color:var(--muted)}
+.meta span b{color:var(--text);font-weight:600}
+
+h2.sec{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);font-weight:700;font-family:Inter}
+h3.title{font-size:clamp(24px,3vw,32px);margin:10px 0 16px}
+p.sub{color:var(--muted);max-width:74ch;margin-bottom:30px}
+h4{font-size:17px;margin:34px 0 12px}
+
+/* ---------- componentes ---------- */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.card.accent{border-color:var(--primary-line);background:linear-gradient(180deg,rgba(139,92,246,.10),rgba(139,92,246,.02))}
+.stat .n{font-family:'Space Grotesk';font-size:34px;font-weight:700;color:var(--primary);line-height:1.1}
+.stat .n.cy{color:var(--secondary)}
+.stat .l{font-size:13px;color:var(--muted);margin-top:8px}
+.stat .src{font-size:10.5px;color:var(--dim);margin-top:10px;letter-spacing:.02em}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 4px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:700}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.p0{background:rgba(52,211,153,.15);color:#6EE7B7;border:1px solid rgba(52,211,153,.4)}
+.p1{background:var(--primary-soft);color:#C4B5FD;border:1px solid var(--primary-line)}
+.p2{background:rgba(148,163,184,.12);color:var(--muted);border:1px solid var(--line)}
+.hi{background:rgba(52,211,153,.15);color:#6EE7B7}
+.md{background:rgba(251,191,36,.15);color:#FCD34D}
+.lo{background:rgba(248,113,113,.15);color:#FCA5A5}
+
+.bar{height:7px;border-radius:4px;background:var(--surface-2);overflow:hidden;min-width:70px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:4px}
+
+.persona{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;position:relative;overflow:hidden}
+.persona.star{border-color:var(--primary-line)}
+.persona .badge{position:absolute;top:18px;right:18px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#C4B5FD;background:var(--primary-soft);border:1px solid var(--primary-line);padding:4px 10px;border-radius:999px}
+.persona .who{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.persona .av{width:52px;height:52px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center;font-family:'Space Grotesk';font-size:19px;font-weight:700;color:var(--primary);flex:none}
+.persona h4{margin:0;font-size:18px}
+.persona .who small{color:var(--dim);font-size:12px;display:block;margin-top:2px}
+.persona .quote{font-style:italic;color:#CBD5E1;border-left:2px solid var(--primary);padding-left:14px;margin:16px 0;font-size:13.5px}
+.persona ul{list-style:none;margin:10px 0}
+.persona li{font-size:13px;color:var(--muted);padding-left:16px;position:relative;margin-bottom:6px}
+.persona li:before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.lbl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:700;margin-top:14px}
+
+figure{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;margin:20px 0}
+figure img{display:block;width:100%;height:auto;border-radius:8px}
+figcaption{background:var(--surface);color:var(--muted);font-size:12.5px;padding:11px 14px;border-radius:0 0 10px 10px;margin:10px -10px -10px;border-top:1px solid var(--line)}
+figcaption b{color:var(--text)}
+figcaption a{float:right;font-size:11.5px}
+
+.us{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+.us .h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.us .id{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--secondary);font-weight:700}
+.us .t{font-weight:600;font-size:14.5px}
+.us p{font-size:13px;color:var(--muted);margin:0}
+
+.note{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.3);border-left:3px solid var(--warn);border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0}
+.note b{color:#FCD34D}
+.note.v{background:var(--primary-soft);border-color:var(--primary-line);border-left-color:var(--primary)}
+.note.v b{color:#C4B5FD}
+.note p{font-size:13.5px;color:var(--muted);margin-top:6px}
+
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}
+.flow .step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 15px;font-size:13px;font-weight:600}
+.flow .step.k{border-color:var(--primary-line);background:var(--primary-soft);color:#C4B5FD}
+.flow .arw{color:var(--dim)}
+
+ul.plain{list-style:none}
+ul.plain li{font-size:14px;color:var(--muted);padding-left:22px;position:relative;margin-bottom:9px}
+ul.plain li:before{content:"→";position:absolute;left:0;color:var(--primary);font-weight:700}
+ul.plain li b{color:var(--text)}
+
+footer{margin-left:var(--sidebar);padding:34px 40px 60px;border-top:1px solid var(--line);color:var(--dim);font-size:12.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+@media(max-width:1000px){
+  :root{--sidebar:0px}
+  #nav{position:static;width:auto;inset:auto;border-right:none;border-bottom:1px solid var(--line);padding:16px}
+  #nav a{display:inline-block;font-size:12px;padding:5px 10px;border-left:none;border-bottom:2px solid transparent}
+  #nav a.on{border-left:none;border-bottom-color:var(--primary)}
+  #nav .navsep,#nav .foot,#nav .role{display:none}
+  main,footer{margin-left:0;padding-left:20px;padding-right:20px}
+  .g3,.g4,.g2{grid-template-columns:1fr}
+}
+@media print{#nav{display:none}main,footer{margin-left:0}section{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="15" stroke="#8B5CF6" stroke-width="2"/><path d="M9 16h4l3-6 3 12 3-6h3" stroke="#22D3EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <b>CinePulse</b>
+  </div>
+  <div class="role">Dossiê de Product / UX</div>
+
+  <div class="navsep">Descoberta</div>
+  <a href="#problema">1 · Problema</a>
+  <a href="#hipoteses">2 · Hipóteses</a>
+  <a href="#personas">3 · Público e personas</a>
+  <a href="#jornada">4 · Jornada</a>
+
+  <div class="navsep">Definição</div>
+  <a href="#stories">5 · User stories</a>
+  <a href="#priorizacao">6 · Priorização do MVP</a>
+  <a href="#metricas">7 · Métricas</a>
+
+  <div class="navsep">Desenho</div>
+  <a href="#ia">8 · Arquitetura</a>
+  <a href="#fluxo">9 · Fluxo principal</a>
+  <a href="#wireframes">10 · Wireframes</a>
+  <a href="#estados">11 · Estados</a>
+
+  <div class="navsep">Próximo passo</div>
+  <a href="#validacao">12 · Plano de validação</a>
+
+  <div class="foot">
+    Rafael Ferreira<br>Product / UX · Checkpoint 4<br>09/09/2026
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+<!-- ============ CAPA ============ -->
+<header class="hero">
+  <span class="eyebrow">Checkpoint 4 · Frente de Produto e Experiência</span>
+  <h1>Do problema ao wireframe</h1>
+  <div class="tag">CINEPULSE · ASSISTA. AVALIE. CONECTE.</div>
+  <p class="lead">Um diário social de filmes e séries que transforma avaliações em um mapa de gosto pessoal — e usa esse mapa para gerar descobertas mais relevantes. Este dossiê reúne a validação do problema, o público, as personas, a jornada, as user stories, a priorização do MVP e os wireframes.</p>
+  <div class="meta">
+    <span><b>Responsável</b> · Rafael Ferreira</span>
+    <span><b>Frente</b> · Product / UX</span>
+    <span><b>Entrega</b> · CP4 — Idealização do App</span>
+    <span><b>Artefatos</b> · 5 documentos + 12 wireframes</span>
+  </div>
+</header>
+
+<!-- ============ 1 PROBLEMA ============ -->
+<section id="problema">
+  <h2 class="sec">01 — Validação do problema</h2>
+  <h3 class="title">Não falta conteúdo. Falta um filtro pessoal confiável.</h3>
+  <p class="sub">O ponto de partida não é uma ideia de app, é um comportamento medido: o catálogo cresce, o tempo gasto decidindo cresce junto, e uma parcela relevante das pessoas simplesmente desiste da sessão.</p>
+
+  <div class="grid g4">
+    <div class="card stat"><div class="n">2,7 mi</div><div class="l">títulos disponíveis em jun/2023, contra 1,9 mi em jul/2021</div><div class="src">Nielsen · State of Play 2023</div></div>
+    <div class="card stat"><div class="n">10,5 min</div><div class="l">gastos por sessão só decidindo o que assistir — eram 7,4 min em 2019</div><div class="src">Nielsen · State of Play 2023</div></div>
+    <div class="card stat"><div class="n cy">1 em 5</div><div class="l">espectadores abandonam a sessão quando não acham nada que valha a pena</div><div class="src">Nielsen · State of Play 2023</div></div>
+    <div class="card stat"><div class="n cy">44,4%</div><div class="l">dos lares brasileiros com internet já pagam por streaming (~33,4 mi)</div><div class="src">IBGE / Poder360 · 2025</div></div>
+  </div>
+
+  <h4>As quatro dores</h4>
+  <div class="grid g2">
+    <div class="card"><b>1 · Memória fragmentada</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">O histórico fica espalhado entre serviços, prints e conversas de WhatsApp. A pessoa não consegue responder "o que eu assisti em maio?".</p></div>
+    <div class="card"><b>2 · Nota única é pobre</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Um "4 estrelas" não separa "roteiro fraco, atuação impecável" de "tudo mediano". Duas experiências opostas viram o mesmo número.</p></div>
+    <div class="card"><b>3 · Descoberta impessoal</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Rankings respondem "esse título é bom?", mas não "combina comigo, hoje, nesse humor?".</p></div>
+    <div class="card"><b>4 · Spoiler acidental</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Ler qualquer discussão sobre um título recente é apostar. O custo é alto e irreversível.</p></div>
+  </div>
+
+  <div class="note v">
+    <b>Declaração de problema</b>
+    <p>Pessoas de 16 a 35 anos que assistem filmes e séries semanalmente perdem tempo decidindo o que assistir e perdem o registro do que já assistiram, porque as ferramentas disponíveis oferecem catálogo e nota média — mas não um retrato do gosto individual nem um caminho seguro para conversar sobre o que viram.</p>
+  </div>
+
+  <h4>Por que o espaço existe</h4>
+  <div class="scroll"><table>
+    <thead><tr><th>Produto</th><th>Foco</th><th>Filmes</th><th>Séries</th><th>Avaliação<br>multidimensional</th><th>Afinidade<br>entre perfis</th><th>Descoberta<br>por humor</th><th>Spoiler oculto<br>por padrão</th></tr></thead>
+    <tbody>
+      <tr><td><b>Letterboxd</b></td><td>Diário social de cinema</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td><td>parcial</td></tr>
+      <tr><td><b>IMDb</b></td><td>Base de dados e nota agregada</td><td>✅</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>parcial</td></tr>
+      <tr><td><b>Trakt</b></td><td>Rastreamento de consumo</td><td>✅</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td><b>Serializd</b></td><td>Diário de séries</td><td>—</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>parcial</td></tr>
+      <tr><td><b>JustWatch</b></td><td>Onde assistir</td><td>✅</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>n/a</td></tr>
+      <tr style="background:var(--primary-soft)"><td><b>CinePulse</b></td><td>Diário social + descoberta por gosto</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    </tbody>
+  </table></div>
+  <p class="sub" style="margin-top:16px">O espaço vazio não é "mais um app de listas": é a combinação de <b style="color:var(--text)">filmes e séries no mesmo diário</b> com <b style="color:var(--text)">descoberta guiada por gosto e humor</b>. O crescimento do Letterboxd — 17 milhões de membros em jan/2025 com um produto essencialmente de diário e avaliação, e só de cinema — prova que existe apetite pelo comportamento.</p>
+</section>
+
+<!-- ============ 2 HIPOTESES ============ -->
+<section id="hipoteses">
+  <h2 class="sec">02 — O que ainda não sabemos</h2>
+  <h3 class="title">Seis hipóteses, com critério de falseamento</h3>
+  <p class="sub">Este projeto ainda não fez pesquisa primária. Em vez de apresentar suposição como fato, as afirmações sobre comportamento estão registradas como hipóteses — cada uma com o resultado que a derrubaria e a decisão de escopo correspondente.</p>
+
+  <div class="scroll"><table>
+    <thead><tr><th style="width:44px">#</th><th>Hipótese</th><th style="width:110px">Confiança</th><th>Falseada se…</th><th>Decisão em caso de falha</th></tr></thead>
+    <tbody>
+      <tr><td><b>H1</b></td><td>"Não sei o que assistir" é dor recorrente e irritante</td><td><span class="pill hi">alta</span></td><td>menos de 50% citarem espontaneamente</td><td>Produto vira só diário</td></tr>
+      <tr><td><b>H2</b></td><td>Querem registrar, mas desistem pelo esforço</td><td><span class="pill md">média</span></td><td>mais de 60% já usarem solução satisfatória</td><td>Focar no social, não no registro</td></tr>
+      <tr><td><b>H3</b></td><td>PulseScore por critérios é valor, não formulário</td><td><span class="pill lo">baixa</span></td><td>menos de 20% expandirem a seção opcional</td><td>PulseScore desce para P2</td></tr>
+      <tr><td><b>H4</b></td><td>PulseMatch aumenta a confiança na recomendação</td><td><span class="pill md">média</span></td><td>preferirem a nota média ao percentual</td><td>Manter só a nota agregada</td></tr>
+      <tr><td><b>H5</b></td><td>Filtrar por humor supera filtrar por gênero</td><td><span class="pill md">média</span></td><td>uso do filtro de humor abaixo do de gênero</td><td>MoodTags voltam a ser só marcação</td></tr>
+      <tr><td><b>H6</b></td><td>Spoiler oculto aumenta o engajamento com reviews</td><td><span class="pill md">média</span></td><td>taxa de revelação abaixo de 30%</td><td>Rever o card, não o princípio</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note">
+    <b>H3 é a hipótese mais frágil do produto.</b>
+    <p>É exatamente por isso que, no MVP, o PulseScore por critérios é opcional e fica recolhido atrás de um toque — decisão visível no wireframe WF-05. O desenho da interface é a forma de comprar a opção sem apostar o produto nela.</p>
+  </div>
+</section>
+
+<!-- ============ 3 PERSONAS ============ -->
+<section id="personas">
+  <h2 class="sec">03 — Público e personas</h2>
+  <h3 class="title">Recorte comportamental, não demográfico</h3>
+  <p class="sub">Idade e renda descrevem quem a pessoa é, mas não explicam por que ela usaria o app. O sinal mais forte de que alguém sente a dor é <b style="color:var(--text)">já ter tentado registrar o que assiste — e ter desistido</b>.</p>
+
+  <div class="grid g4" style="margin-bottom:34px">
+    <div class="card"><div class="lbl" style="margin-top:0">Frequência</div><div style="font-size:14px;margin-top:6px">≥ 2 títulos por semana</div></div>
+    <div class="card"><div class="lbl" style="margin-top:0">Acesso</div><div style="font-size:14px;margin-top:6px">1+ serviço de streaming</div></div>
+    <div class="card"><div class="lbl" style="margin-top:0">Comportamento</div><div style="font-size:14px;margin-top:6px">Recomenda ou pede recomendação</div></div>
+    <div class="card accent"><div class="lbl" style="margin-top:0">Sinal decisivo</div><div style="font-size:14px;margin-top:6px">Já tentou registrar e parou</div></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="persona star">
+      <span class="badge">primária</span>
+      <div class="who"><div class="av">M</div><div><h4>Marina Costa</h4><small>27 anos · analista de marketing · SP</small></div></div>
+      <p style="font-size:13.5px;color:var(--muted)">Chega em casa às 20h cansada, rola a tela inicial por sete minutos, abre outro serviço, desiste e repete algo que já viu.</p>
+      <div class="lbl">Dores</div>
+      <ul><li>Ranking genérico não combina com o humor do dia</li><li>Recomendação de amigo morre no WhatsApp</li><li>Pesquisar sobre um título é arriscar spoiler</li></ul>
+      <div class="quote">"Não quero escolher entre 400 opções. Quero que alguém me diga qual dessas quatro é a minha cara."</div>
+      <div class="lbl">Abandona o app se</div>
+      <p style="font-size:12.5px;color:var(--muted)">houver formulário longo ou cadastro obrigatório antes de ver valor.</p>
+    </div>
+
+    <div class="persona">
+      <div class="who"><div class="av">L</div><div><h4>Lucas Andrade</h4><small>20 anos · universitário</small></div></div>
+      <p style="font-size:13.5px;color:var(--muted)">Assiste 3 a 5 títulos por semana. Termina um filme às 2h e quer dar a nota na hora. É a pessoa a quem os amigos perguntam o que assistir.</p>
+      <div class="lbl">Dores</div>
+      <ul><li>Salva recomendação em três lugares e não acha depois</li><li>Quer discutir o final sem estragar para os outros</li></ul>
+      <div class="quote">"Quero olhar o meu ano e ver o que assisti. Isso conta uma história sobre mim."</div>
+      <div class="lbl">Abandona o app se</div>
+      <p style="font-size:12.5px;color:var(--muted)">o diário continuar vazio depois de duas semanas, ou se séries não forem cobertas.</p>
+    </div>
+
+    <div class="persona">
+      <div class="who"><div class="av">P</div><div><h4>Pedro Nakamura</h4><small>24 anos · designer · escreve resenhas</small></div></div>
+      <p style="font-size:13.5px;color:var(--muted)">Usa Letterboxd para cinema, mas não tem nada consistente para séries. Produz o conteúdo que a Marina consome.</p>
+      <div class="lbl">Dores</div>
+      <ul><li>Nota única achata a análise</li><li>Precisa avisar sobre spoiler na mão, e nem sempre funciona</li></ul>
+      <div class="quote">"Dá para ser 5 estrelas de roteiro e 2 de direção. O número sozinho mente."</div>
+      <div class="lbl">Por que ele importa</div>
+      <p style="font-size:12.5px;color:var(--muted)">Um app com muitas Marinas e nenhum Pedro não tem reviews.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Antipersona — Sandra, 45 anos.</b>
+    <p>Assiste um filme a cada duas semanas, escolhe pela tela inicial do serviço e nunca comentou sobre um filme na internet. O CinePulse não desenha para ela: se uma funcionalidade só se justifica pelo perfil da Sandra, ela sai do escopo.</p>
+  </div>
+
+  <h4>Princípios de UX — e o que cada um proíbe</h4>
+  <div class="scroll"><table>
+    <thead><tr><th style="width:36px">#</th><th>Princípio</th><th>O que isso proíbe</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Registrar leva segundos</td><td>Qualquer campo obrigatório além da nota. Meta cronometrada: ≤ 20 s</td></tr>
+      <tr><td>2</td><td>Profundidade é sempre opcional</td><td>Bloquear o salvamento por PulseScore, MoodTag ou review</td></tr>
+      <tr><td>3</td><td>Spoiler só aparece por ação consciente</td><td>Exibir texto marcado em prévia, feed ou notificação</td></tr>
+      <tr><td>4</td><td>Filmes e séries convivem</td><td>Telas, abas ou fluxos separados por tipo de mídia</td></tr>
+      <tr><td>5</td><td>O casual e o crítico cabem no mesmo app</td><td>Linguagem que trate nota alta em blockbuster como gosto inferior</td></tr>
+      <tr><td>6</td><td>Todo número é explicável</td><td>Exibir PulseMatch ou recomendação sem mostrar a razão</td></tr>
+      <tr><td>7</td><td>O valor aparece antes do cadastro</td><td>Usar a tela de login como porta única de entrada</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 4 JORNADA ============ -->
+<section id="jornada">
+  <h2 class="sec">04 — Jornada</h2>
+  <h3 class="title">O produto mora no vale da curva</h3>
+  <p class="sub">O mapa segue a Marina da noite sem plano até o registro que melhora a próxima escolha. Ele tem dois pontos baixos — e são exatamente esses dois pontos que o MVP inteiro existe para atacar.</p>
+
+  <figure><img src="assets/wireframes/jornada-mapa.svg" alt="Mapa da jornada da persona Marina, em seis fases, com curva de emoção">
+    <figcaption><b>Mapa da jornada · Marina, 27 anos</b> — ações, pensamento, emoção, dores e a resposta do produto em cada fase<a href="assets/wireframes/jornada-mapa.svg" target="_blank">abrir em tamanho real ↗</a></figcaption>
+  </figure>
+
+  <div class="grid g2">
+    <div class="card accent"><b style="color:#C4B5FD">Vale 1 · Fase 2 — Descoberta</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Nota média não diz se combina com ela; recomendação de amigo se perde no chat.<br><b style="color:var(--text)">Resposta:</b> MoodTags e PulseMatch.</p></div>
+    <div class="card accent"><b style="color:#C4B5FD">Vale 2 · Fase 5 — Registro</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Formulário longo faz desistir; nota única não expressa o que sentiu.<br><b style="color:var(--text)">Resposta:</b> bottom sheet de dois toques.</p></div>
+  </div>
+
+  <div class="note v">
+    <b>A regra que liga a jornada à priorização</b>
+    <p>Toda funcionalidade P0 ou P1 precisa se justificar pela fase 2 ou pela fase 5. As demais fases da jornada são mantidas como estão — não é papel do MVP melhorar tudo.</p>
+  </div>
+</section>
+
+<!-- ============ 5 USER STORIES ============ -->
+<section id="stories">
+  <h2 class="sec">05 — User stories</h2>
+  <h3 class="title">20 histórias, 7 épicos, critérios verificáveis</h3>
+  <p class="sub">Cada história tem critérios de aceite escritos em <i>dado / quando / então</i>. Abaixo, as sete mais determinantes para o produto. A lista completa está em <code>docs/03-mvp-e-requisitos.md</code>.</p>
+
+  <div class="us"><div class="h"><span class="id">US-08</span><span class="t">Marcar como assistido e avaliar</span><span class="pill p0">P0</span><span class="pill p1">central</span></div>
+    <p>Como Lucas, quero registrar um título com nota em poucos toques para não perder o histórico. <b style="color:var(--text)">Uma estrela e "Salvar" encerram a tarefa — exatamente dois toques.</b> Nenhum campo além da nota pode bloquear o salvamento.</p></div>
+
+  <div class="us"><div class="h"><span class="id">US-06</span><span class="t">Descobrir por humor (MoodTags)</span><span class="pill p0">P0</span></div>
+    <p>Como Marina, quero filtrar por sensação para decidir o que assistir agora sem saber o nome do título. Duas tags selecionadas filtram por interseção; tag com menos de 5 títulos não é oferecida.</p></div>
+
+  <div class="us"><div class="h"><span class="id">US-13</span><span class="t">Marcar e revelar spoiler</span><span class="pill p0">P0</span></div>
+    <p>Como Pedro, quero sinalizar spoiler para não estragar a experiência de ninguém. A review marcada aparece oculta em <b style="color:var(--text)">todos</b> os lugares — detalhe, perfil, feed e notificação — e volta ao estado fechado ao sair da tela.</p></div>
+
+  <div class="us"><div class="h"><span class="id">US-16</span><span class="t">Ver o PulseMatch</span><span class="pill p1">P1</span><span class="pill p1">diferencial</span></div>
+    <p>Como Marina, quero saber o quanto meu gosto combina com o de alguém. Com menos de 5 títulos em comum, o app mostra "poucos dados para comparar" — <b style="color:var(--text)">nunca um número inventado</b>.</p></div>
+
+  <div class="us"><div class="h"><span class="id">US-03</span><span class="t">Explorar sem conta</span><span class="pill p0">P0</span><span class="pill p2">criada nesta revisão</span></div>
+    <p>Como visitante, quero navegar e ler reviews antes de criar conta. Ao tentar avaliar ou salvar, o cadastro é oferecido <i>naquele contexto</i> e a ação é concluída automaticamente depois.</p></div>
+
+  <div class="us"><div class="h"><span class="id">US-14</span><span class="t">Editar ou excluir um registro</span><span class="pill p0">P0</span><span class="pill p2">criada nesta revisão</span></div>
+    <p>Como Lucas, quero corrigir uma nota que dei errado, porque avaliei com pressa. Uma UX que promete registro em 20 segundos <b style="color:var(--text)">assume</b> que haverá erro.</p></div>
+
+  <div class="us"><div class="h"><span class="id">US-09</span><span class="t">Detalhar o PulseScore</span><span class="pill p1">P1</span></div>
+    <p>Como Pedro, quero avaliar história, atuação, visual e trilha separadamente. Critério não preenchido não vira zero; a seção nasce recolhida e marcada como opcional.</p></div>
+</section>
+
+<!-- ============ 6 PRIORIZACAO ============ -->
+<section id="priorizacao">
+  <h2 class="sec">06 — Priorização do MVP</h2>
+  <h3 class="title">RICE, com a linha de corte declarada</h3>
+  <p class="sub"><code>RICE = (Reach × Impact × Confidence) ÷ Effort</code>. Reach e Impact são estimativas do time, não medições — o método serve para tornar a discussão explícita e comparável, não para produzir uma verdade.</p>
+
+  <div class="scroll"><table>
+    <thead><tr><th style="width:34px">#</th><th>Funcionalidade</th><th>US</th><th class="num">R</th><th class="num">I</th><th class="num">C</th><th class="num">E</th><th class="num">RICE</th><th style="width:96px"></th><th>Faixa</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>Marcar assistido + nota</b></td><td>US-08</td><td class="num">90</td><td class="num">3</td><td class="num">100%</td><td class="num">2,0</td><td class="num"><b>135,0</b></td><td><div class="bar"><i style="width:100%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>2</td><td>Busca de filmes e séries</td><td>US-04</td><td class="num">95</td><td class="num">3</td><td class="num">100%</td><td class="num">3,0</td><td class="num"><b>95,0</b></td><td><div class="bar"><i style="width:70%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>3</td><td>Detalhe do título</td><td>US-05</td><td class="num">95</td><td class="num">2</td><td class="num">100%</td><td class="num">2,0</td><td class="num"><b>95,0</b></td><td><div class="bar"><i style="width:70%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>4</td><td>Watchlist</td><td>US-11</td><td class="num">70</td><td class="num">2</td><td class="num">90%</td><td class="num">1,5</td><td class="num"><b>84,0</b></td><td><div class="bar"><i style="width:62%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>5</td><td>Diário</td><td>US-12</td><td class="num">80</td><td class="num">2</td><td class="num">95%</td><td class="num">2,0</td><td class="num"><b>76,0</b></td><td><div class="bar"><i style="width:56%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>6</td><td>MoodTags na avaliação</td><td>US-17</td><td class="num">55</td><td class="num">2</td><td class="num">70%</td><td class="num">1,5</td><td class="num"><b>51,3</b></td><td><div class="bar"><i style="width:38%"></i></div></td><td><span class="pill p0">P0 ↑</span></td></tr>
+      <tr><td>7</td><td>Cadastro e login</td><td>US-01/02</td><td class="num">100</td><td class="num">1</td><td class="num">100%</td><td class="num">2,0</td><td class="num"><b>50,0</b></td><td><div class="bar"><i style="width:37%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>8</td><td>Descoberta por MoodTag</td><td>US-06</td><td class="num">50</td><td class="num">3</td><td class="num">60%</td><td class="num">2,5</td><td class="num"><b>36,0</b></td><td><div class="bar"><i style="width:27%"></i></div></td><td><span class="pill p0">P0 ↑</span></td></tr>
+      <tr><td>9</td><td>Editar/excluir registro</td><td>US-14</td><td class="num">35</td><td class="num">1</td><td class="num">100%</td><td class="num">1,0</td><td class="num"><b>35,0</b></td><td><div class="bar"><i style="width:26%"></i></div></td><td><span class="pill p0">P0 ✚</span></td></tr>
+      <tr><td>10</td><td>Review + Spoiler Safe</td><td>US-10/13</td><td class="num">45</td><td class="num">2</td><td class="num">80%</td><td class="num">2,5</td><td class="num"><b>28,8</b></td><td><div class="bar"><i style="width:21%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr><td>11</td><td>Explorar sem conta</td><td>US-03</td><td class="num">40</td><td class="num">1</td><td class="num">70%</td><td class="num">1,0</td><td class="num"><b>28,0</b></td><td><div class="bar"><i style="width:21%"></i></div></td><td><span class="pill p0">P0 ✚</span></td></tr>
+      <tr><td>12</td><td>Perfil e mapa de gosto</td><td>US-18</td><td class="num">60</td><td class="num">1</td><td class="num">90%</td><td class="num">2,0</td><td class="num"><b>27,0</b></td><td><div class="bar"><i style="width:20%"></i></div></td><td><span class="pill p0">P0</span></td></tr>
+      <tr style="background:rgba(139,92,246,.10)"><td colspan="10" style="text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C4B5FD;font-weight:700;padding:9px">linha de corte do MVP</td></tr>
+      <tr><td>13</td><td>Perfil de outra pessoa</td><td>US-15</td><td class="num">45</td><td class="num">1</td><td class="num">85%</td><td class="num">1,5</td><td class="num">25,5</td><td><div class="bar"><i style="width:19%"></i></div></td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>14</td><td>Seguir pessoas</td><td>US-19</td><td class="num">45</td><td class="num">1</td><td class="num">80%</td><td class="num">1,5</td><td class="num">24,0</td><td><div class="bar"><i style="width:18%"></i></div></td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>15</td><td>Feed de amigos</td><td>US-07</td><td class="num">45</td><td class="num">2</td><td class="num">60%</td><td class="num">3,0</td><td class="num">18,0</td><td><div class="bar"><i style="width:13%"></i></div></td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>16</td><td>Listas personalizadas</td><td>US-20</td><td class="num">40</td><td class="num">1</td><td class="num">80%</td><td class="num">2,0</td><td class="num">16,0</td><td><div class="bar"><i style="width:12%"></i></div></td><td><span class="pill p1">P1</span></td></tr>
+      <tr><td>17</td><td><b>PulseMatch</b></td><td>US-16</td><td class="num">40</td><td class="num">3</td><td class="num">50%</td><td class="num">4,0</td><td class="num">15,0</td><td><div class="bar"><i style="width:11%"></i></div></td><td><span class="pill p1">P1 ⚠</span></td></tr>
+      <tr><td>18</td><td>Onde assistir (integração)</td><td>—</td><td class="num">60</td><td class="num">2</td><td class="num">40%</td><td class="num">5,0</td><td class="num">9,6</td><td><div class="bar"><i style="width:7%"></i></div></td><td><span class="pill p2">P2</span></td></tr>
+      <tr><td>19</td><td><b>PulseScore por critérios</b></td><td>US-09</td><td class="num">25</td><td class="num">1</td><td class="num">70%</td><td class="num">2,0</td><td class="num">8,8</td><td><div class="bar"><i style="width:6%"></i></div></td><td><span class="pill p1">P1 ⚠</span></td></tr>
+      <tr><td>20</td><td>Recomendação personalizada</td><td>—</td><td class="num">50</td><td class="num">3</td><td class="num">30%</td><td class="num">8,0</td><td class="num">5,6</td><td><div class="bar"><i style="width:4%"></i></div></td><td><span class="pill p2">P2</span></td></tr>
+      <tr><td>21</td><td>Gamificação / conquistas</td><td>—</td><td class="num">30</td><td class="num">0,5</td><td class="num">40%</td><td class="num">2,0</td><td class="num">3,0</td><td><div class="bar"><i style="width:2%"></i></div></td><td><span class="pill p2">P2</span></td></tr>
+      <tr><td>22</td><td>Listas colaborativas</td><td>—</td><td class="num">15</td><td class="num">1</td><td class="num">50%</td><td class="num">3,0</td><td class="num">2,5</td><td><div class="bar"><i style="width:2%"></i></div></td><td><span class="pill p2">P2</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>Duas exceções estratégicas — declaradas, não escondidas</h4>
+  <div class="grid g2">
+    <div class="card"><b style="color:#C4B5FD">⚠ PulseMatch (RICE 15) fica em P1</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">O RICE penaliza confiança baixa e esforço alto — as características de qualquer hipótese não testada. Mas um MVP só de P0 é um clone do Letterboxd com séries: entregaria um produto funcional e <b style="color:var(--text)">nenhum aprendizado</b>. O esforço é contido usando fórmula determinística, não aprendizado de máquina.</p></div>
+    <div class="card"><b style="color:#C4B5FD">⚠ PulseScore (RICE 8,8) fica em P1</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Uso projetado baixo, mas é um dos quatro pilares da marca, reaproveita a mesma folha do US-08 e testa a hipótese H3 — a mais frágil do produto. Se o teste de usabilidade mostrar menos de 20% de abertura, <b style="color:var(--text)">desce para P2 sem drama</b>.</p></div>
+  </div>
+
+  <h4>O que mudou em relação à primeira versão do CP4</h4>
+  <div class="scroll"><table>
+    <thead><tr><th style="width:34px">#</th><th>Antes</th><th>Agora</th><th>Por quê</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>MoodTags eram P1</td><td><b>MoodTags viram P0</b></td><td>RICE 51,3 e 36,0 — acima de review+spoiler, que já era P0. É o recurso mais barato que ataca o vale 1 da jornada</td></tr>
+      <tr><td>2</td><td>"Explorar sem conta" não existia</td><td><b>Criado como P0 (US-03)</b></td><td>Cadastro obrigatório na porta contradiz o princípio nº 7 e é a principal causa de abandono em apps sociais novos</td></tr>
+      <tr><td>3</td><td>"Editar registro" não estava listado</td><td><b>Criado como P0 (US-14)</b></td><td>Registro em 20 segundos pressupõe erro; se corrigir for caro, o usuário passa a avaliar devagar</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>PulseMatch v1 — determinístico e auditável</h4>
+  <div class="card" style="font-family:ui-monospace,monospace;font-size:12.5px;color:#CBD5E1;line-height:1.9;white-space:pre-wrap">Comum = títulos avaliados pelos dois perfis
+
+1. se |Comum| &lt; 5  →  "poucos dados para comparar". Fim.
+2. sobreposicao  = min(1 ; |Comum| / 30)
+3. concordancia  = 1 − (média|nota_A − nota_B| / 4,5)
+4. <b style="color:#C4B5FD">PulseMatch = 100 × (0,35 × sobreposicao + 0,65 × concordancia)</b>
+5. exibir sempre junto: gênero de maior acordo, de maior divergência
+   e o link para os títulos em comum</div>
+  <p class="sub" style="margin-top:14px"><b style="color:var(--text)">Por que 65% para concordância:</b> assistir as mesmas coisas não é o mesmo que gostar das mesmas coisas. O peso maior fica em concordar sobre as notas — que é o que a pessoa quer saber ao pedir uma recomendação. <b style="color:var(--text)">Requisito de transparência:</b> nenhuma versão futura pode exibir o percentual sem os três elementos do passo 5.</p>
+</section>
+
+<!-- ============ 7 METRICAS ============ -->
+<section id="metricas">
+  <h2 class="sec">07 — Métricas</h2>
+  <h3 class="title">Uma métrica-guia, cinco de apoio</h3>
+
+  <div class="card accent" style="margin-bottom:24px">
+    <div class="lbl" style="margin-top:0">North Star Metric</div>
+    <div style="font-family:'Space Grotesk';font-size:26px;font-weight:700;margin:8px 0 10px">Títulos avaliados por usuário ativo semanal</div>
+    <p style="color:var(--muted);font-size:13.5px">É a única métrica que só sobe quando o produto entrega valor dos dois lados: a pessoa está assistindo <b style="color:var(--text)">e</b> registrando. Downloads e cadastros não medem nada disso.</p>
+  </div>
+
+  <div class="grid g3">
+    <div class="card stat"><div class="n">≤ 20 s</div><div class="l">tempo mediano para registrar um título já encontrado — a restrição que governa todo o desenho de interface</div></div>
+    <div class="card stat"><div class="n cy">≥ 40%</div><div class="l">ativação: usuários que registram 3 títulos nos primeiros 7 dias</div></div>
+    <div class="card stat"><div class="n cy">≥ 35%</div><div class="l">retenção D7 entre usuários ativados</div></div>
+  </div>
+
+  <h4>Métricas por funcionalidade</h4>
+  <div class="scroll"><table>
+    <thead><tr><th>Funcionalidade</th><th>Métrica</th><th class="num">Meta</th><th>Hipótese testada</th></tr></thead>
+    <tbody>
+      <tr><td>Avaliação rápida (US-08)</td><td>tempo mediano até salvar</td><td class="num">≤ 20 s</td><td>—</td></tr>
+      <tr><td>Busca (US-04)</td><td>buscas que terminam em detalhe aberto</td><td class="num">≥ 60%</td><td>—</td></tr>
+      <tr><td>MoodTags (US-06/17)</td><td>usuários que usam ao menos uma vez</td><td class="num">≥ 30%</td><td>H5</td></tr>
+      <tr><td>PulseScore (US-09)</td><td>usuários que expandem a seção opcional</td><td class="num">≥ 20%</td><td><b>H3</b></td></tr>
+      <tr><td>Spoiler Safe (US-13)</td><td>reviews marcadas que são reveladas</td><td class="num">≥ 30%</td><td>H6</td></tr>
+      <tr><td>PulseMatch (US-16)</td><td>usuários que abrem "títulos em comum"</td><td class="num">≥ 25%</td><td>H4</td></tr>
+      <tr><td>Diário (US-12)</td><td>retorno ao diário em D7</td><td class="num">≥ 35%</td><td>H2</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 8 IA ============ -->
+<section id="ia">
+  <h2 class="sec">08 — Arquitetura da informação</h2>
+  <h3 class="title">Quatro abas fixas, três telas sobrepostas</h3>
+  <p class="sub">As cores no diagrama indicam a faixa de prioridade: verde = P0 (MVP), roxo = P1 (diferencial), cinza = P2 (futuro). Dá para ver, em uma imagem, o que existe no CP5 e o que fica para depois.</p>
+
+  <figure><img src="assets/wireframes/ia-sitemap.svg" alt="Sitemap do CinePulse com quatro abas e telas sobrepostas, coloridas por prioridade">
+    <figcaption><b>Arquitetura da informação</b> — estrutura de navegação com a prioridade de escopo embutida<a href="assets/wireframes/ia-sitemap.svg" target="_blank">abrir em tamanho real ↗</a></figcaption>
+  </figure>
+
+  <ul class="plain">
+    <li>Nenhuma tarefa do MVP exige mais de <b>três níveis de profundidade</b> a partir de uma aba.</li>
+    <li>O detalhe do título é acessível de <b>qualquer</b> lista — busca, diário, watchlist, feed ou perfil de terceiro. Ele é o hub do produto.</li>
+    <li>A avaliação <b>nunca</b> é uma tela nova: é uma folha por cima do contexto. Trocar de tela custaria o contexto do título.</li>
+    <li>Filmes e séries <b>não</b> têm abas separadas.</li>
+    <li>O botão <b>+</b> flutuante está em todas as abas: registrar é a ação de primeira classe do produto.</li>
+  </ul>
+</section>
+
+<!-- ============ 9 FLUXO ============ -->
+<section id="fluxo">
+  <h2 class="sec">09 — Fluxo principal</h2>
+  <h3 class="title">Um ciclo, não uma linha</h3>
+
+  <div class="flow">
+    <span class="step">assistir</span><span class="arw">→</span>
+    <span class="step k">registrar em segundos</span><span class="arw">→</span>
+    <span class="step">mapa de gosto mais preciso</span><span class="arw">→</span>
+    <span class="step k">descoberta mais relevante</span><span class="arw">↺</span>
+  </div>
+
+  <figure><img src="assets/wireframes/wf-00-fluxo-principal.svg" alt="Fluxograma do caminho crítico, do gatilho ao registro no diário">
+    <figcaption><b>Fluxo principal</b> — do gatilho ao registro, com os desvios opcionais fora do caminho crítico<a href="assets/wireframes/wf-00-fluxo-principal.svg" target="_blank">abrir em tamanho real ↗</a></figcaption>
+  </figure>
+
+  <ul class="plain">
+    <li><b>É um ciclo.</b> O último passo alimenta o primeiro. Um app de listas termina no arquivo; o CinePulse volta para a descoberta.</li>
+    <li><b>O caminho crítico tem no máximo 5 passos</b> do gatilho até o registro salvo.</li>
+    <li><b>Tudo que é opcional está fora do caminho crítico.</b> PulseScore, MoodTags e review são desvios, nunca pedágios.</li>
+  </ul>
+</section>
+
+<!-- ============ 10 WIREFRAMES ============ -->
+<section id="wireframes">
+  <h2 class="sec">10 — Wireframes</h2>
+  <h3 class="title">Oito telas, lo-fi e anotadas</h3>
+  <p class="sub">Cinza, sem imagem real e sem tipografia de marca — de propósito. Wireframe responde <b style="color:var(--text)">"a estrutura está certa e a tarefa é curta?"</b>; o mockup de alta fidelidade responde <b style="color:var(--text)">"está bonito e consistente?"</b>. Discutir cor antes de estrutura é a forma mais rápida de gastar tempo com a coisa errada. Cada número no desenho é uma decisão em revisão.</p>
+
+  <figure><img src="assets/wireframes/wf-01-onboarding.svg" alt="Wireframe da tela de onboarding e acesso"><figcaption><b>WF-01 · Onboarding e acesso</b> — o valor aparece antes do cadastro <span style="color:var(--dim)">· US-01, US-02, US-03</span><a href="assets/wireframes/wf-01-onboarding.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-02-home.svg" alt="Wireframe da home"><figcaption><b>WF-02 · Home / Descobrir</b> — busca acima da dobra e descoberta por humor <span style="color:var(--dim)">· US-04, US-06, US-07, US-08</span><a href="assets/wireframes/wf-02-home.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-03-busca.svg" alt="Wireframe da busca e resultados"><figcaption><b>WF-03 · Busca e resultados</b> — decidir sem abrir o detalhe, salvar direto da linha <span style="color:var(--dim)">· US-04, US-11</span><a href="assets/wireframes/wf-03-busca.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-04-detalhe.svg" alt="Wireframe do detalhe do título"><figcaption><b>WF-04 · Detalhe do título</b> — PulseMatch onde a decisão acontece <span style="color:var(--dim)">· US-05, US-08, US-11, US-13, US-16</span><a href="assets/wireframes/wf-04-detalhe.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-05-avaliacao.svg" alt="Wireframe da folha de avaliação rápida"><figcaption><b>WF-05 · Avaliação rápida</b> — a tela mais importante do produto: dois toques encerram a tarefa <span style="color:var(--dim)">· US-08, US-09, US-17</span><a href="assets/wireframes/wf-05-avaliacao.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-06-review-spoiler.svg" alt="Wireframe da review com spoiler"><figcaption><b>WF-06 · Review com Spoiler Safe</b> — prévia do card fechado antes de publicar <span style="color:var(--dim)">· US-10, US-13</span><a href="assets/wireframes/wf-06-review-spoiler.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-07-diario.svg" alt="Wireframe do diário"><figcaption><b>WF-07 · Diário</b> — números antes da lista: o retorno visível de ter registrado <span style="color:var(--dim)">· US-12, US-14, US-18</span><a href="assets/wireframes/wf-07-diario.svg" target="_blank">abrir ↗</a></figcaption></figure>
+
+  <figure><img src="assets/wireframes/wf-08-perfil-pulsematch.svg" alt="Wireframe do perfil com PulseMatch"><figcaption><b>WF-08 · Perfil e PulseMatch</b> — número explicado e auditável, nunca mágico <span style="color:var(--dim)">· US-15, US-16, US-18, US-19</span><a href="assets/wireframes/wf-08-perfil-pulsematch.svg" target="_blank">abrir ↗</a></figcaption></figure>
+</section>
+
+<!-- ============ 11 ESTADOS ============ -->
+<section id="estados">
+  <h2 class="sec">11 — Estados de tela</h2>
+  <h3 class="title">Um fluxo só está especificado quando o caminho infeliz também está</h3>
+  <p class="sub">É o artefato que costuma faltar em trabalho acadêmico — e o primeiro que quebra no app real.</p>
+
+  <figure><img src="assets/wireframes/wf-09-estados.svg" alt="Wireframes dos estados vazio, carregando e erro"><figcaption><b>WF-09 · Vazio, carregando e erro</b> — requisito não funcional aplicado a toda tela que carrega dados<a href="assets/wireframes/wf-09-estados.svg" target="_blank">abrir em tamanho real ↗</a></figcaption></figure>
+
+  <div class="grid g3">
+    <div class="card"><b>Vazio</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Explica o valor da tela e oferece a ação que sai dali. "Nenhum item encontrado" sozinho é um beco sem saída.</p></div>
+    <div class="card"><b>Carregando</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Esqueleto com a forma do conteúdo, não spinner. A pessoa já entende o que vai chegar e a espera parece menor.</p></div>
+    <div class="card"><b>Erro</b><p style="color:var(--muted);font-size:13.5px;margin-top:8px">Linguagem humana, causa provável, ação de recuperação <b style="color:var(--text)">e</b> uma saída alternativa que não depende de rede.</p></div>
+  </div>
+</section>
+
+<!-- ============ 12 VALIDACAO ============ -->
+<section id="validacao">
+  <h2 class="sec">12 — Próximo passo</h2>
+  <h3 class="title">O plano de validação está pronto para rodar</h3>
+  <p class="sub">Questionário, roteiro de entrevista e teste de usabilidade já escritos em <code>docs/10-pesquisa-e-validacao.md</code>. Cinco participantes bem conduzidos revelam a maior parte dos problemas graves de usabilidade — para prazo acadêmico, valem mais do que trinta respostas de formulário.</p>
+
+  <h4>Teste de usabilidade sobre o protótipo <code>app_interativo.html</code></h4>
+  <div class="scroll"><table>
+    <thead><tr><th style="width:34px">#</th><th>Tarefa dita ao participante</th><th>Mede</th><th>Sucesso</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>"Registre o último filme ou série que você assistiu, com a nota que você daria."</td><td>meta dos 20 s e <b>H3</b></td><td>concluída sozinho em ≤ 20 s; anotar se abriu o PulseScore</td></tr>
+      <tr><td>2</td><td>"É sexta à noite e você quer algo leve. Encontre uma opção."</td><td><b>H5</b></td><td>usou o filtro por humor sem ser instruído</td></tr>
+      <tr><td>3</td><td>"Você quer comentar o final sem estragar para quem não viu. Faça isso."</td><td><b>H6</b></td><td>ativou o controle de spoiler sem ajuda</td></tr>
+      <tr><td>4</td><td>"A Marina recomendou um filme. Vale a pena confiar?"</td><td><b>H4</b></td><td>encontrou e interpretou o PulseMatch corretamente</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note">
+    <b>Regra do time</b>
+    <p>Uma hipótese falseada gera mudança documentada de escopo, não uma nota de rodapé. Todo problema de gravidade 3 no teste vira item obrigatório de backlog no CP5. Enquanto a seção de resultados não existir, tudo neste repositório sobre comportamento de usuário deve ser lido como <b>hipótese</b>.</p>
+  </div>
+
+  <h4>Documentação completa</h4>
+  <ul class="plain">
+    <li><a href="01-visao-produto.md">01 — Visão do produto</a> · problema, hipóteses, benchmark, posicionamento e métricas</li>
+    <li><a href="02-publico-personas-e-jornada.md">02 — Público, personas e jornada</a> · segmentação, três personas, antipersona e mapa de jornada</li>
+    <li><a href="03-mvp-e-requisitos.md">03 — MVP e requisitos</a> · 20 user stories com critérios de aceite, RICE, MoSCoW e requisitos não funcionais</li>
+    <li><a href="06-wireframes-e-fluxos.md">06 — Wireframes e fluxos</a> · arquitetura, fluxo, 12 wireframes e rastreabilidade</li>
+    <li><a href="10-pesquisa-e-validacao.md">10 — Pesquisa e validação</a> · questionário, roteiro de entrevista e teste de usabilidade</li>
+  </ul>
+</section>
+
+</div>
+</main>
+
+<footer><div class="wrap">
+  <div><b style="color:var(--text)">CinePulse</b> · Dossiê de Product / UX · Checkpoint 4</div>
+  <div>Rafael Ferreira · 09/09/2026</div>
+</div></footer>
+
+<script>
+const links=[...document.querySelectorAll('#nav a[href^="#"]')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      const id='#'+e.target.id;
+      links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')===id));
+    }
+  });
+},{rootMargin:'-25% 0px -65% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>
