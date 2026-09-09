@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CinePulse — Protótipo Interativo Mobile (CP4)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8B5CF6;
+      --primary-hover: #7C3AED;
+      --secondary: #22D3EE;
+      --background: #090D18;
+      --surface: #121829;
+      --surface-strong: #1A2238;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --success: #34D399;
+      --warning: #FBBF24;
+      --phone-w: 390px;
+      --phone-h: 844px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at top center, #171536 0%, #060911 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+      overflow-x: hidden;
+    }
+
+    /* Top Bar Controls */
+    .top-panel {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .top-panel .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid var(--primary);
+      color: #C4B5FD;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .top-panel h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #F8FAFC 40%, #22D3EE 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .top-panel p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* Smartphone Frame */
+    .phone-wrapper {
+      position: relative;
+      width: var(--phone-w);
+      height: var(--phone-h);
+      background: var(--background);
+      border-radius: 50px;
+      box-shadow: 
+        0 0 0 12px #1E2235,
+        0 0 0 14px #0F121E,
+        0 30px 80px rgba(0, 0, 0, 0.9),
+        0 0 50px rgba(139, 92, 246, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 30px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+    }
+
+    .dynamic-island .camera {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #08111e;
+      border: 1px solid #16263b;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 48px;
+      padding: 14px 28px 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 100;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Screen Views Container */
+    .screen-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      scrollbar-width: none;
+    }
+
+    .screen-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Views */
+    .view {
+      display: none;
+      padding: 12px 18px 90px 18px;
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* App Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .brand-logo-small {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon-box {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), #6D28D9);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+    }
+
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .icon-btn {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      color: var(--text-secondary);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: 0.2s;
+    }
+
+    .icon-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--primary);
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      width: 8px;
+      height: 8px;
+      background: var(--secondary);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--secondary);
+    }
+
+    /* Search Bar */
+    .search-box {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .search-box:hover {
+      border-color: var(--primary);
+    }
+
+    /* Banner Hero */
+    .hero-banner {
+      background: linear-gradient(135deg, #2D1B69 0%, #171536 100%);
+      border: 1px solid #3B2A82;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      background: var(--secondary);
+      opacity: 0.15;
+      filter: blur(30px);
+      border-radius: 50%;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(139, 92, 246, 0.3);
+      color: #C4B5FD;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .hero-banner h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-banner p {
+      color: var(--text-secondary);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    /* Section Title */
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .section-title a {
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* MoodTags Carrossel */
+    .mood-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+
+    .mood-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .mood-chip {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      color: var(--text-secondary);
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mood-chip:hover {
+      transform: translateY(-2px);
+      color: var(--text-primary);
+    }
+
+    .mood-chip.active {
+      background: var(--surface-strong);
+      border-color: var(--secondary);
+      color: var(--secondary);
+      box-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
+    }
+
+    /* Trending Posters */
+    .posters-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+    }
+
+    .posters-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .movie-card {
+      flex: 0 0 130px;
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .movie-poster-box {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .movie-poster-box.dune {
+      background: linear-gradient(135deg, #2D1B69, #1E1B4B);
+    }
+
+    .movie-poster-box.severance {
+      background: linear-gradient(135deg, #0F766E, #134E4A);
+    }
+
+    .movie-poster-box.interstellar {
+      background: linear-gradient(135deg, #831843, #4C0519);
+    }
+
+    .movie-badge-score {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(9, 13, 24, 0.85);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: var(--warning);
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .movie-info {
+      padding: 10px;
+    }
+
+    .movie-info h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .movie-info span {
+      color: var(--secondary);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* PulseScore Widget */
+    .pulsescore-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .pulsescore-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .pulsescore-header h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pulsescore-header .badge-score {
+      background: var(--surface-strong);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      color: var(--secondary);
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .criterion-item {
+      margin-bottom: 10px;
+    }
+
+    .criterion-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .criterion-header span:first-child {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .criterion-header span:last-child {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .progress-bar-bg {
+      height: 6px;
+      background: var(--surface-strong);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.8s ease-out;
+    }
+
+    /* Spoiler Safe Interactive Card */
+    .spoiler-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .spoiler-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .spoiler-card-header strong {
+      font-size: 13px;
+    }
+
+    .spoiler-card-header small {
+      color: var(--text-secondary);
+      font-size: 11px;
+      display: block;
+    }
+
+    .spoiler-box {
+      background: #16152B;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .spoiler-box.revealed {
+      background: rgba(26, 34, 56, 0.4);
+      border-color: var(--surface-strong);
+    }
+
+    .spoiler-locked-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #C4B5FD;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .spoiler-text-content {
+      display: none;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-primary);
+    }
+
+    .spoiler-box.revealed .spoiler-locked-msg {
+      display: none;
+    }
+
+    .spoiler-box.revealed .spoiler-text-content {
+      display: block;
+    }
+
+    /* PulseMatch Gauge in Profile */
+    .profile-card {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .profile-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 3px;
+      margin: 0 auto 12px auto;
+    }
+
+    .profile-avatar-inner {
+      width: 100%;
+      height: 100%;
+      background: #1E1B4B;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .profile-stats-bar {
+      display: flex;
+      justify-content: space-around;
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 18px;
+      padding: 14px;
+      margin-top: 18px;
+    }
+
+    .profile-stat-col strong {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .profile-stat-col span {
+      display: block;
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .pulsematch-gauge-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .gauge-circle {
+      position: relative;
+      width: 74px;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-circle svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-circle circle {
+      fill: none;
+      stroke-width: 7;
+    }
+
+    .gauge-bg {
+      stroke: var(--surface-strong);
+    }
+
+    .gauge-fill {
+      stroke: var(--secondary);
+      stroke-linecap: round;
+      stroke-dasharray: 188;
+      stroke-dashoffset: 22; /* 88% */
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .gauge-label {
+      position: absolute;
+      text-align: center;
+    }
+
+    .gauge-label strong {
+      font-size: 16px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      display: block;
+    }
+
+    .gauge-label span {
+      font-size: 9px;
+      color: var(--secondary);
+      font-weight: 800;
+    }
+
+    /* Modal de Avaliação & Review */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(9, 13, 24, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 500;
+      padding: 48px 18px 24px 18px;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .modal-header span {
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .modal-header h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .stars-selector {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px 0 6px 0;
+    }
+
+    .star-btn {
+      font-size: 32px;
+      color: var(--surface-strong);
+      cursor: pointer;
+      transition: color 0.15s, transform 0.15s;
+    }
+
+    .star-btn:hover,
+    .star-btn.active {
+      color: var(--warning);
+      transform: scale(1.15);
+    }
+
+    .star-status-text {
+      text-align: center;
+      font-size: 13px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 18px;
+    }
+
+    .review-textarea {
+      width: 100%;
+      height: 100px;
+      background: var(--surface);
+      border: 1px solid var(--surface-strong);
+      border-radius: 14px;
+      padding: 12px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      resize: none;
+      margin-bottom: 18px;
+      outline: none;
+    }
+
+    .review-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    /* Spoiler Toggle Switch */
+    .spoiler-switch-box {
+      background: #16152B;
+      border: 1px solid var(--primary);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .switch-info strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .switch-info small {
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    .toggle-switch {
+      width: 50px;
+      height: 28px;
+      background: var(--surface-strong);
+      border-radius: 14px;
+      padding: 3px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch.on {
+      background: var(--secondary);
+      box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+    }
+
+    .toggle-circle {
+      width: 22px;
+      height: 22px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toggle-switch.on .toggle-circle {
+      transform: translateX(22px);
+      background: #090D18;
+    }
+
+    /* Primary CTA Button */
+    .cta-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      border-radius: 16px;
+      color: #090D18;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: transform 0.15s, filter 0.2s;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .cta-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: rgba(18, 24, 41, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--surface-strong);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 12px 14px 12px;
+      z-index: 300;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-secondary);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 14px;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item.active .nav-icon-box {
+      background: var(--surface-strong);
+      color: var(--primary);
+    }
+
+    .nav-icon-box {
+      width: 32px;
+      height: 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 4px;
+      background: #475569;
+      border-radius: 2px;
+      z-index: 400;
+    }
+
+    /* Toast Alert */
+    .toast-msg {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--surface-strong);
+      border: 1px solid var(--success);
+      color: var(--success);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1200;
+      white-space: nowrap;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-panel">
+    <div class="badge">CP4 • Protótipo Interativo Funcional</div>
+    <h1>CinePulse Mobile Simulator</h1>
+    <p>Clique, navegue entre as abas, teste as <strong>MoodTags</strong>, revele os <strong>Spoilers</strong> e avalie no modal!</p>
+  </div>
+
+  <div class="phone-wrapper">
+    <!-- Dynamic Island -->
+    <div class="dynamic-island">
+      <div class="camera"></div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>09:41</span>
+      <div class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="#F8FAFC"><path d="M0 12h3V8H0v4zm5 0h3V5H5v7zm5 0h3V2h-3v10zm5 0h3V0h-3v12z"/></svg>
+        <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.75" y="0.75" width="18.5" height="9.5" rx="2.25" stroke="#F8FAFC" stroke-width="1.5"/><rect x="2.5" y="2.5" width="12" height="6" rx="1.5" fill="#22D3EE"/><path d="M21 4v3" stroke="#F8FAFC" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast-msg">✓ Publicado com sucesso no Diário!</div>
+
+    <!-- Screen Content Scroll -->
+    <div class="screen-content">
+
+      <!-- ================= VIEW 1: HOME ================= -->
+      <div id="view-home" class="view active">
+        <div class="app-header">
+          <div class="brand-logo-small">
+            <div class="brand-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div>
+              <div class="brand-title">CinePulse</div>
+              <small style="color: var(--text-secondary); font-size: 11px;">O que vale a próxima sessão?</small>
+            </div>
+          </div>
+          <div class="icon-btn" onclick="showToast('Você tem 2 recomendações da comunidade!')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <div class="notification-dot"></div>
+          </div>
+        </div>
+
+        <div class="search-box" onclick="showToast('A busca será conectada ao catálogo real no CP5!')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Buscar filmes, séries ou amigos...
+        </div>
+
+        <div class="hero-banner">
+          <span class="hero-badge">PULSE MATCH</span>
+          <h3>Seu gosto além das estrelas.</h3>
+          <p>Avalie por história, visual, trilha e atuação — e conecte sua afinidade.</p>
+        </div>
+
+        <div class="section-title">
+          <h4>Para o seu humor</h4>
+          <a onclick="showToast('Filtrando MoodTags...')">Ver todas</a>
+        </div>
+
+        <div class="mood-scroll">
+          <div class="mood-chip active" onclick="selectMood(this, '⚡ Tenso')">⚡ Tenso</div>
+          <div class="mood-chip" onclick="selectMood(this, '☕ Leve')">☕ Leve</div>
+          <div class="mood-chip" onclick="selectMood(this, '💡 Reflexivo')">💡 Reflexivo</div>
+          <div class="mood-chip" onclick="selectMood(this, '🔥 Épico')">🔥 Épico</div>
+          <div class="mood-chip" onclick="selectMood(this, '🌌 Imersivo')">🌌 Imersivo</div>
+        </div>
+
+        <div class="section-title">
+          <h4>Em alta na comunidade</h4>
+          <small style="color: var(--text-secondary); font-size: 11px;">Toque para ver detalhes</small>
+        </div>
+
+        <div class="posters-scroll">
+          <div class="movie-card" onclick="openDetail('Duna: Parte 2', '2024 • Ficção, Aventura • 2h 46m', '4.8', '96%')">
+            <div class="movie-poster-box dune">
+              <div class="movie-badge-score">★ 4.8</div>
+              <strong style="font-family:'Space Grotesk'; font-size: 16px; color:#C4B5FD;">DUNA 2</strong>
+            </div>
+            <div class="movie-info">
+              <h5>Duna: Parte 2</h5>
+              <span>96% Pulse</span>
+            </div>
+          </div>
+
+          <div class="movie-card" onclick="openDetail('Severance', '2022 • Série • Suspense Psicológico', '4.7', '92%')">
+            <div class="movie-poster-box severance">
+              <div class="movie-badge-score">★ 4.7</div>
+              <strong style="font-family:'Space Grotesk'; font-size: 16px; color:#99F6E4;">RUPTURA</strong>
+            </div>
+            <div class="movie-info">
+              <h5>Severance</h5>
+              <span>92% Pulse</span>
+            </div>
+          </div>
+
+          <div class="movie-card" onclick="openDetail('Interestelar', '2014 • Ficção, Drama • 2h 49m', '4.9', '98%')">
+            <div class="movie-poster-box interstellar">
+              <div class="movie-badge-score">★ 4.9</div>
+              <strong style="font-family:'Space Grotesk'; font-size: 14px; color:#FBCFE8;">INTERSTELLAR</strong>
+            </div>
+            <div class="movie-info">
+              <h5>Interestelar</h5>
+              <span>98% Pulse</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PulseScore Component -->
+        <div class="pulsescore-card">
+          <div class="pulsescore-header">
+            <h5>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              PulseScore™ da Comunidade
+            </h5>
+            <div class="badge-score">9.6 / 10</div>
+          </div>
+
+          <div class="criterion-item">
+            <div class="criterion-header">
+              <span>História &amp; Roteiro</span>
+              <span>4.8 ★</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 96%;"></div></div>
+          </div>
+
+          <div class="criterion-item">
+            <div class="criterion-header">
+              <span>Atuação &amp; Elenco</span>
+              <span>4.9 ★</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 98%;"></div></div>
+          </div>
+
+          <div class="criterion-item">
+            <div class="criterion-header">
+              <span>Direção Visual &amp; Fotografia</span>
+              <span>5.0 ★</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+          </div>
+
+          <div class="criterion-item">
+            <div class="criterion-header">
+              <span>Trilha Sonora &amp; Som</span>
+              <span>4.7 ★</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 94%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Spoiler Safe Demonstration Card -->
+        <div class="spoiler-card">
+          <div class="spoiler-card-header">
+            <div>
+              <strong>Duna: Parte 2</strong>
+              <small>Review por Cauã Ferreira Muniz</small>
+            </div>
+            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
+          </div>
+          <div class="spoiler-box" onclick="toggleSpoiler(this)">
+            <div class="spoiler-locked-msg">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              SPOILER SAFE • Toque para revelar
+            </div>
+            <div class="spoiler-text-content">
+              "A sequência em que Paul aceita o fundamentalismo religioso e desafia o Imperador encerra o filme com uma tensão monumental que prepara o terreno para a Jihad Galáctica!"
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= VIEW 2: DIÁRIO ================= -->
+      <div id="view-diary" class="view">
+        <div class="app-header">
+          <h3 style="font-family:'Space Grotesk'; font-size: 20px;">Meu Diário</h3>
+          <span style="font-size: 12px; color: var(--text-secondary);">142 registrados</span>
+        </div>
+
+        <div class="spoiler-card">
+          <div class="spoiler-card-header">
+            <div>
+              <strong>Duna: Parte 2</strong>
+              <small>Assistido em 08 de Setembro, 2026</small>
+            </div>
+            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
+          </div>
+          <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+            "Obra-prima audiovisual incontestável. Hans Zimmer e Greig Fraser no ápice."
+          </p>
+          <div class="spoiler-box" onclick="toggleSpoiler(this)">
+            <div class="spoiler-locked-msg">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              SPOILER DA CENA FINAL • Toque para ler
+            </div>
+            <div class="spoiler-text-content">
+              A luta de facas com Feyd-Rautha é visualmente impecável e o desfecho com a princesa Irulan fecha o arco de maneira épica.
+            </div>
+          </div>
+        </div>
+
+        <div class="spoiler-card">
+          <div class="spoiler-card-header">
+            <div>
+              <strong>Interestelar</strong>
+              <small>Assistido em 02 de Setembro, 2026</small>
+            </div>
+            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 5.0</div>
+          </div>
+          <p style="font-size: 12px; color: var(--text-primary); line-height: 1.4;">
+            "A cena do relógio e as ondas de Miller continuam me arrepiando toda vez que revejo."
+          </p>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 3: LISTAS ================= -->
+      <div id="view-lists" class="view">
+        <div class="app-header">
+          <h3 style="font-family:'Space Grotesk'; font-size: 20px;">Minhas Listas</h3>
+          <div class="icon-btn" onclick="showToast('Criar nova lista')">+</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Abrindo lista Sci-Fi...')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="font-size:14px;">🌌 Melhores Ficções Científicas</strong>
+                <small style="display:block; color:var(--text-secondary); margin-top:3px;">18 títulos • Pública</small>
+              </div>
+              <span style="color:var(--secondary); font-size:12px;">Ver &rarr;</span>
+            </div>
+          </div>
+
+          <div class="pulsescore-card" style="cursor: pointer;" onclick="showToast('Abrindo Watchlist...')">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="font-size:14px;">⏱️ Para Assistir no Fim de Semana</strong>
+                <small style="display:block; color:var(--text-secondary); margin-top:3px;">6 títulos • Privada</small>
+              </div>
+              <span style="color:var(--secondary); font-size:12px;">Ver &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 4: PERFIL ================= -->
+      <div id="view-profile" class="view">
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <div class="profile-avatar-inner">CM</div>
+          </div>
+          <h3 style="font-family:'Space Grotesk'; font-size: 18px; font-weight:800;">Cauã Ferreira Muniz</h3>
+          <small style="color: var(--text-secondary); font-size: 12px;">@caua.muniz • Brand &amp; UI Designer</small>
+
+          <div class="profile-stats-bar">
+            <div class="profile-stat-col">
+              <strong>142</strong>
+              <span>ASSISTIDOS</span>
+            </div>
+            <div style="width: 1px; background: var(--surface-strong);"></div>
+            <div class="profile-stat-col">
+              <strong>38</strong>
+              <span>REVIEWS</span>
+            </div>
+            <div style="width: 1px; background: var(--surface-strong);"></div>
+            <div class="profile-stat-col">
+              <strong>6</strong>
+              <span>LISTAS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PulseMatch Gauge -->
+        <div class="pulsematch-gauge-card">
+          <div class="gauge-circle">
+            <svg viewBox="0 0 74 74">
+              <circle class="gauge-bg" cx="37" cy="37" r="30" />
+              <circle class="gauge-fill" cx="37" cy="37" r="30" />
+            </svg>
+            <div class="gauge-label">
+              <strong>88%</strong>
+              <span>MATCH</span>
+            </div>
+          </div>
+          <div>
+            <span style="background:rgba(139,92,246,0.2); color:#C4B5FD; font-size:9px; font-weight:800; padding:2px 6px; border-radius:4px;">PULSE MATCH™</span>
+            <strong style="display:block; font-size:13px; margin:4px 0 2px 0;">Alta afinidade na rede</strong>
+            <small style="color:var(--text-secondary); font-size:11px; display:block; line-height:1.3;">
+              Você combina com <strong>Rafael, Matheus e Victor</strong> em Ficção Científica e Suspense.
+            </small>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h4>Minhas Reviews</h4>
+        </div>
+        <div class="spoiler-card">
+          <div class="spoiler-card-header">
+            <strong>Duna: Parte 2</strong>
+            <div style="color: var(--warning); font-size: 12px; font-weight: 700;">★ 4.8</div>
+          </div>
+          <small style="color: var(--text-secondary); display:block; margin-bottom:6px;">Nota por critérios: História 4.8 • Visual 5.0</small>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= MODAL: DETALHE DO FILME ================= -->
+    <div id="detail-modal" class="modal-overlay">
+      <div class="modal-header">
+        <span onclick="closeDetail()">&larr; Voltar</span>
+        <h4 id="detail-title">Duna: Parte 2</h4>
+        <span onclick="showToast('Adicionado aos favoritos!')">★</span>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 16px;">
+        <div id="detail-poster-box" style="width: 110px; height: 160px; margin: 0 auto 12px auto; border-radius: 16px; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #2D1B69, #1E1B4B); border:1px solid #3B2A82;">
+          <strong id="detail-tag" style="font-family:'Space Grotesk'; font-size: 16px; color:#C4B5FD;">DUNA 2</strong>
+        </div>
+        <h3 id="detail-movie-name" style="font-family:'Space Grotesk'; font-size: 20px; font-weight:800;">Duna: Parte 2</h3>
+        <small id="detail-meta" style="color: var(--text-secondary); font-size: 12px;">2024 • Ficção, Aventura • 2h 46m</small>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+        <button class="cta-btn" style="flex:1; padding: 10px; background: var(--surface); color: var(--text-primary); border: 1px solid var(--surface-strong); font-size: 12px;" onclick="showToast('Adicionado à Watchlist!')">+ Watchlist</button>
+        <button class="cta-btn" style="flex:1; padding: 10px; background: var(--surface-strong); color: var(--secondary); border: 1px solid var(--secondary); font-size: 12px;" onclick="showToast('Marcado como assistido!')">&#10003; Assistido</button>
+        <button class="cta-btn" style="flex:1.2; padding: 10px; font-size: 12px;" onclick="openReviewModal()">★ Avaliar</button>
+      </div>
+
+      <div class="pulsescore-card">
+        <h5 style="font-family:'Space Grotesk'; font-size: 14px; margin-bottom: 10px;">Sinopse</h5>
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          Paul Atreides se une a Chani e aos Fremen enquanto busca vingança contra os conspiradores que destruíram sua família. Diante de uma escolha entre o amor de sua vida e o destino do universo, ele deve evitar um futuro terrível que só ele pode prever.
+        </p>
+      </div>
+
+      <div class="pulsescore-card">
+        <div class="pulsescore-header">
+          <h5>PulseScore™ Detalhado</h5>
+          <div class="badge-score">9.6 / 10</div>
+        </div>
+        <div class="criterion-item">
+          <div class="criterion-header"><span>História &amp; Roteiro</span><span>4.8 ★</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 96%;"></div></div>
+        </div>
+        <div class="criterion-item">
+          <div class="criterion-header"><span>Atuação &amp; Elenco</span><span>4.9 ★</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 98%;"></div></div>
+        </div>
+        <div class="criterion-item">
+          <div class="criterion-header"><span>Direção Visual</span><span>5.0 ★</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+        </div>
+        <div class="criterion-item">
+          <div class="criterion-header"><span>Trilha Sonora</span><span>4.7 ★</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 94%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MODAL: ESCOLHER NOTA & REVIEW ================= -->
+    <div id="review-modal" class="modal-overlay" style="z-index: 600;">
+      <div class="modal-header">
+        <span onclick="closeReviewModal()">Cancelar</span>
+        <h4>Avaliar &amp; Review</h4>
+        <div style="width: 40px;"></div>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 12px;">
+        <small style="color: var(--text-secondary); font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">SUA NOTA GERAL</small>
+        <div class="stars-selector">
+          <span class="star-btn active" onclick="setStars(1)">★</span>
+          <span class="star-btn active" onclick="setStars(2)">★</span>
+          <span class="star-btn active" onclick="setStars(3)">★</span>
+          <span class="star-btn active" onclick="setStars(4)">★</span>
+          <span class="star-btn" onclick="setStars(5)">★</span>
+        </div>
+        <div id="star-label" class="star-status-text">4.0 / 5.0 — Muito Bom</div>
+      </div>
+
+      <small style="color: var(--text-secondary); font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; display:block;">SELECIONE AS MOODTAGS</small>
+      <div class="mood-scroll" style="margin-bottom: 16px;">
+        <div class="mood-chip active" onclick="this.classList.toggle('active')">⚡ Tenso</div>
+        <div class="mood-chip active" onclick="this.classList.toggle('active')">🔥 Épico</div>
+        <div class="mood-chip" onclick="this.classList.toggle('active')">💡 Reflexivo</div>
+        <div class="mood-chip" onclick="this.classList.toggle('active')">☕ Leve</div>
+      </div>
+
+      <small style="color: var(--text-secondary); font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; display:block;">SUA REVIEW</small>
+      <textarea id="review-input" class="review-textarea" placeholder="O que você achou desta obra? Conte para a comunidade...">Obra-prima audiovisual! A trilha sonora e os efeitos práticos na areia colocam a ficção científica em outro patamar.</textarea>
+
+      <!-- Switch de Spoiler Safe -->
+      <div class="spoiler-switch-box">
+        <div class="switch-info">
+          <strong>Spoiler Safe™ Ativo</strong>
+          <small>Contém spoilers da trama ou do final?</small>
+        </div>
+        <div id="spoiler-toggle" class="toggle-switch on" onclick="toggleSpoilerSwitch()">
+          <div class="toggle-circle"></div>
+        </div>
+      </div>
+
+      <button class="cta-btn" onclick="publishReview()">Publicar no Diário</button>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="switchNav('home', this)">
+        <div class="nav-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </div>
+        <span>Descobrir</span>
+      </div>
+
+      <div class="nav-item" onclick="switchNav('diary', this)">
+        <div class="nav-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        </div>
+        <span>Diário</span>
+      </div>
+
+      <div class="nav-item" onclick="switchNav('lists', this)">
+        <div class="nav-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        </div>
+        <span>Listas</span>
+      </div>
+
+      <div class="nav-item" onclick="switchNav('profile', this)">
+        <div class="nav-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
+        <span>Perfil</span>
+      </div>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    // Navegação entre abas
+    function switchNav(viewId, element) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+      const target = document.getElementById('view-' + viewId);
+      if (target) target.classList.add('active');
+      element.classList.add('active');
+    }
+
+    // Seleção de MoodTags
+    function selectMood(el, moodName) {
+      document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      showToast('Filtrando títulos com clima: ' + moodName);
+    }
+
+    // Toggle de spoiler no card
+    function toggleSpoiler(el) {
+      el.classList.toggle('revealed');
+    }
+
+    // Modal de Detalhe
+    function openDetail(title, meta, score, pulse) {
+      document.getElementById('detail-title').innerText = title;
+      document.getElementById('detail-movie-name').innerText = title;
+      document.getElementById('detail-meta').innerText = meta;
+      document.getElementById('detail-modal').classList.add('open');
+    }
+
+    function closeDetail() {
+      document.getElementById('detail-modal').classList.remove('open');
+    }
+
+    // Modal de Avaliação
+    function openReviewModal() {
+      document.getElementById('review-modal').classList.add('open');
+    }
+
+    function closeReviewModal() {
+      document.getElementById('review-modal').classList.remove('open');
+    }
+
+    // Seletor de Estrelas
+    let currentRating = 4;
+    const ratingLabels = [
+      '',
+      '1.0 / 5.0 — Fraco',
+      '2.0 / 5.0 — Regular',
+      '3.0 / 5.0 — Bom',
+      '4.0 / 5.0 — Muito Bom',
+      '5.0 / 5.0 — Obra-Prima!'
+    ];
+
+    function setStars(count) {
+      currentRating = count;
+      const stars = document.querySelectorAll('.star-btn');
+      stars.forEach((s, idx) => {
+        if (idx < count) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      document.getElementById('star-label').innerText = ratingLabels[count];
+    }
+
+    // Switch de Spoiler
+    let spoilerSafeOn = true;
+    function toggleSpoilerSwitch() {
+      spoilerSafeOn = !spoilerSafeOn;
+      const sw = document.getElementById('spoiler-toggle');
+      if (spoilerSafeOn) {
+        sw.classList.add('on');
+        showToast('Spoiler Safe Ativo: sua review ficará oculta por padrão.');
+      } else {
+        sw.classList.remove('on');
+        showToast('Spoiler Safe Desativado: texto livre visível.');
+      }
+    }
+
+    // Publicar Avaliação
+    function publishReview() {
+      closeReviewModal();
+      showToast('✓ Avaliação publicada com sucesso no Diário!');
+      // Switch to diary tab to see effect
+      setTimeout(() => {
+        const diaryNav = document.querySelectorAll('.nav-item')[1];
+        switchNav('diary', diaryNav);
+      }, 700);
+    }
+
+    // Toast genérico
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
