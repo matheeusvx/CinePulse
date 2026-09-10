@@ -18,8 +18,33 @@ abstract final class AppTheme {
       navigationBarTheme: const NavigationBarThemeData(
         backgroundColor: AppColors.surface,
         indicatorColor: AppColors.surfaceStrong,
+        selectedIconTheme: IconThemeData(color: AppColors.secondary),
+        unselectedIconTheme: IconThemeData(color: AppColors.textSecondary),
+        selectedLabelTextStyle: TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w700,
+        ),
+        unselectedLabelTextStyle: TextStyle(
+          color: AppColors.textSecondary,
+          fontWeight: FontWeight.w600,
+        ),
         labelTextStyle: WidgetStatePropertyAll(
           TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        ),
+      ),
+      navigationRailTheme: const NavigationRailThemeData(
+        backgroundColor: AppColors.surface,
+        indicatorColor: AppColors.surfaceStrong,
+        labelType: NavigationRailLabelType.all,
+        selectedIconTheme: IconThemeData(color: AppColors.secondary),
+        unselectedIconTheme: IconThemeData(color: AppColors.textSecondary),
+        selectedLabelTextStyle: TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w700,
+        ),
+        unselectedLabelTextStyle: TextStyle(
+          color: AppColors.textSecondary,
+          fontWeight: FontWeight.w600,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

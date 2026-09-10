@@ -27,9 +27,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
-      children: [
+    return LayoutBuilder(
+      builder: (context, _) {
+        final isWide = MediaQuery.sizeOf(context).width >= 760;
+        final horizontalPadding = isWide ? 32.0 : 20.0;
+
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 960),
+            child: ListView(
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                isWide ? 28 : 18,
+                horizontalPadding,
+                28,
+              ),
+              children: [
         // App Bar Header
         Row(
           children: [
@@ -253,7 +266,11 @@ class _HomePageState extends State<HomePage> {
           spoilerText:
               'A sequência da batalha final em Arrakis e a ascensão ao trono imperial encerram o arco de Paul de maneira avassaladora e sombria.',
         ),
-      ],
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
