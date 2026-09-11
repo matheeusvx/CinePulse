@@ -15,22 +15,29 @@ abstract final class AppTheme {
       brightness: Brightness.dark,
       colorScheme: scheme,
       scaffoldBackgroundColor: AppColors.background,
-      navigationBarTheme: const NavigationBarThemeData(
+      navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.surface,
         indicatorColor: AppColors.surfaceStrong,
-        selectedIconTheme: IconThemeData(color: AppColors.secondary),
-        unselectedIconTheme: IconThemeData(color: AppColors.textSecondary),
-        selectedLabelTextStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontWeight: FontWeight.w700,
-        ),
-        unselectedLabelTextStyle: TextStyle(
-          color: AppColors.textSecondary,
-          fontWeight: FontWeight.w600,
-        ),
-        labelTextStyle: WidgetStatePropertyAll(
-          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-        ),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const IconThemeData(color: AppColors.secondary);
+          }
+          return const IconThemeData(color: AppColors.textSecondary);
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const TextStyle(
+              fontSize: 12,
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w700,
+            );
+          }
+          return const TextStyle(
+            fontSize: 12,
+            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w600,
+          );
+        }),
       ),
       navigationRailTheme: const NavigationRailThemeData(
         backgroundColor: AppColors.surface,

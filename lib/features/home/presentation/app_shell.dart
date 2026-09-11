@@ -34,6 +34,7 @@ class _AppShellState extends State<AppShell> {
               index: _currentIndex,
               children: _pages,
             ),
+          ),
         );
 
         return Scaffold(

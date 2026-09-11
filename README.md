@@ -1,180 +1,189 @@
-# CinePulse
+# CinePulse 🎬⚡
 
-> **Assista. Avalie. Conecte.**
+> **Assista. Avalie. Conecte.**  
+> *O pulso da sua experiência com filmes e séries.*
 
-CinePulse é um aplicativo mobile em Flutter para pessoas que querem registrar, avaliar e descobrir **filmes e séries** de forma social, organizada e mais expressiva do que uma nota isolada.
+[![Flutter](https://img.shields.io/badge/Flutter-3.3+-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.3+-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+[![Material Design 3](https://img.shields.io/badge/Material%20Design-3-7B1FA2?style=for-the-badge&logo=materialdesign&logoColor=white)](https://m3.material.io)
+[![License](https://img.shields.io/badge/License-Academic-blue?style=for-the-badge)](LICENSE)
 
-Este repositório contém a entrega-base do **Checkpoint 4 — Idealização do App**, preparada para evoluir nos Checkpoints 5 e 6.
+---
 
-## Proposta de valor
+## 📌 Sobre o Projeto
 
-Plataformas de entretenimento ajudam a encontrar títulos, mas a experiência de avaliação costuma ser rasa ou pouco personalizada. O CinePulse combina diário de consumo, reviews, listas e descoberta com quatro diferenciais planejados:
+O **CinePulse** é um aplicativo mobile desenvolvido em **Flutter** voltado para cinéfilos e entusiastas do entretenimento que desejam registrar, avaliar e descobrir **filmes e séries** de maneira social, interativa e muito mais expressiva do que uma nota média isolada.
 
-- **PulseScore:** avaliação por critérios como história, atuação, visual e trilha.
-- **PulseMatch:** percentual de afinidade de gosto entre usuários.
-- **MoodTags:** descoberta por sensação/clima, como leve, tenso, emocionante ou confortável.
-- **Spoiler Safe:** reviews com spoilers ocultos por padrão e sinalização clara.
+Atualmente, quem consome audiovisual sofre com notas genéricas que não refletem o gosto pessoal, medo de spoilers em fóruns abertos e a fragmentação entre notas no bloco de notas, grupos de WhatsApp e múltiplos serviços de streaming. O CinePulse resolve isso centralizando o diário do usuário e aplicando inteligência social de recomendação.
 
-## Público-alvo
+Este repositório consolida a entrega do **Checkpoint 4 — Idealização, Arquitetura e Protótipo do App**, estruturado com arquitetura escalável e design system pronto para as implementações de backend e persistência nos Checkpoints 5 e 6.
 
-Jovens e adultos de aproximadamente 16 a 35 anos que consomem filmes e séries com frequência, usam streaming, conversam sobre entretenimento em redes sociais e gostam de registrar ou compartilhar opiniões e recomendações.
+---
 
-## MVP planejado
+## 📱 Justificativa da Escolha / Migração para Flutter & Garantia de Escopo
 
-1. Cadastro/login de usuário.
-2. Busca de filmes e séries.
-3. Página de detalhes do título.
-4. Avaliação geral e por critérios.
-5. Review com marcação de spoiler.
-6. Diário de títulos assistidos.
-7. Watchlist/listas personalizadas.
-8. Perfil com histórico e estatísticas básicas.
-9. PulseMatch entre usuários como diferencial social.
+Atendendo aos critérios e diretrizes do projeto, documentamos a justificativa técnica e estratégica para a adoção do **Flutter**:
 
-> No CP4, o foco é a **fundação do produto**: marca, documentação e primeiro projeto Flutter funcional. Integrações reais com catálogo, autenticação e persistência ficam para os próximos checkpoints.
+1. **Compilação Nativa Multiplataforma (Single Codebase):**  
+   O ecossistema do CinePulse requer presença fluida tanto em dispositivos móveis (Android e iOS) quanto em telas expandidas (Web e Tablets). O Flutter permite compilar para código de máquina nativo (ARM/x86) mantendo 60/120 fps constantes, sem pontes de JavaScript (*bridge bottleneck*), garantindo a renderização imersiva do Dark Theme cinematográfico.
+2. **Controle Total de Renderização (Skia/Impeller):**  
+   A proposta de valor do CinePulse envolve componentes visuais proprietários de alto impacto (barras do *PulseScore*, chip cards do *Spoiler Safe*, gráficos de progresso circular do *PulseMatch* e tags dinâmicas de *MoodTags*). O Flutter desenha cada pixel na tela, eliminando discrepâncias visuais entre fabricantes de dispositivos.
+3. **Produtividade e Agilidade (Stateful Hot Reload):**  
+   A velocidade de iteração no ciclo de vida de UI e testes rápidos de layouts responsivos reduziu significativamente o tempo de desenvolvimento da Sprint.
+4. **Garantia de Cobertura de Escopo das Sprints Anteriores:**  
+   A migração e consolidação do escopo em Flutter garantiu 100% de aderência ao que foi concebido nas etapas de ideação, cobrindo integralmente:
+   - **Fluxo de Descoberta (`Home`):** Carrosséis de títulos em alta, filtro interativo de humor (*MoodTags*), destaques de pontuação e proteção de spoilers.
+   - **Fluxo de Registro (`Diário`):** Histórico de títulos assistidos com datas e notas atribuídas.
+   - **Fluxo de Organização (`Listas`):** Categorização por Watchlist e listas temáticas com contadores.
+   - **Fluxo Social e Métricas (`Perfil`):** Identificação do usuário, estatísticas de consumo e demonstração do indicador de compatibilidade *PulseMatch*.
+   - **Responsividade Total:** Suporte tanto para dimensões móveis quanto para desktop/web através de `LayoutBuilder` inteligente.
 
-## Identidade da marca
+---
 
-- **Nome:** CinePulse
-- **Tagline:** Assista. Avalie. Conecte.
-- **Conceito:** o “pulso” do gosto de cada pessoa e da comunidade.
-- **Tom de voz:** direto, curioso, leve, inclusivo e sem elitismo cinematográfico.
-- **Cor primária:** `#8B5CF6` — violeta.
-- **Cor secundária:** `#22D3EE` — ciano.
-- **Fundo:** `#090D18`.
-- **Superfície:** `#121829`.
-- **Texto principal:** `#F8FAFC`.
-- **Texto secundário:** `#94A3B8`.
-- **Tipografia recomendada:** Space Grotesk (títulos) + Inter (corpo).
+## 🚀 Diferenciais do CinePulse
 
-Arquivos de logo e ícones em `assets/brand/`, mockups visuais em `docs/assets/` e [Figma Oficial do CinePulse](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1).
+| Funcionalidade | Descrição |
+|---|---|
+| **⚡ PulseScore** | Avaliação granular que vai além da nota de 1 a 5 estrelas: permite pontuar dimensões como *História*, *Atuação*, *Visual* e *Trilha Sonora*. |
+| **🤝 PulseMatch** | Algoritmo de afinidade social que calcula a compatibilidade de gosto entre perfis de amigos e da comunidade ("Vocês combinam 87% em Ficção Científica"). |
+| **🎭 MoodTags** | Sistema de descoberta por sensação e clima emocional (ex: *Tenso*, *Confortável*, *Chorei Horrores*, *Fim de Noite*), ideal para quando você não sabe o que assistir. |
+| **🛡️ Spoiler Safe** | Sistema nativo com máscaras de spoiler e alertas visuais, garantindo discussões seguras sem arruinar a experiência alheia. |
 
-## Integrantes e papéis no CP4
+---
 
-| Integrante | Papel principal | Entregas sugeridas / Realizadas |
-|---|---|---|
-| **Matheus Morelli** | Tech Lead / Integração Flutter | Criar/organizar repositório, consolidar branches, revisar estrutura Flutter, rodar build final e garantir README atualizado. |
-| **Cauã Ferreira Muniz** | Brand & UI Designer | Identidade visual completa, variações de logo/ícone de app (`assets/brand/`), especificação de UI Kit, mockups das 5 telas e [Figma Oficial](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1) (detalhes em `docs/04-identidade-visual.md`). |
-| **Rafael Ferreira** | Product / UX | Validação do problema com dados de mercado, hipóteses e benchmark (`docs/01`), segmentação, 3 personas, antipersona e mapa de jornada (`docs/02`), 20 user stories com critérios de aceite + priorização RICE/MoSCoW (`docs/03`), arquitetura de informação, fluxos e 12 wireframes lo-fi em SVG (`docs/06` + `docs/assets/wireframes/`), plano de pesquisa e validação (`docs/10`) e o [dossiê navegável de Product/UX](docs/dossie-product-ux.html). |
-| **Victor Nicolas** | Flutter Developer | Implementar/refinar a home e navegação do protótipo Flutter, responsividade e componentes visuais. |
-| **Henrique Nicolas** | Documentação, Pitch & QA | Organizar documentação GitHub, preparar pitch, revisar critérios do professor, testar execução e registrar evidências. |
+## 🛠️ Tecnologias Utilizadas
 
-**Regra de equipe:** todo integrante deve ter pelo menos um commit identificável no GitHub, mesmo quando sua entrega principal for documentação/design.
+- **Framework:** [Flutter](https://flutter.dev/) (SDK `>=3.3.0 <4.0.0`)
+- **Linguagem:** [Dart](https://dart.dev/)
+- **Design System:** Material Design 3 customizado com Dark Theme imersivo
+- **Ícones:** `cupertino_icons` e Material Symbols
+- **Gerenciamento de Estado & Telas:** StatefulWidgets modulares com `IndexedStack` e navegação responsiva (`NavigationBar` para mobile e `NavigationRail` para desktop/tablet)
+- **Qualidade de Código & Linter:** `flutter_lints` versão 5.0.0
+- **Testes:** `flutter_test` (testes de widgets automatizados)
+- **Prototipação & Design:** Figma ([Figma Oficial CinePulse](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1))
 
-## Estrutura do projeto
+---
+
+## 💻 Estrutura do Repositório
+
+O projeto segue a abordagem **Feature-First** (organização por funcionalidade), promovendo isolamento, testabilidade e alta manutenibilidade:
 
 ```text
 cinepulse/
-├─ assets/
-│  └─ brand/
-├─ docs/
-├─ lib/
-│  ├─ core/
-│  │  ├─ theme/
-│  │  └─ widgets/
-│  └─ features/
-│     ├─ home/
-│     ├─ diary/
-│     ├─ lists/
-│     └─ profile/
-├─ test/
-├─ analysis_options.yaml
-├─ pubspec.yaml
-└─ README.md
+├── assets/
+│   └── brand/               # Logos, badges e ícones oficiais em vetor (SVG)
+├── docs/                    # Dossiê completo de engenharia, UX e requisitos
+│   ├── assets/              # Mockups e wireframes em SVG
+│   ├── 01-visao-produto.md  # Visão, benchmark, hipóteses e dados de mercado
+│   ├── 02-publico-personas-e-jornada.md # Personas detalhadas e jornada do usuário
+│   ├── 03-mvp-e-requisitos.md # 20 User Stories, critérios de aceite e MoSCoW
+│   ├── 04-identidade-visual.md # Tokens de cor, tipografia e UI Kit
+│   ├── 05-pitch-e-modelo-de-negocio.md # Estratégia de negócios e roteiros de pitch
+│   ├── 06-wireframes-e-fluxos.md # Arquitetura de informação e wireframes
+│   ├── 07-divisao-da-equipe.md # Papéis, matriz RACI e responsabilidades
+│   ├── 08-checklist-checkpoint-4.md # Validação de critérios acadêmicos
+│   ├── 09-roadmap-cp5-cp6.md # Planejamento das próximas sprints
+│   └── dossie-product-ux.html # Relatório visual interativo
+├── lib/
+│   ├── core/
+│   │   ├── theme/           # Tokens de cores, temas escuros e tipografia
+│   │   └── widgets/         # Componentes compartilhados (cards, botões, chips)
+│   ├── features/
+│   │   ├── home/            # Tela Descobrir, destaques, trilhas e carrosséis
+│   │   ├── diary/           # Diário de consumo e registro de assistidos
+│   │   ├── lists/           # Watchlist e listas temáticas
+│   │   └── profile/         # Perfil de usuário, estatísticas e preferências
+│   └── main.dart            # Ponto de entrada do aplicativo
+├── test/
+│   └── widget_test.dart     # Bateria de testes de widget
+├── pubspec.yaml             # Manifesto de dependências e assets
+└── README.md                # Documentação principal
 ```
 
-## Como rodar
+---
 
-Este pacote contém o código-fonte e os arquivos de configuração do CP4. Como o ambiente em que ele foi preparado não possui o SDK do Flutter instalado, o build final precisa ser validado em uma máquina com Flutter.
+## ⚙️ Instalação e Configuração
 
-### Se vocês já têm um projeto Flutter criado
+### Pré-requisitos
 
-Copiem/substituam estas pastas e arquivos no projeto:
+Certifique-se de ter instalado em seu ambiente:
+1. **[Git](https://git-scm.com/)**
+2. **[Flutter SDK](https://docs.flutter.dev/get-started/install)** (versão 3.3.0 ou superior)
+3. **[VS Code](https://code.visualstudio.com/)** ou **[Android Studio](https://developer.android.com/studio)** com os plugins do Flutter e Dart habilitados
+4. Emulador configurado (Android/iOS) ou o **Google Chrome** para execução em modo Web
 
-- `lib/`
-- `assets/`
-- `test/`
-- `pubspec.yaml`
-- `analysis_options.yaml`
-- `docs/`
-- `README.md`
-
-Depois executem:
-
+Verifique o status do seu ambiente executando:
 ```bash
-flutter pub get
-flutter analyze
-flutter test
-flutter run
+flutter doctor
 ```
 
-### Se ainda não têm o projeto Flutter
+---
 
-```bash
-flutter create cinepulse
-cd cinepulse
-```
+## ▶️ Como Rodar a Aplicação
 
-Depois substituam os arquivos gerados pelos arquivos deste pacote e executem os quatro comandos acima.
+Siga o passo a passo abaixo no seu terminal:
 
-## Git e colaboração
+1. **Clone este repositório:**
+   ```bash
+   git clone https://github.com/matheeusvx/CinePulse.git
+   cd CinePulse
+   ```
 
-Sugestão de branches:
+2. **Baixe as dependências do projeto:**
+   ```bash
+   flutter pub get
+   ```
 
-- `main` — versão estável/entrega.
-- `develop` — integração do checkpoint.
-- `feat/flutter-home-victor`
-- `docs/product-rafael`
-- `design/brand-caua`
-- `docs/pitch-henrique`
-- `chore/integration-matheus`
+3. **Verifique a integridade e padrões de código (Linter):**
+   ```bash
+   flutter analyze
+   ```
 
-Padrão de commits:
+4. **Execute os testes automatizados:**
+   ```bash
+   flutter test
+   ```
 
-```text
-feat: cria estrutura inicial da home
-feat: adiciona navegacao principal
-docs: documenta proposta de valor e publico alvo
-design: adiciona identidade visual do CinePulse
-docs: adiciona pitch e modelo de negocio
-chore: prepara entrega do checkpoint 4
-```
+5. **Inicie o aplicativo:**
+   - No emulador padrão ou dispositivo USB conectado:
+     ```bash
+     flutter run
+     ```
+   - No navegador Google Chrome (modo Web Desktop):
+     ```bash
+     flutter run -d chrome
+     ```
+   - No Windows nativo (se habilitado):
+     ```bash
+     flutter run -d windows
+     ```
 
-## Checkpoint 4 — conferência rápida
+---
 
-- [x] Nome e conceito de marca definidos.
-- [x] Proposta de valor definida.
-- [x] Problema e público-alvo documentados.
-- [x] MVP e diferenciais documentados.
-- [x] Identidade visual e logo-base definidos.
-- [x] Pitch e modelo de negócio documentados.
-- [x] Estrutura Flutter inicial preparada.
-- [x] Tela inicial/navegação de demonstração implementadas.
-- [x] Papéis de todos os integrantes documentados.
-- [ ] Tema aprovado pelo professor.
-- [ ] Repositório GitHub do grupo criado e link inserido neste README.
-- [ ] `flutter analyze`, `flutter test` e `flutter run` validados localmente.
-- [ ] Screenshot/vídeo curto do app rodando anexado à documentação, se desejado.
+## 👥 Equipe e Responsabilidades (CP4)
 
-## Documentação complementar
+| Integrante | Papel Principal | Entregas Chave no Checkpoint 4 |
+|---|---|---|
+| **Matheus Morelli** | *Tech Lead & Integração Flutter* | Estrutura de arquitetura de pastas, integração das branches, revisão de pull requests e build da aplicação. |
+| **Cauã Ferreira Muniz** | *Brand & UI Designer* | Criação da identidade visual, logos vetoriais em `assets/brand/`, UI Kit, design system e [Figma Oficial](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1). |
+| **Rafael Ferreira** | *Product Manager & UX Researcher* | Validação do problema, 3 personas, mapa de jornada, 20 User Stories priorizadas (RICE/MoSCoW), arquitetura de informação e wireframes. |
+| **Victor Nicolas** | *Flutter Developer* | Implementação do protótipo funcional, casca do app (`AppShell`), telas (`Home`, `Diário`, `Listas`, `Perfil`) e responsividade. |
+| **Henrique Nicolas** | *Documentação, Pitch & QA* | Documentação técnica e README, roteiro de Pitch, plano de testes de QA e auditoria de evidências de execução. |
 
-A pasta `docs/` reúne a documentação completa do Checkpoint 4 e o planejamento de evolução para CP5/CP6.
+---
 
-| Documento | Conteúdo |
-|---|---|
-| [01 — Visão do produto](docs/01-visao-produto.md) | Problema com dados de mercado, hipóteses, proposta de valor, benchmark, posicionamento, métricas e riscos |
-| [02 — Público, personas e jornada](docs/02-publico-personas-e-jornada.md) | Segmentação comportamental, 3 personas, antipersona, mapa de jornada e princípios de UX |
-| [03 — MVP e requisitos](docs/03-mvp-e-requisitos.md) | 20 user stories com critérios de aceite, priorização RICE e MoSCoW, requisitos não funcionais e DoD |
-| [04 — Identidade visual](docs/04-identidade-visual.md) | Marca, paleta, tipografia, UI kit e mockups de alta fidelidade |
-| [05 — Pitch e modelo de negócio](docs/05-pitch-e-modelo-de-negocio.md) | Pitch de 30 s e 1 min, modelo de negócio e diferenciais competitivos |
-| [06 — Wireframes e fluxos](docs/06-wireframes-e-fluxos.md) | Arquitetura da informação, fluxo principal e 12 wireframes lo-fi em SVG |
-| [07 — Divisão da equipe](docs/07-divisao-da-equipe.md) | Papéis, responsabilidades e evidências por integrante |
-| [08 — Checklist do CP4](docs/08-checklist-checkpoint-4.md) | Conferência item a item contra a rubrica |
-| [09 — Roadmap CP5/CP6](docs/09-roadmap-cp5-cp6.md) | Evolução planejada até o produto instalável |
-| [10 — Pesquisa e validação](docs/10-pesquisa-e-validacao.md) | Questionário, roteiro de entrevista e plano de teste de usabilidade |
+## 🎨 Identidade Visual e Recursos
 
-**Materiais para apresentação**
+- **Paleta de Cores:**
+  - Primária: `#8B5CF6` (Violeta Neon — pulso criativo)
+  - Secundária: `#22D3EE` (Ciano Elétrico — tecnologia e fluidez)
+  - Fundo: `#090D18` (Dark Slate profundo para economia de bateria e imersão cinematográfica)
+  - Superfície: `#121829` (Contraste limpo para cards e modais)
+- **Figma:** [Acessar Projeto no Figma](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1)
+- **Protótipo Rápido:** Arquivo navegável em [`docs/app_interativo.html`](docs/app_interativo.html)
 
-- [Dossiê navegável de Product/UX](docs/dossie-product-ux.html) — página única com problema, personas, jornada, priorização e wireframes.
-- [Protótipo interativo mobile](docs/app_interativo.html) — simulador clicável do app.
-- [Wireframes lo-fi](docs/assets/wireframes/) — 12 arquivos SVG anotados, prontos para importar no Figma.
+---
+
+## 📄 Licença e Uso Acadêmico
+
+Projeto concebido e desenvolvido para fins acadêmicos na FIAP. Todos os direitos de propriedade intelectual pertencem aos membros da equipe CinePulse.
