@@ -171,7 +171,11 @@ class _SearchPageState extends State<SearchPage> {
                     child: SizedBox(
                       width: 64,
                       height: 92,
-                      child: MediaArtwork(url: media.posterUrl, iconSize: 28),
+                      child: MediaArtwork(
+                        url: media.posterUrl,
+                        iconSize: 28,
+                        semanticLabel: 'Pôster de ${media.title}',
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),

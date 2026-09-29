@@ -7,13 +7,30 @@ import '../../catalog/presentation/media_detail_page.dart';
 import '../../catalog/presentation/widgets/media_artwork.dart';
 import '../../catalog/presentation/widgets/rating_sheet.dart';
 
-class DiaryPage extends StatelessWidget {
+class DiaryPage extends StatefulWidget {
   const DiaryPage({super.key, this.dependencies});
   final CatalogDependencies? dependencies;
 
   @override
+  State<DiaryPage> createState() => _DiaryPageState();
+}
+
+class _DiaryPageState extends State<DiaryPage> {
+  late Stream<List<RatingEntry>>? _stream;
+
+  @override
+  void initState() {
+    super.initState();
+    _stream = widget.dependencies?.ratings.watchAll();
+  }
+
+  void _retry() => setState(() {
+    _stream = widget.dependencies?.ratings.watchAll();
+  });
+
+  @override
   Widget build(BuildContext context) => StreamBuilder<List<RatingEntry>>(
-    stream: dependencies?.ratings.watchAll(),
+    stream: _stream,
     builder: (context, snapshot) {
       final entries = snapshot.data ?? const <RatingEntry>[];
       final now = DateTime.now();
@@ -65,12 +82,18 @@ class DiaryPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          if (dependencies != null &&
+          if (widget.dependencies != null &&
               snapshot.connectionState == ConnectionState.waiting)
             const Center(child: CircularProgressIndicator())
           else if (snapshot.hasError)
-            const Text(
-              'Não foi possível carregar o diário. Verifique a conexão e tente novamente.',
+            Column(
+              children: [
+                const Text('Não foi possível carregar o diário.'),
+                TextButton(
+                  onPressed: _retry,
+                  child: const Text('Tentar novamente'),
+                ),
+              ],
             )
           else if (entries.isEmpty)
             const Text(
@@ -89,7 +112,7 @@ class DiaryPage extends StatelessWidget {
                 ),
               ),
               for (final entry in group.value)
-                _DiaryItem(entry: entry, dependencies: dependencies!),
+                _DiaryItem(entry: entry, dependencies: widget.dependencies!),
             ],
         ],
       );
@@ -216,7 +239,10 @@ class _DiaryItem extends StatelessWidget {
         child: SizedBox(
           width: 42,
           height: 62,
-          child: MediaArtwork(url: entry.media.posterUrl),
+          child: MediaArtwork(
+            url: entry.media.posterUrl,
+            semanticLabel: 'Pôster de ${entry.title}',
+          ),
         ),
       ),
       title: Text(

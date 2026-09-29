@@ -11,6 +11,7 @@ import 'package:cinepulse/features/catalog/data/repositories/rating_repository.d
 import 'package:cinepulse/features/catalog/data/repositories/watchlist_repository.dart';
 import 'package:cinepulse/features/catalog/presentation/search_page.dart';
 import 'package:cinepulse/features/home/presentation/home_page.dart';
+import 'package:cinepulse/features/home/presentation/app_shell.dart';
 import 'package:cinepulse/features/diary/presentation/diary_page.dart';
 import 'package:cinepulse/features/lists/presentation/lists_page.dart';
 import 'package:cinepulse/features/profile/presentation/profile_page.dart';
@@ -511,5 +512,96 @@ void main() {
     expect(find.text('4.5'), findsOneWidget);
     expect(find.text('Leve • 1'), findsOneWidget);
     expect(find.text('Gostei muito'), findsOneWidget);
+  });
+
+  testWidgets('Home sem dados pessoais mostra estados honestos', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.dark,
+        home: Scaffold(body: HomePage(catalogDependencies: dependencies)),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Sua review • Spoiler Safe'),
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byType(HomePage),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    expect(find.textContaining('Detalhe história'), findsOneWidget);
+    expect(find.textContaining('Escreva uma review'), findsOneWidget);
+    expect(find.textContaining('Duna: Parte 2'), findsNothing);
+    expect(find.textContaining('88%'), findsNothing);
+    expect(find.textContaining('Cauã'), findsNothing);
+  });
+
+  testWidgets('Home mostra PulseScore parcial e review real protegida', (
+    tester,
+  ) async {
+    await ratings.save(
+      _media,
+      RatingDraft(
+        rating: 4.5,
+        reviewText: 'Segredo real da sessão',
+        containsSpoiler: true,
+        pulseScore: const PulseScore(story: 4, visual: 5),
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.dark,
+        home: Scaffold(body: HomePage(catalogDependencies: dependencies)),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Sua review • Spoiler Safe'),
+      300,
+      scrollable: find
+          .descendant(
+            of: find.byType(HomePage),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    expect(find.text('9.0 / 10'), findsOneWidget);
+    expect(find.text('Não avaliado'), findsNWidgets(2));
+    expect(find.text('Segredo real da sessão'), findsNothing);
+    await tester.ensureVisible(find.text('Revelar spoiler'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Revelar spoiler'));
+    await tester.pump();
+    expect(find.text('Segredo real da sessão'), findsOneWidget);
+  });
+
+  testWidgets('telas principais não transbordam em 360dp', (tester) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.dark,
+        home: AppShell(
+          onSignOut: () async {},
+          catalogDependencies: dependencies,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    for (final tab in ['Diário', 'Listas', 'Perfil']) {
+      await tester.tap(find.text(tab).last);
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    }
   });
 }

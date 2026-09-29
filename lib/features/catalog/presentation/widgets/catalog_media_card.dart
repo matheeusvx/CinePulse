@@ -36,7 +36,10 @@ class CatalogMediaCard extends StatelessWidget {
             child: SizedBox(
               height: 212,
               width: 150,
-              child: MediaArtwork(url: media.posterUrl),
+              child: MediaArtwork(
+                url: media.posterUrl,
+                semanticLabel: 'Pôster de ${media.title}',
+              ),
             ),
           ),
           const SizedBox(height: 7),

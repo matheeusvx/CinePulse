@@ -6,13 +6,30 @@ import '../../catalog/data/models/watchlist_entry.dart';
 import '../../catalog/presentation/media_detail_page.dart';
 import '../../catalog/presentation/widgets/media_artwork.dart';
 
-class ListsPage extends StatelessWidget {
+class ListsPage extends StatefulWidget {
   const ListsPage({super.key, this.dependencies});
   final CatalogDependencies? dependencies;
 
   @override
+  State<ListsPage> createState() => _ListsPageState();
+}
+
+class _ListsPageState extends State<ListsPage> {
+  late Stream<List<WatchlistEntry>>? _stream;
+
+  @override
+  void initState() {
+    super.initState();
+    _stream = widget.dependencies?.watchlist.watchAll();
+  }
+
+  void _retry() => setState(() {
+    _stream = widget.dependencies?.watchlist.watchAll();
+  });
+
+  @override
   Widget build(BuildContext context) => StreamBuilder<List<WatchlistEntry>>(
-    stream: dependencies?.watchlist.watchAll(),
+    stream: _stream,
     builder: (context, snapshot) {
       final entries = snapshot.data ?? const <WatchlistEntry>[];
       return ListView(
@@ -58,12 +75,18 @@ class ListsPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          if (dependencies != null &&
+          if (widget.dependencies != null &&
               snapshot.connectionState == ConnectionState.waiting)
             const Center(child: CircularProgressIndicator())
           else if (snapshot.hasError)
-            const Text(
-              'Não foi possível carregar a Watchlist. Verifique a conexão e tente novamente.',
+            Column(
+              children: [
+                const Text('Não foi possível carregar a Watchlist.'),
+                TextButton(
+                  onPressed: _retry,
+                  child: const Text('Tentar novamente'),
+                ),
+              ],
             )
           else if (entries.isEmpty)
             const Text(
@@ -78,7 +101,7 @@ class ListsPage extends StatelessWidget {
                     MaterialPageRoute<void>(
                       builder: (_) => MediaDetailPage(
                         media: entry.media,
-                        dependencies: dependencies!,
+                        dependencies: widget.dependencies!,
                       ),
                     ),
                   ),
@@ -87,7 +110,10 @@ class ListsPage extends StatelessWidget {
                     child: SizedBox(
                       width: 42,
                       height: 62,
-                      child: MediaArtwork(url: entry.media.posterUrl),
+                      child: MediaArtwork(
+                        url: entry.media.posterUrl,
+                        semanticLabel: 'Pôster de ${entry.title}',
+                      ),
                     ),
                   ),
                   title: Text(
@@ -103,7 +129,9 @@ class ListsPage extends StatelessWidget {
                     icon: const Icon(Icons.bookmark_remove_outlined),
                     onPressed: () async {
                       try {
-                        await dependencies!.watchlist.remove(entry.mediaKey);
+                        await widget.dependencies!.watchlist.remove(
+                          entry.mediaKey,
+                        );
                       } catch (_) {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(

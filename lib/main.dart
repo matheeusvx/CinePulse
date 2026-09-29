@@ -91,7 +91,19 @@ class _ConfigurationErrorApp extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text(message, textAlign: TextAlign.center),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/brand/cinepulse_symbol_transparente.png',
+                width: 72,
+                height: 72,
+                semanticLabel: 'CinePulse',
+              ),
+              const SizedBox(height: 12),
+              Text(message, textAlign: TextAlign.center),
+            ],
+          ),
         ),
       ),
     ),

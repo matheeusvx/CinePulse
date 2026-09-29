@@ -8,6 +8,7 @@ import '../../../core/widgets/spoiler_safe_card.dart';
 import '../../catalog/catalog_dependencies.dart';
 import '../../catalog/data/models/media_item.dart';
 import '../../catalog/data/models/mood_tag.dart';
+import '../../catalog/data/models/rating_entry.dart';
 import '../../catalog/data/repositories/catalog_repository.dart';
 import '../../catalog/presentation/widgets/catalog_media_card.dart';
 import '../../catalog/presentation/search_page.dart';
@@ -25,13 +26,98 @@ class _HomePageState extends State<HomePage> {
   int _selectedMoodIndex = 0;
   Future<List<MediaItem>>? _trending;
   Future<List<MediaItem>>? _moodResults;
+  Stream<List<RatingEntry>>? _ratingsStream;
 
   @override
   void initState() {
     super.initState();
     _reloadTrending();
     _reloadMood();
+    _ratingsStream = widget.catalogDependencies?.ratings.watchAll();
   }
+
+  void _reloadRatings() => setState(() {
+    _ratingsStream = widget.catalogDependencies?.ratings.watchAll();
+  });
+
+  Widget _emptyHighlight(String message) => Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(18),
+    decoration: BoxDecoration(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(18),
+      border: Border.all(color: AppColors.surfaceStrong),
+    ),
+    child: Text(
+      message,
+      style: const TextStyle(color: AppColors.textSecondary),
+    ),
+  );
+
+  Widget _personalHighlights() => StreamBuilder<List<RatingEntry>>(
+    stream: _ratingsStream,
+    builder: (context, snapshot) {
+      RatingEntry? withScore;
+      RatingEntry? withReview;
+      for (final entry in snapshot.data ?? const <RatingEntry>[]) {
+        if (withScore == null && entry.pulseScore?.averageFive != null) {
+          withScore = entry;
+        }
+        if (withReview == null && entry.hasReview) withReview = entry;
+      }
+      if (snapshot.hasError) {
+        return Column(
+          children: [
+            const Text('Não foi possível carregar seus destaques.'),
+            TextButton(
+              onPressed: _reloadRatings,
+              child: const Text('Tentar novamente'),
+            ),
+          ],
+        );
+      }
+      if (_ratingsStream != null &&
+          snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      final score = withScore?.pulseScore;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionTitle(title: 'Seu PulseScore'),
+          const SizedBox(height: 12),
+          score == null
+              ? _emptyHighlight(
+                  'Detalhe história, atuação, visual ou trilha em uma avaliação para ver seu PulseScore.',
+                )
+              : PulseScoreCard(
+                  title: withScore!.title,
+                  averageTen: score.averageTen!,
+                  story: score.story,
+                  acting: score.acting,
+                  visual: score.visual,
+                  soundtrack: score.soundtrack,
+                ),
+          const SizedBox(height: 26),
+          const SectionTitle(title: 'Sua review • Spoiler Safe'),
+          const SizedBox(height: 12),
+          withReview == null
+              ? _emptyHighlight(
+                  'Escreva uma review ao avaliar um título. Se houver spoiler, ela ficará oculta até você revelar.',
+                )
+              : SpoilerSafeCard(
+                  key: ValueKey(
+                    '${withReview.mediaKey}_${withReview.updatedAt}',
+                  ),
+                  title: withReview.title,
+                  rating: withReview.rating,
+                  reviewText: withReview.reviewText,
+                  containsSpoiler: withReview.containsSpoiler,
+                ),
+        ],
+      );
+    },
+  );
 
   void _reloadTrending() => setState(() {
     _trending = widget.catalogDependencies?.catalog.trending();
@@ -122,25 +208,11 @@ class _HomePageState extends State<HomePage> {
                 // App Bar Header
                 Row(
                   children: [
-                    Container(
+                    Image.asset(
+                      'assets/brand/cinepulse_symbol_transparente.png',
                       width: 44,
                       height: 44,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.play_arrow_rounded,
-                        color: Colors.white,
-                        size: 28,
-                      ),
+                      semanticLabel: 'Símbolo CinePulse',
                     ),
                     const SizedBox(width: 12),
                     const Expanded(
@@ -160,28 +232,6 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      tooltip: 'Notificações',
-                      onPressed: () {},
-                      icon: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          const Icon(Icons.notifications_none_rounded),
-                          Positioned(
-                            top: -2,
-                            right: -2,
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: AppColors.secondary,
-                                shape: BoxShape.circle,
-                              ),
                             ),
                           ),
                         ],
@@ -244,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Text(
-                          'PULSE MATCH',
+                          'CINEPULSE',
                           style: TextStyle(
                             color: Color(0xFFC4B5FD),
                             fontSize: 10,
@@ -264,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 6),
                       const Text(
-                        'Avalie por história, atuação, visual e trilha — e conecte sua afinidade com a comunidade.',
+                        'Descubra filmes e séries e registre o que cada sessão despertou em você.',
                         style: TextStyle(
                           height: 1.4,
                           color: AppColors.textSecondary,
@@ -304,35 +354,13 @@ class _HomePageState extends State<HomePage> {
                 _mediaStrip(_moodResults, _reloadMood),
                 const SizedBox(height: 26),
 
-                // Em alta na comunidade
+                // Tendências semanais do TMDB.
                 const SectionTitle(title: 'Em alta no TMDB'),
                 const SizedBox(height: 14),
                 _mediaStrip(_trending, _reloadTrending),
                 const SizedBox(height: 26),
 
-                // Destaque PulseScore
-                const SectionTitle(title: 'Destaque PulseScore™'),
-                const SizedBox(height: 12),
-                const PulseScoreCard(
-                  title: 'Duna: Parte 2 — Médias',
-                  average: '9.6',
-                  story: 0.96,
-                  acting: 0.98,
-                  visual: 1.0,
-                  soundtrack: 0.94,
-                ),
-                const SizedBox(height: 26),
-
-                // Destaque Spoiler Safe
-                const SectionTitle(title: 'Review com Spoiler Safe™'),
-                const SizedBox(height: 12),
-                const SpoilerSafeCard(
-                  movieTitle: 'Duna: Parte 2 (2024)',
-                  reviewAuthor: 'Por Cauã Ferreira Muniz (@caua.muniz)',
-                  rating: 4.8,
-                  spoilerText:
-                      'A sequência da batalha final em Arrakis e a ascensão ao trono imperial encerram o arco de Paul de maneira avassaladora e sombria.',
-                ),
+                _personalHighlights(),
               ],
             ),
           ),

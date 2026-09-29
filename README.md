@@ -1,189 +1,83 @@
-# CinePulse 🎬⚡
+# CinePulse
 
-> **Assista. Avalie. Conecte.**  
-> *O pulso da sua experiência com filmes e séries.*
+![Logo oficial do CinePulse](assets/brand/cinepulse_logo_oficial.png)
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.35+-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.9+-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
-[![Material Design 3](https://img.shields.io/badge/Material%20Design-3-7B1FA2?style=for-the-badge&logo=materialdesign&logoColor=white)](https://m3.material.io)
-[![License](https://img.shields.io/badge/License-Academic-blue?style=for-the-badge)](LICENSE)
+**Versão CP6: `1.0.0+1`** · Flutter para Android · tema escuro
 
----
+O CinePulse permite descobrir filmes e séries, guardar títulos para assistir, registrar avaliações e acompanhar um diário pessoal. O catálogo vem do TMDB; autenticação e dados do usuário ficam no Firebase. O aplicativo não oferece feed social, recomendações por IA ou comparação de perfis na interface.
 
-## 📌 Sobre o Projeto
+## O que funciona
 
-O **CinePulse** é um aplicativo mobile desenvolvido em **Flutter** voltado para cinéfilos e entusiastas do entretenimento que desejam registrar, avaliar e descobrir **filmes e séries** de maneira social, interativa e muito mais expressiva do que uma nota média isolada.
+1. Cadastro, login, logout e restauração de sessão com Firebase Authentication.
+2. Home com tendências do TMDB, busca e filtros MoodTags determinísticos por gênero. Busca e detalhe aceitam filmes e séries.
+3. Watchlist pessoal em `users/{uid}/watchlist/{mediaKey}`.
+4. Avaliação de 0,5 a 5 estrelas, MoodTags opcionais, review opcional de até 2.000 caracteres e PulseScore opcional. Marcar como assistido remove o título da Watchlist.
+5. Diário com registros por mês, métricas e edição ou exclusão de avaliação.
+6. Perfil com dados reais do usuário, totais, nota média, MoodTags frequentes e reviews recentes. Reviews com spoiler ficam ocultas até uma ação explícita.
 
-Atualmente, quem consome audiovisual sofre com notas genéricas que não refletem o gosto pessoal, medo de spoilers em fóruns abertos e a fragmentação entre notas no bloco de notas, grupos de WhatsApp e múltiplos serviços de streaming. O CinePulse resolve isso centralizando o diário do usuário e aplicando inteligência social de recomendação.
+Dados inexistentes aparecem como estados vazios. O perfil não mostra médias comunitárias ou percentuais fictícios.
 
-Este repositório preserva a entrega do **Checkpoint 4 — Idealização, Arquitetura e Protótipo do App** e inclui autenticação Firebase, catálogo TMDB, busca, detalhe, Watchlist e avaliação simples para os Checkpoints 5 e 6.
+## Stack e arquitetura
 
----
-
-## 📱 Justificativa da Escolha / Migração para Flutter & Garantia de Escopo
-
-Atendendo aos critérios e diretrizes do projeto, documentamos a justificativa técnica e estratégica para a adoção do **Flutter**:
-
-1. **Compilação Nativa Multiplataforma (Single Codebase):**  
-   O ecossistema do CinePulse requer presença fluida tanto em dispositivos móveis (Android e iOS) quanto em telas expandidas (Web e Tablets). O Flutter permite compilar para código de máquina nativo (ARM/x86) mantendo 60/120 fps constantes, sem pontes de JavaScript (*bridge bottleneck*), garantindo a renderização imersiva do Dark Theme cinematográfico.
-2. **Controle Total de Renderização (Skia/Impeller):**  
-   A proposta de valor do CinePulse envolve componentes visuais proprietários de alto impacto (barras do *PulseScore*, chip cards do *Spoiler Safe*, gráficos de progresso circular do *PulseMatch* e tags dinâmicas de *MoodTags*). O Flutter desenha cada pixel na tela, eliminando discrepâncias visuais entre fabricantes de dispositivos.
-3. **Produtividade e Agilidade (Stateful Hot Reload):**  
-   A velocidade de iteração no ciclo de vida de UI e testes rápidos de layouts responsivos reduziu significativamente o tempo de desenvolvimento da Sprint.
-4. **Garantia de Cobertura de Escopo das Sprints Anteriores:**  
-   A migração e consolidação do escopo em Flutter garantiu 100% de aderência ao que foi concebido nas etapas de ideação, cobrindo integralmente:
-   - **Fluxo de Descoberta (`Home`):** Carrosséis de títulos em alta, filtro interativo de humor (*MoodTags*), destaques de pontuação e proteção de spoilers.
-   - **Fluxo de Registro (`Diário`):** Histórico de títulos assistidos com datas e notas atribuídas.
-   - **Fluxo de Organização (`Listas`):** Categorização por Watchlist e listas temáticas com contadores.
-   - **Fluxo Social e Métricas (`Perfil`):** Identificação do usuário, estatísticas de consumo e demonstração do indicador de compatibilidade *PulseMatch*.
-   - **Responsividade Total:** Suporte tanto para dimensões móveis quanto para desktop/web através de `LayoutBuilder` inteligente.
-
----
-
-## 🚀 Diferenciais do CinePulse
-
-| Funcionalidade | Descrição |
-|---|---|
-| **⚡ PulseScore** | Avaliação granular que vai além da nota de 1 a 5 estrelas: permite pontuar dimensões como *História*, *Atuação*, *Visual* e *Trilha Sonora*. |
-| **🤝 PulseMatch** | Algoritmo de afinidade social que calcula a compatibilidade de gosto entre perfis de amigos e da comunidade ("Vocês combinam 87% em Ficção Científica"). |
-| **🎭 MoodTags** | Sistema de descoberta por sensação e clima emocional (ex: *Tenso*, *Confortável*, *Chorei Horrores*, *Fim de Noite*), ideal para quando você não sabe o que assistir. |
-| **🛡️ Spoiler Safe** | Sistema nativo com máscaras de spoiler e alertas visuais, garantindo discussões seguras sem arruinar a experiência alheia. |
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Framework:** [Flutter](https://flutter.dev/) 3.35+ (Dart `>=3.9.0 <4.0.0`)
-- **Linguagem:** [Dart](https://dart.dev/)
-- **Dados:** TMDB API (filmes e séries), Firebase Authentication e Cloud Firestore
-- **Design System:** Material Design 3 customizado com Dark Theme imersivo
-- **Ícones:** `cupertino_icons` e Material Symbols
-- **Gerenciamento de Estado & Telas:** StatefulWidgets modulares com `IndexedStack` e navegação responsiva (`NavigationBar` para mobile e `NavigationRail` para desktop/tablet)
-- **Qualidade de Código & Linter:** `flutter_lints` versão 5.0.0
-- **Testes:** `flutter_test` (testes de widgets automatizados)
-- **Prototipação & Design:** Figma ([Figma Oficial CinePulse](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1))
-
----
-
-## 💻 Estrutura do Repositório
-
-O projeto segue a abordagem **Feature-First** (organização por funcionalidade), promovendo isolamento, testabilidade e alta manutenibilidade:
+- **Flutter/Dart:** UI Material 3 com identidade escura CinePulse.
+- **TMDB API v3:** tendências, busca, filtros Discover e detalhes; autenticação por Bearer token.
+- **Firebase Authentication:** e-mail e senha.
+- **Cloud Firestore:** perfil, Watchlist e avaliações isolados pelo `uid` nas regras locais.
+- **Feature-First:** `lib/features/auth`, `catalog`, `home`, `diary`, `lists` e `profile`; tema e widgets compartilhados em `lib/core`.
+- **Testes:** `flutter_test` com repositórios fake e cliente HTTP simulado, sem acessar serviços reais.
 
 ```text
-cinepulse/
-├── assets/
-│   └── brand/               # Logos, badges e ícones oficiais em vetor (SVG)
-├── docs/                    # Dossiê completo de engenharia, UX e requisitos
-│   ├── assets/              # Mockups e wireframes em SVG
-│   ├── 01-visao-produto.md  # Visão, benchmark, hipóteses e dados de mercado
-│   ├── 02-publico-personas-e-jornada.md # Personas detalhadas e jornada do usuário
-│   ├── 03-mvp-e-requisitos.md # 20 User Stories, critérios de aceite e MoSCoW
-│   ├── 04-identidade-visual.md # Tokens de cor, tipografia e UI Kit
-│   ├── 05-pitch-e-modelo-de-negocio.md # Estratégia de negócios e roteiros de pitch
-│   ├── 06-wireframes-e-fluxos.md # Arquitetura de informação e wireframes
-│   ├── 07-divisao-da-equipe.md # Papéis, matriz RACI e responsabilidades
-│   ├── 08-checklist-checkpoint-4.md # Validação de critérios acadêmicos
-│   ├── 09-roadmap-cp5-cp6.md # Planejamento das próximas sprints
-│   └── dossie-product-ux.html # Relatório visual interativo
-├── android/                # Projeto nativo Android para build/APK
-├── firestore.rules         # Regras de acesso aos perfis no Firestore
-├── lib/
-│   ├── core/
-│   │   ├── theme/           # Tokens de cores, temas escuros e tipografia
-│   │   └── widgets/         # Componentes compartilhados (cards, botões, chips)
-│   ├── features/
-│   │   ├── auth/            # Login, cadastro, sessão e AuthGate
-│   │   ├── home/            # Tela Descobrir, destaques, trilhas e carrosséis
-│   │   ├── diary/           # Diário de consumo e registro de assistidos
-│   │   ├── lists/           # Watchlist e listas temáticas
-│   │   └── profile/         # Perfil de usuário, estatísticas e preferências
-│   ├── main.dart            # Ponto de entrada do aplicativo
-│   └── firebase_options.dart # Gerado localmente pelo FlutterFire; ignorado no Git
-├── test/
-│   └── widget_test.dart     # Bateria de testes de widget
-├── pubspec.yaml             # Manifesto de dependências e assets
-├── SETUP.md                 # Configuração local e comandos Flutter
-└── README.md                # Documentação principal
+assets/brand/       logo oficial, símbolo do ícone e crédito TMDB
+android/            projeto e recursos nativos do APK
+config/             exemplo de configuração TMDB
+docs/               documentação e protótipos históricos
+lib/core/           tema e componentes compartilhados
+lib/features/       código por funcionalidade
+test/               testes de modelo, cálculo e widgets
+firestore.rules     regras para dados por usuário
+SETUP.md            configuração local detalhada
 ```
 
----
+## Configurar e executar
 
-## ⚙️ Instalação e Configuração
+Requer Flutter 3.35+, Dart 3.9+ e Android SDK. Configure um projeto Firebase real e habilite **Authentication > Email/Password** e **Cloud Firestore**. Execute `flutterfire configure --platforms=android` para gerar localmente `lib/firebase_options.dart` e `android/app/google-services.json`. O package name é `com.cinepulse.cinepulse`. Publique manualmente `firestore.rules` no Firebase Console; o repositório não publica regras.
 
-### Pré-requisitos
+Obtenha um **API Read Access Token** do TMDB, copie `config/local.example.json` para `config/local.json` e preencha a variável `TMDB_READ_ACCESS_TOKEN`. Esse arquivo e os dois arquivos gerados pelo FlutterFire estão no `.gitignore`. Nunca os versione. `--dart-define-from-file` embute o token no binário, portanto o APK gerado aqui é para teste/entrega acadêmica; distribuição pública pede um proxy para proteger o token.
 
-Certifique-se de ter instalado em seu ambiente:
-1. **[Git](https://git-scm.com/)**
-2. **[Flutter SDK](https://docs.flutter.dev/get-started/install)** (versão 3.3.0 ou superior)
-3. **[VS Code](https://code.visualstudio.com/)** ou **[Android Studio](https://developer.android.com/studio)** com os plugins do Flutter e Dart habilitados
-4. Emulador configurado (Android/iOS) ou o **Google Chrome** para execução em modo Web
-
-Verifique o status do seu ambiente executando:
-```bash
-flutter doctor
+```powershell
+flutter pub get
+flutter analyze
+flutter test
+flutter run --dart-define-from-file=config/local.json
+flutter build apk --debug --dart-define-from-file=config/local.json
+flutter build apk --release --dart-define-from-file=config/local.json
 ```
 
----
+O APK fica em `build/app/outputs/flutter-apk/`. A configuração atual usa **assinatura de debug também no build release**; ela serve à entrega acadêmica e não está pronta para publicação na Play Store. Veja [SETUP.md](SETUP.md) para o passo a passo completo e a geração de ícone/splash.
 
-## ▶️ Como Rodar a Aplicação
+## Como funcionam os diferenciais
 
-Siga o passo a passo abaixo no seu terminal:
+- **MoodTags:** os chips da Home aplicam filtros fixos de gêneros TMDB em filmes e séries. O mapeamento está em [SETUP.md](SETUP.md). É um filtro explicável, sem IA ou dados sociais.
+- **PulseScore pessoal:** história, atuação, visual e trilha aceitam notas de 0,5 a 5. Critérios não preenchidos ficam `null`. A média considera somente os critérios preenchidos e é multiplicada por 2 para o cartão visual de 0–10. Sem critérios, não há média. O destaque usa a avaliação detalhada mais recente do próprio usuário.
+- **Spoiler Safe:** reviews marcadas com spoiler iniciam ocultas no detalhe, na Home e no Perfil. Revelar um card não revela os demais.
+- **PulseMatch:** há somente uma função determinística testada conforme [a especificação do projeto](docs/03-mvp-e-requisitos.md). Com menos de cinco títulos avaliados em comum, o resultado é insuficiente. O aplicativo não compara usuários reais nem apresenta percentual na UI.
 
-1. **Clone este repositório:**
-   ```bash
-   git clone https://github.com/matheeusvx/CinePulse.git
-   cd CinePulse
-   ```
+## Evolução CP4 → CP5 → CP6
 
-2. **Configure Firebase e TMDB seguindo [`SETUP.md`](SETUP.md)**. Gere `lib/firebase_options.dart` com `flutterfire configure` e forneça o token TMDB em `config/local.json`.
+- **CP4:** identidade escura, arquitetura inicial e protótipo visual das telas principais.
+- **CP5:** Android, Firebase Auth/Firestore, TMDB, busca, detalhe, Watchlist e avaliação.
+- **CP6:** Diário e Perfil ligados aos dados pessoais, review/Spoiler Safe, PulseScore pessoal, estados vazios honestos, identidade oficial, ícone/splash e APK validado.
 
-3. **Baixe as dependências do projeto:**
-   ```bash
-   flutter pub get
-   ```
+## Decisões e limites
 
-4. **Verifique a integridade e padrões de código (Linter):**
-   ```bash
-   flutter analyze
-   ```
+Os repositórios de catálogo, Watchlist e avaliação isolam serviços externos da UI. Dados das Etapas 2 e 3 continuam compatíveis. O PulseScore não altera o schema existente; as regras Firestore atuais continuam necessárias. O ícone Android usa somente o símbolo da logo oficial para legibilidade em tamanho pequeno; a logo completa aparece no README e no splash anterior ao Android 12.
 
-5. **Execute os testes automatizados:**
-   ```bash
-   flutter test
-   ```
+Não estão implementados feed, seguidores, perfis de terceiros, listas personalizadas, recomendação por IA/ML ou PulseMatch entre usuários na interface. Testes automatizados usam fakes; o fluxo contra Firebase e TMDB reais precisa de validação manual no projeto configurado.
 
-6. **Inicie o aplicativo Android:**
-   - No emulador padrão ou dispositivo USB conectado:
-     ```bash
-     flutter run --dart-define-from-file=config/local.json
-     ```
+## Créditos do catálogo
 
----
+![Marca oficial do TMDB](assets/brand/tmdb_logo_oficial.svg)
 
-## 👥 Equipe e Responsabilidades (CP4)
+**This product uses the TMDB API but is not endorsed or certified by TMDB.** Filmes, séries e imagens de catálogo são fornecidos pelo [TMDB](https://www.themoviedb.org). A marca TMDB usada nos créditos foi obtida da [página oficial de atribuição](https://www.themoviedb.org/about/logos-attribution) e aparece com menos destaque que a marca CinePulse, conforme os [requisitos oficiais](https://developer.themoviedb.org/docs/faq).
 
-| Integrante | Papel Principal | Entregas Chave no Checkpoint 4 |
-|---|---|---|
-| **Matheus Morelli** | *Tech Lead & Integração Flutter* | Estrutura de arquitetura de pastas, integração das branches, revisão de pull requests e build da aplicação. |
-| **Cauã Ferreira Muniz** | *Brand & UI Designer* | Criação da identidade visual, logos vetoriais em `assets/brand/`, UI Kit, design system e [Figma Oficial](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1). |
-| **Rafael Ferreira** | *Product Manager & UX Researcher* | Validação do problema, 3 personas, mapa de jornada, 20 User Stories priorizadas (RICE/MoSCoW), arquitetura de informação e wireframes. |
-| **Victor Nicolas** | *Flutter Developer* | Implementação do protótipo funcional, casca do app (`AppShell`), telas (`Home`, `Diário`, `Listas`, `Perfil`) e responsividade. |
-| **Henrique Nicolas** | *Documentação, Pitch & QA* | Documentação técnica e README, roteiro de Pitch, plano de testes de QA e auditoria de evidências de execução. |
-
----
-
-## 🎨 Identidade Visual e Recursos
-
-- **Paleta de Cores:**
-  - Primária: `#8B5CF6` (Violeta Neon — pulso criativo)
-  - Secundária: `#22D3EE` (Ciano Elétrico — tecnologia e fluidez)
-  - Fundo: `#090D18` (Dark Slate profundo para economia de bateria e imersão cinematográfica)
-  - Superfície: `#121829` (Contraste limpo para cards e modais)
-- **Figma:** [Acessar Projeto no Figma](https://www.figma.com/design/SMfkQcK7LwgpSV9Yp8VVkh/Sem-t%C3%ADtulo?node-id=1-3&t=fcr24qhg0RFKlwOL-1)
-- **Protótipo Rápido:** Arquivo navegável em [`docs/app_interativo.html`](docs/app_interativo.html)
-
----
-
-## 📄 Licença e Uso Acadêmico
-
-Projeto concebido e desenvolvido para fins acadêmicos na FIAP. Todos os direitos de propriedade intelectual pertencem aos membros da equipe CinePulse.
+Projeto acadêmico CinePulse/FIAP. Os documentos em `docs/` preservam o histórico de produto e UX e podem descrever ideias ainda não implementadas.

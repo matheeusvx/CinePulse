@@ -143,7 +143,10 @@ class _MediaDetailPageState extends State<MediaDetailPage> {
               borderRadius: BorderRadius.circular(18),
               child: SizedBox(
                 height: 210,
-                child: MediaArtwork(url: media.backdropUrl ?? media.posterUrl),
+                child: MediaArtwork(
+                  url: media.backdropUrl ?? media.posterUrl,
+                  semanticLabel: 'Imagem de ${media.title}',
+                ),
               ),
             ),
             const SizedBox(height: 18),
@@ -155,7 +158,10 @@ class _MediaDetailPageState extends State<MediaDetailPage> {
                   child: SizedBox(
                     width: 94,
                     height: 140,
-                    child: MediaArtwork(url: media.posterUrl),
+                    child: MediaArtwork(
+                      url: media.posterUrl,
+                      semanticLabel: 'Pôster de ${media.title}',
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),

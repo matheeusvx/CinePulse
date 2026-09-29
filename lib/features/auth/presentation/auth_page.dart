@@ -100,10 +100,11 @@ class _AuthPageState extends State<AuthPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Icon(
-                      Icons.play_circle_fill_rounded,
-                      color: AppColors.primary,
-                      size: 64,
+                    Image.asset(
+                      'assets/brand/cinepulse_symbol_transparente.png',
+                      width: 76,
+                      height: 76,
+                      semanticLabel: 'CinePulse',
                     ),
                     const SizedBox(height: 16),
                     Text(

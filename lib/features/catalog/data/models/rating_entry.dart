@@ -17,6 +17,16 @@ class PulseScore {
   bool get isEmpty =>
       story == null && acting == null && visual == null && soundtrack == null;
 
+  /// A média considera apenas critérios preenchidos; ausências não valem zero.
+  double? get averageFive {
+    final values = [story, acting, visual, soundtrack].whereType<double>();
+    if (values.isEmpty) return null;
+    return values.reduce((a, b) => a + b) / values.length;
+  }
+
+  /// O cartão do CP4 usa escala visual 0–10, o dobro da média em 0,5–5.
+  double? get averageTen => averageFive == null ? null : averageFive! * 2;
+
   Map<String, dynamic> toMap() => {
     'story': story,
     'acting': acting,

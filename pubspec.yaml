@@ -1,7 +1,7 @@
 name: cinepulse
-description: Aplicativo social para avaliar, registrar e descobrir filmes e series.
+description: Aplicativo para descobrir, avaliar e registrar filmes e séries.
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.9.0 <4.0.0'
@@ -14,12 +14,37 @@ dependencies:
   firebase_auth: ^6.7.0
   cloud_firestore: ^6.10.0
   http: ^1.6.0
+  flutter_svg: ^2.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.8
 
 flutter:
   uses-material-design: true
   assets:
     - assets/brand/
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: assets/brand/cinepulse_symbol_oficial.png
+  adaptive_icon_background: "#090D18"
+  adaptive_icon_foreground: assets/brand/cinepulse_symbol_oficial.png
+  adaptive_icon_foreground_inset: 24
+
+flutter_native_splash:
+  android: true
+  ios: false
+  web: false
+  color: "#090D18"
+  image: assets/brand/cinepulse_logo_oficial.png
+  color_dark: "#090D18"
+  image_dark: assets/brand/cinepulse_logo_oficial.png
+  android_12:
+    color: "#090D18"
+    image: assets/brand/cinepulse_symbol_oficial.png
+    color_dark: "#090D18"
+    image_dark: assets/brand/cinepulse_symbol_oficial.png

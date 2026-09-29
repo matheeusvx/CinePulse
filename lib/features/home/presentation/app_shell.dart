@@ -128,14 +128,11 @@ class _DesktopNavigation extends StatelessWidget {
       groupAlignment: -0.8,
       leading: Padding(
         padding: const EdgeInsets.fromLTRB(0, 18, 0, 36),
-        child: Container(
+        child: Image.asset(
+          'assets/brand/cinepulse_symbol_transparente.png',
           width: 44,
           height: 44,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: const Icon(Icons.play_arrow_rounded, color: Colors.white),
+          semanticLabel: 'CinePulse',
         ),
       ),
       destinations: const [

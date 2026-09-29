@@ -44,8 +44,11 @@ flutter analyze
 flutter test
 flutter run --dart-define-from-file=config/local.json
 flutter build apk --debug --dart-define-from-file=config/local.json
+flutter build apk --release --dart-define-from-file=config/local.json
 ```
 
-O APK release exige assinatura própria antes de distribuição. A configuração Android atual ainda usa assinatura de debug no tipo `release`.
+Para atualizar os recursos Android após mudar o branding oficial, execute `dart run flutter_launcher_icons` e `dart run flutter_native_splash:create`, depois gere os APKs novamente. A versão de entrega acadêmica é `1.0.0+1`. Os APKs gerados ficam em `build/app/outputs/flutter-apk/`.
 
-Diário, Watchlist e métricas do Perfil usam os registros do usuário no Firestore. O destaque PulseScore e o exemplo Spoiler Safe da Home permanecem como peças visuais do CP4; não representam dados comunitários reais. Feed social, PulseMatch e listas personalizadas ainda não estão implementados.
+O APK release exige assinatura própria antes de distribuição. A configuração Android atual ainda usa assinatura de debug no tipo `release`, portanto não está pronta para Play Store.
+
+Diário, Watchlist e métricas do Perfil usam registros pessoais do Firestore. PulseScore e review da Home aparecem apenas com dados reais do usuário; critérios ausentes não entram na média. O núcleo determinístico de PulseMatch é testável, mas a comparação entre usuários ainda não existe na interface. Feed social e listas personalizadas não estão implementados.
