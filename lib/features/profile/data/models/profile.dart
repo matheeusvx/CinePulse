@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Profile {
   const Profile({
     required this.id,
@@ -12,15 +14,16 @@ class Profile {
   final String? displayName;
   final String? username;
   final String? avatarUrl;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json['id'] as String,
-        displayName: json['display_name'] as String?,
-        username: json['username'] as String?,
-        avatarUrl: json['avatar_url'] as String?,
-        createdAt: DateTime.parse(json['created_at'] as String),
-        updatedAt: DateTime.parse(json['updated_at'] as String),
+  factory Profile.fromFirestore(String id, Map<String, dynamic> data) =>
+      Profile(
+        id: id,
+        displayName: data['displayName'] as String?,
+        username: data['username'] as String?,
+        avatarUrl: data['avatarUrl'] as String?,
+        createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+        updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
       );
 }

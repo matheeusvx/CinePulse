@@ -18,8 +18,10 @@ class AuthGate extends StatelessWidget {
         if (snapshot.hasError) {
           return const Scaffold(
             body: Center(
-                child: Text(
-                    'Não foi possível restaurar a sessão. Reinicie o app.')),
+              child: Text(
+                'Não foi possível restaurar a sessão. Reinicie o app.',
+              ),
+            ),
           );
         }
         return snapshot.data == true

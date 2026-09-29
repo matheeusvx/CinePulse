@@ -1,20 +1,28 @@
 # Setup local do CinePulse
 
-O repositório já contém a estrutura Android. Não é necessário criar outro projeto Flutter nem copiar arquivos.
+O repositório já contém a estrutura Android. Não é necessário criar outro projeto Flutter.
 
 ## Pré-requisitos
 
-- Flutter 3.35+ (Dart 3.9+) e Android SDK instalados (`flutter doctor`).
-- Um projeto Supabase com autenticação por e-mail/senha habilitada.
+- Flutter 3.35+ (Dart 3.9+) e Android SDK (`flutter doctor`).
+- Um projeto Firebase ao qual você tenha acesso no Firebase Console.
+- Firebase CLI e FlutterFire CLI para vincular o app ao projeto real.
 
-## Configurar Supabase
+## Configurar Firebase
 
-1. No painel Supabase, copie **Project URL** e a chave **publishable/anon** do projeto. Nunca use `service_role` nem secret key no aplicativo.
-2. Copie `config/local.example.json` para `config/local.json` e preencha `SUPABASE_URL` e `SUPABASE_ANON_KEY`. `config/local.json` está no `.gitignore`. A chave anon é pública por natureza; a segurança dos dados depende das políticas RLS.
-3. Execute `docs/supabase_profiles.sql` no SQL Editor do projeto. O script cria `profiles`, índices, políticas RLS, atualização de `updated_at` e criação automática de perfil para usuários novos. Se o projeto já possui tabelas/triggers com estes nomes, revise antes de executar.
-4. Em **Authentication > Providers**, confirme que o provedor Email está ativo. Se **Confirm email** estiver ativo, o cadastro mostra uma orientação para confirmar o e-mail antes do login. Configure o template/remetente de e-mail conforme o ambiente.
+1. No Firebase Console, crie ou selecione um projeto. Em **Authentication > Sign-in method**, habilite **Email/Password**.
+2. Em **Firestore Database**, crie o banco de dados e escolha a região. Publique o conteúdo de `firestore.rules` na aba **Rules**. As regras permitem apenas acesso ao documento `users/{uid}` do próprio usuário; não há acesso a outros documentos nesta etapa.
+3. Instale e autentique as ferramentas oficiais, se necessário:
 
-O arquivo local é entregue ao Flutter durante o build. Portanto, a URL e a chave pública ficam no binário gerado. Não coloque credenciais privilegiadas nesse arquivo.
+   ```powershell
+   firebase login
+   dart pub global activate flutterfire_cli
+   ```
+
+4. Na raiz deste repositório, execute `flutterfire configure --platforms=android`, selecione o projeto Firebase real e registre/vincule o app Android com o package name **`com.cinepulse.cinepulse`**. A CLI deverá substituir o marcador `lib/firebase_options.dart` pelo arquivo gerado oficialmente. Não preencha esse arquivo manualmente com valores inventados.
+5. Confira no Console se o app Android registrado tem o mesmo package name. Para e-mail/senha e Firestore não há credencial privilegiada para colocar no aplicativo. Os identificadores gerados pelo FlutterFire não são secrets.
+
+Sem a etapa 4, o projeto continua analisável, testável e compilável, mas ao abrir mostra uma mensagem de configuração pendente. Depois de gerar `lib/firebase_options.dart`, execute o app para validar cadastro, criação do documento `users/{uid}`, login, restauração de sessão e logout contra seu projeto real.
 
 ## Executar e validar
 
@@ -22,15 +30,10 @@ O arquivo local é entregue ao Flutter durante o build. Portanto, a URL e a chav
 flutter pub get
 flutter analyze
 flutter test
-flutter run --dart-define-from-file=config/local.json
+flutter run
+flutter build apk --debug
 ```
 
-Para gerar APK de desenvolvimento:
+O APK release exige assinatura própria antes de distribuição. A configuração Android atual ainda usa assinatura de debug no tipo `release`.
 
-```powershell
-flutter build apk --debug --dart-define-from-file=config/local.json
-```
-
-O APK release exige assinatura própria antes de distribuição. A configuração Android gerada pelo Flutter ainda usa assinatura de debug no tipo `release`; substitua por uma configuração de assinatura segura quando for publicar.
-
-As quatro telas CP4 seguem como protótipo visual. Dados e métricas mostrados nelas ainda são demonstrativos. O perfil Supabase e sua tabela estão preparados para integração futura, sem alterar as telas do CP4 nesta etapa.
+As quatro telas CP4 continuam como protótipo visual; dados e métricas nelas exibidos são demonstrativos. O documento Firestore de usuário fica preparado para integração futura sem alterar essas telas nesta etapa.

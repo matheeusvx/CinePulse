@@ -1,20 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'core/config/supabase_config.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/auth_gate.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'features/profile/data/repositories/profile_repository.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await SupabaseConfig.initialize();
-    runApp(CinePulseApp(
-      authRepository: SupabaseAuthRepository(Supabase.instance.client),
-    ));
-  } on FormatException catch (error) {
-    runApp(_ConfigurationErrorApp(message: error.message));
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    runApp(
+      CinePulseApp(
+        authRepository: FirebaseAuthRepository(
+          FirebaseAuth.instance,
+          ProfileRepository(FirebaseAuth.instance, FirebaseFirestore.instance),
+        ),
+      ),
+    );
+  } on UnsupportedError catch (error) {
+    runApp(
+      _ConfigurationErrorApp(message: error.message ?? 'Configure o Firebase.'),
+    );
+  } on FirebaseException {
+    runApp(
+      const _ConfigurationErrorApp(
+        message:
+            'Não foi possível iniciar o Firebase. Confira a configuração em SETUP.md.',
+      ),
+    );
   }
 }
 
@@ -41,15 +60,15 @@ class _ConfigurationErrorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'CinePulse',
-        theme: AppTheme.dark,
-        home: Scaffold(
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(message, textAlign: TextAlign.center),
-            ),
-          ),
+    title: 'CinePulse',
+    theme: AppTheme.dark,
+    home: Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(message, textAlign: TextAlign.center),
         ),
-      );
+      ),
+    ),
+  );
 }

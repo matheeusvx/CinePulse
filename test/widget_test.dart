@@ -24,8 +24,9 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<bool> signUp({required String email, required String password}) async {
-    return false; // Simula confirmação de e-mail habilitada.
+  Future<void> signUp({required String email, required String password}) async {
+    isAuthenticated = true;
+    _changes.add(true);
   }
 
   @override
@@ -49,15 +50,18 @@ void main() {
     expect(find.text('Perfil'), findsOneWidget);
   });
 
-  testWidgets('login abre AppShell e logout retorna à autenticação',
-      (tester) async {
+  testWidgets('login abre AppShell e logout retorna à autenticação', (
+    tester,
+  ) async {
     final repository = FakeAuthRepository();
     addTearDown(repository.dispose);
     await tester.pumpWidget(CinePulseApp(authRepository: repository));
     expect(find.text('Entrar'), findsWidgets);
 
     await tester.enterText(
-        find.byType(EditableText).first, 'teste@cinepulse.com');
+      find.byType(EditableText).first,
+      'teste@cinepulse.com',
+    );
     await tester.enterText(find.byType(EditableText).last, 'senha123');
     await tester.tap(find.text('Entrar').last);
     await tester.pumpAndSettle();
@@ -78,19 +82,19 @@ void main() {
     expect(find.text('Ainda não tem conta? Cadastre-se'), findsOneWidget);
   });
 
-  testWidgets('cadastro sem sessão orienta confirmação do e-mail',
-      (tester) async {
+  testWidgets('cadastro autentica e abre o AppShell', (tester) async {
     final repository = FakeAuthRepository();
     addTearDown(repository.dispose);
     await tester.pumpWidget(CinePulseApp(authRepository: repository));
     await tester.tap(find.text('Ainda não tem conta? Cadastre-se'));
     await tester.pumpAndSettle();
     await tester.enterText(
-        find.byType(EditableText).first, 'novo@cinepulse.com');
+      find.byType(EditableText).first,
+      'novo@cinepulse.com',
+    );
     await tester.enterText(find.byType(EditableText).last, 'senha123');
     await tester.tap(find.text('Cadastrar'));
     await tester.pumpAndSettle();
-    expect(find.text('Cadastro realizado. Confirme seu e-mail e depois entre.'),
-        findsOneWidget);
+    expect(find.text('Descobrir'), findsOneWidget);
   });
 }

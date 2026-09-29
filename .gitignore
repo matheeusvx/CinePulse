@@ -16,9 +16,13 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# Configuração local e credenciais de build
-config/local.json
+# Credenciais locais de build
 *.env
 *.keystore
 *.jks
 android/key.properties
+
+
+# Firebase local configuration
+lib/firebase_options.dart
+android/app/google-services.json

@@ -1,41 +1,61 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../../profile/data/repositories/profile_repository.dart';
 
 abstract class AuthRepository {
   bool get isAuthenticated;
   Stream<bool> get authStateChanges;
 
-  Future<bool> signUp({required String email, required String password});
+  Future<void> signUp({required String email, required String password});
   Future<void> signIn({required String email, required String password});
   Future<void> signOut();
 }
 
-class SupabaseAuthRepository implements AuthRepository {
-  SupabaseAuthRepository(this._client);
+class FirebaseAuthRepository implements AuthRepository {
+  FirebaseAuthRepository(this._auth, this._profiles);
 
-  final SupabaseClient _client;
-
-  @override
-  bool get isAuthenticated {
-    final session = _client.auth.currentSession;
-    return session != null && !session.isExpired;
-  }
+  final FirebaseAuth _auth;
+  final ProfileRepository _profiles;
 
   @override
-  Stream<bool> get authStateChanges => _client.auth.onAuthStateChange
-      .map((event) => event.session != null && !event.session!.isExpired);
+  bool get isAuthenticated => _auth.currentUser != null;
 
   @override
-  Future<bool> signUp({required String email, required String password}) async {
-    final response =
-        await _client.auth.signUp(email: email, password: password);
-    return response.session != null;
+  Stream<bool> get authStateChanges =>
+      _auth.authStateChanges().map((user) => user != null);
+
+  @override
+  Future<void> signUp({required String email, required String password}) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final user = credential.user;
+    if (user == null) throw StateError('Cadastro sem usuário retornado.');
+    try {
+      await _profiles.ensureFor(user.uid);
+    } catch (_) {
+      await _auth.signOut();
+      rethrow;
+    }
   }
 
   @override
   Future<void> signIn({required String email, required String password}) async {
-    await _client.auth.signInWithPassword(email: email, password: password);
+    final credential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final user = credential.user;
+    if (user == null) throw StateError('Login sem usuário retornado.');
+    try {
+      await _profiles.ensureFor(user.uid);
+    } catch (_) {
+      await _auth.signOut();
+      rethrow;
+    }
   }
 
   @override
-  Future<void> signOut() => _client.auth.signOut();
+  Future<void> signOut() => _auth.signOut();
 }
