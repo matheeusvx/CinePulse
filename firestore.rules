@@ -34,6 +34,67 @@ service cloud.firestore {
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.updatedAt == request.time;
       allow delete: if false;
+
+      match /watchlist/{itemId} {
+        function validWatchlist() {
+          return request.resource.data.keys().hasAll([
+              'tmdbId', 'mediaType', 'title', 'posterPath', 'releaseDate', 'addedAt'
+            ])
+            && request.resource.data.keys().hasOnly([
+              'tmdbId', 'mediaType', 'title', 'posterPath', 'releaseDate', 'addedAt'
+            ])
+            && request.resource.data.tmdbId is int
+            && request.resource.data.tmdbId > 0
+            && request.resource.data.mediaType in ['movie', 'tv']
+            && request.resource.data.title is string
+            && (request.resource.data.posterPath == null
+                || request.resource.data.posterPath is string)
+            && (request.resource.data.releaseDate == null
+                || request.resource.data.releaseDate is string)
+            && request.resource.data.addedAt == request.time;
+        }
+
+        allow get, list: if isOwner();
+        allow create: if isOwner() && validWatchlist();
+        allow delete: if isOwner();
+        allow update: if false;
+      }
+
+      match /ratings/{itemId} {
+        function validRating() {
+          return request.resource.data.keys().hasAll([
+              'tmdbId', 'mediaType', 'title', 'posterPath',
+              'rating', 'watchedAt', 'updatedAt'
+            ])
+            && request.resource.data.keys().hasOnly([
+              'tmdbId', 'mediaType', 'title', 'posterPath',
+              'rating', 'watchedAt', 'updatedAt'
+            ])
+            && request.resource.data.tmdbId is int
+            && request.resource.data.tmdbId > 0
+            && request.resource.data.mediaType in ['movie', 'tv']
+            && request.resource.data.title is string
+            && (request.resource.data.posterPath == null
+                || request.resource.data.posterPath is string)
+            && request.resource.data.rating is number
+            && request.resource.data.rating >= 0.5
+            && request.resource.data.rating <= 5.0
+            && request.resource.data.rating * 2 % 1 == 0;
+        }
+
+        allow get, list: if isOwner();
+        allow create: if isOwner()
+          && validRating()
+          && request.resource.data.watchedAt == request.time
+          && request.resource.data.updatedAt == request.time;
+        allow update: if isOwner()
+          && validRating()
+          && request.resource.data.tmdbId == resource.data.tmdbId
+          && request.resource.data.mediaType == resource.data.mediaType
+          && request.resource.data.watchedAt == resource.data.watchedAt
+          && request.resource.data.updatedAt == request.time;
+        allow delete: if false;
+      }
     }
   }
 }

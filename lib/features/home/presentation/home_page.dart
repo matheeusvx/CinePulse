@@ -6,9 +6,13 @@ import '../../../core/widgets/mood_tag_chip.dart';
 import '../../../core/widgets/pulse_score_card.dart';
 import '../../../core/widgets/section_title.dart';
 import '../../../core/widgets/spoiler_safe_card.dart';
+import '../../catalog/catalog_dependencies.dart';
+import '../../catalog/presentation/search_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.catalogDependencies});
+
+  final CatalogDependencies? catalogDependencies;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -115,14 +119,14 @@ class _HomePageState extends State<HomePage> {
         TextField(
           readOnly: true,
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Busca será conectada ao catálogo no CP5.'),
-              ),
-            );
+            final dependencies = widget.catalogDependencies;
+            if (dependencies == null) return;
+            Navigator.of(context).push(MaterialPageRoute<void>(
+              builder: (_) => SearchPage(dependencies: dependencies),
+            ));
           },
           decoration: InputDecoration(
-            hintText: 'Buscar filmes, séries ou pessoas...',
+            hintText: 'Buscar filmes ou séries...',
             prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary),
             filled: true,
             fillColor: AppColors.surface,

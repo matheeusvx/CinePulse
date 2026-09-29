@@ -6,6 +6,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'core/theme/app_theme.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/auth_gate.dart';
+import 'features/catalog/catalog_dependencies.dart';
+import 'features/catalog/data/repositories/rating_repository.dart';
+import 'features/catalog/data/repositories/tmdb_catalog_repository.dart';
+import 'features/catalog/data/repositories/watchlist_repository.dart';
+import 'features/catalog/data/services/tmdb_client.dart';
 import 'features/profile/data/repositories/profile_repository.dart';
 import 'firebase_options.dart';
 
@@ -15,11 +20,22 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    final auth = FirebaseAuth.instance;
+    final firestore = FirebaseFirestore.instance;
     runApp(
       CinePulseApp(
         authRepository: FirebaseAuthRepository(
-          FirebaseAuth.instance,
-          ProfileRepository(FirebaseAuth.instance, FirebaseFirestore.instance),
+          auth,
+          ProfileRepository(auth, firestore),
+        ),
+        catalogDependencies: CatalogDependencies(
+          catalog: TmdbCatalogRepository(
+            TmdbClient(
+              token: const String.fromEnvironment('TMDB_READ_ACCESS_TOKEN'),
+            ),
+          ),
+          watchlist: FirestoreWatchlistRepository(auth, firestore),
+          ratings: FirestoreRatingRepository(auth, firestore),
         ),
       ),
     );
@@ -38,9 +54,14 @@ Future<void> main() async {
 }
 
 class CinePulseApp extends StatelessWidget {
-  const CinePulseApp({super.key, required this.authRepository});
+  const CinePulseApp({
+    super.key,
+    required this.authRepository,
+    this.catalogDependencies,
+  });
 
   final AuthRepository authRepository;
+  final CatalogDependencies? catalogDependencies;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +69,10 @@ class CinePulseApp extends StatelessWidget {
       title: 'CinePulse',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      home: AuthGate(repository: authRepository),
+      home: AuthGate(
+        repository: authRepository,
+        catalogDependencies: catalogDependencies,
+      ),
     );
   }
 }

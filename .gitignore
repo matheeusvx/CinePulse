@@ -26,3 +26,4 @@ android/key.properties
 # Firebase local configuration
 lib/firebase_options.dart
 android/app/google-services.json
+config/local.json

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../diary/presentation/diary_page.dart';
+import '../../catalog/catalog_dependencies.dart';
 import '../../lists/presentation/lists_page.dart';
 import '../../profile/presentation/profile_page.dart';
 import 'home_page.dart';
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, required this.onSignOut});
+  const AppShell({
+    super.key,
+    required this.onSignOut,
+    this.catalogDependencies,
+  });
 
   final Future<void> Function() onSignOut;
+  final CatalogDependencies? catalogDependencies;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -28,7 +34,7 @@ class _AppShellState extends State<AppShell> {
             child: IndexedStack(
               index: _currentIndex,
               children: [
-                const HomePage(),
+                HomePage(catalogDependencies: widget.catalogDependencies),
                 const DiaryPage(),
                 const ListsPage(),
                 ProfilePage(onSignOut: widget.onSignOut),

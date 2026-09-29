@@ -16,7 +16,7 @@ O **CinePulse** é um aplicativo mobile desenvolvido em **Flutter** voltado para
 
 Atualmente, quem consome audiovisual sofre com notas genéricas que não refletem o gosto pessoal, medo de spoilers em fóruns abertos e a fragmentação entre notas no bloco de notas, grupos de WhatsApp e múltiplos serviços de streaming. O CinePulse resolve isso centralizando o diário do usuário e aplicando inteligência social de recomendação.
 
-Este repositório preserva a entrega do **Checkpoint 4 — Idealização, Arquitetura e Protótipo do App** e inclui a fundação Android e autenticação Firebase para os Checkpoints 5 e 6.
+Este repositório preserva a entrega do **Checkpoint 4 — Idealização, Arquitetura e Protótipo do App** e inclui autenticação Firebase, catálogo TMDB, busca, detalhe, Watchlist e avaliação simples para os Checkpoints 5 e 6.
 
 ---
 
@@ -55,6 +55,7 @@ Atendendo aos critérios e diretrizes do projeto, documentamos a justificativa t
 
 - **Framework:** [Flutter](https://flutter.dev/) 3.35+ (Dart `>=3.9.0 <4.0.0`)
 - **Linguagem:** [Dart](https://dart.dev/)
+- **Dados:** TMDB API (filmes e séries), Firebase Authentication e Cloud Firestore
 - **Design System:** Material Design 3 customizado com Dark Theme imersivo
 - **Ícones:** `cupertino_icons` e Material Symbols
 - **Gerenciamento de Estado & Telas:** StatefulWidgets modulares com `IndexedStack` e navegação responsiva (`NavigationBar` para mobile e `NavigationRail` para desktop/tablet)
@@ -97,7 +98,7 @@ cinepulse/
 │   │   ├── lists/           # Watchlist e listas temáticas
 │   │   └── profile/         # Perfil de usuário, estatísticas e preferências
 │   ├── main.dart            # Ponto de entrada do aplicativo
-│   └── firebase_options.dart # Marcador substituído por flutterfire configure
+│   └── firebase_options.dart # Gerado localmente pelo FlutterFire; ignorado no Git
 ├── test/
 │   └── widget_test.dart     # Bateria de testes de widget
 ├── pubspec.yaml             # Manifesto de dependências e assets
@@ -134,7 +135,7 @@ Siga o passo a passo abaixo no seu terminal:
    cd CinePulse
    ```
 
-2. **Configure o Firebase seguindo [`SETUP.md`](SETUP.md)** e gere `lib/firebase_options.dart` com `flutterfire configure`.
+2. **Configure Firebase e TMDB seguindo [`SETUP.md`](SETUP.md)**. Gere `lib/firebase_options.dart` com `flutterfire configure` e forneça o token TMDB em `config/local.json`.
 
 3. **Baixe as dependências do projeto:**
    ```bash
@@ -154,7 +155,7 @@ Siga o passo a passo abaixo no seu terminal:
 6. **Inicie o aplicativo Android:**
    - No emulador padrão ou dispositivo USB conectado:
      ```bash
-     flutter run
+     flutter run --dart-define-from-file=config/local.json
      ```
 
 ---
