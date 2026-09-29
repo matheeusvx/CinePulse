@@ -61,6 +61,21 @@ service cloud.firestore {
       }
 
       match /ratings/{itemId} {
+        function validHalfStar(value) {
+          return value is number && value >= 0.5 && value <= 5.0
+            && value * 2 % 1 == 0;
+        }
+
+        function validPulseScore() {
+          let score = request.resource.data.get('pulseScore', null);
+          return score == null || (score is map
+            && score.keys().hasOnly(['story', 'acting', 'visual', 'soundtrack'])
+            && (score.get('story', null) == null || validHalfStar(score.story))
+            && (score.get('acting', null) == null || validHalfStar(score.acting))
+            && (score.get('visual', null) == null || validHalfStar(score.visual))
+            && (score.get('soundtrack', null) == null || validHalfStar(score.soundtrack)));
+        }
+
         function validRating() {
           return request.resource.data.keys().hasAll([
               'tmdbId', 'mediaType', 'title', 'posterPath',
@@ -68,7 +83,8 @@ service cloud.firestore {
             ])
             && request.resource.data.keys().hasOnly([
               'tmdbId', 'mediaType', 'title', 'posterPath',
-              'rating', 'watchedAt', 'updatedAt'
+              'rating', 'watchedAt', 'updatedAt', 'moodTags',
+              'reviewText', 'containsSpoiler', 'pulseScore'
             ])
             && request.resource.data.tmdbId is int
             && request.resource.data.tmdbId > 0
@@ -76,10 +92,16 @@ service cloud.firestore {
             && request.resource.data.title is string
             && (request.resource.data.posterPath == null
                 || request.resource.data.posterPath is string)
-            && request.resource.data.rating is number
-            && request.resource.data.rating >= 0.5
-            && request.resource.data.rating <= 5.0
-            && request.resource.data.rating * 2 % 1 == 0;
+            && validHalfStar(request.resource.data.rating)
+            && request.resource.data.get('moodTags', []) is list
+            && request.resource.data.get('moodTags', []).size() <= 3
+            && request.resource.data.get('moodTags', []).hasOnly([
+              'Tenso', 'Leve', 'Reflexivo', 'Épico', 'Emocionante'
+            ])
+            && request.resource.data.get('reviewText', '') is string
+            && request.resource.data.get('reviewText', '').size() <= 2000
+            && request.resource.data.get('containsSpoiler', false) is bool
+            && validPulseScore();
         }
 
         allow get, list: if isOwner();
@@ -93,7 +115,7 @@ service cloud.firestore {
           && request.resource.data.mediaType == resource.data.mediaType
           && request.resource.data.watchedAt == resource.data.watchedAt
           && request.resource.data.updatedAt == request.time;
-        allow delete: if false;
+        allow delete: if isOwner();
       }
     }
   }

@@ -11,7 +11,7 @@ O repositório já contém a estrutura Android. Não é necessário criar outro 
 ## Configurar Firebase
 
 1. No Firebase Console, crie ou selecione um projeto. Em **Authentication > Sign-in method**, habilite **Email/Password**.
-2. Em **Firestore Database**, crie o banco de dados e escolha a região. Publique o conteúdo de `firestore.rules` na aba **Rules**. As regras permitem apenas acesso ao documento `users/{uid}` do próprio usuário; não há acesso a outros documentos nesta etapa.
+2. Em **Firestore Database**, crie o banco de dados e escolha a região. Publique o conteúdo de `firestore.rules` na aba **Rules**. As regras protegem o perfil e as subcoleções Watchlist e avaliações por usuário.
 3. Instale e autentique as ferramentas oficiais, se necessário:
 
    ```powershell
@@ -28,7 +28,11 @@ O repositório já contém a estrutura Android. Não é necessário criar outro 
 2. Copie `config/local.example.json` para `config/local.json` e substitua o placeholder. **Nunca faça commit de `config/local.json`**; o arquivo está no `.gitignore`.
 3. A busca e o detalhe de filmes/séries usam esse token. Sem ele, o restante do app continua abrindo e a busca mostra uma mensagem de configuração pendente. Como `--dart-define-from-file` incorpora valores no aplicativo, o token distribuído em um APK não é um segredo forte; considere um backend/proxy antes de distribuição pública.
 
-As novas regras em `firestore.rules` cobrem `users/{uid}/watchlist/{mediaKey}` e `users/{uid}/ratings/{mediaKey}`. **Publique a versão atualizada no Firebase Console** antes de testar essas ações. Elas não são publicadas automaticamente.
+As regras em `firestore.rules` cobrem `users/{uid}/watchlist/{mediaKey}` e `users/{uid}/ratings/{mediaKey}`, incluindo os campos opcionais de avaliação, review, spoiler e PulseScore. Documentos antigos de avaliação continuam aceitos. **Publique a versão atualizada no Firebase Console** antes de testar essas ações. Elas não são publicadas automaticamente.
+
+## Descoberta por MoodTag
+
+Os chips da Home aplicam filtros fixos de gêneros TMDB via Discover para filmes e séries, ordenados por popularidade. O mapeamento é: Tenso = Thriller (filme 53) / Mistério (série 9648); Leve = Comédia (35/35); Reflexivo = Drama (18/18); Épico = Aventura (filme 12) / Ação e Aventura (série 10759); Emocionante = Romance (filme 10749) / Drama (série 18). Esta regra é determinística e não usa IA nem dados sociais. A seção "Em alta no TMDB" usa tendências semanais do TMDB.
 
 Em um clone novo, execute a etapa 4 antes do build, pois `lib/firebase_options.dart` não é versionado. Depois, execute o app para validar cadastro, criação do documento `users/{uid}`, login, restauração de sessão e logout contra seu projeto real.
 
@@ -44,4 +48,4 @@ flutter build apk --debug --dart-define-from-file=config/local.json
 
 O APK release exige assinatura própria antes de distribuição. A configuração Android atual ainda usa assinatura de debug no tipo `release`.
 
-As quatro telas CP4 continuam como protótipo visual; dados e métricas nelas exibidos são demonstrativos. O documento Firestore de usuário fica preparado para integração futura sem alterar essas telas nesta etapa.
+Diário, Watchlist e métricas do Perfil usam os registros do usuário no Firestore. O destaque PulseScore e o exemplo Spoiler Safe da Home permanecem como peças visuais do CP4; não representam dados comunitários reais. Feed social, PulseMatch e listas personalizadas ainda não estão implementados.

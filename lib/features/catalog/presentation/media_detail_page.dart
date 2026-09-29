@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../catalog_dependencies.dart';
 import '../data/models/media_item.dart';
+import '../data/models/rating_entry.dart';
 import '../data/repositories/catalog_repository.dart';
 import 'widgets/media_artwork.dart';
+import 'widgets/personal_review_card.dart';
+import 'widgets/rating_sheet.dart';
 import 'widgets/watchlist_button.dart';
 
 class MediaDetailPage extends StatefulWidget {
@@ -23,7 +26,7 @@ class MediaDetailPage extends StatefulWidget {
 
 class _MediaDetailPageState extends State<MediaDetailPage> {
   MediaItem? _details;
-  double? _rating;
+  RatingEntry? _entry;
   String? _error;
   bool _loading = true;
   bool _saving = false;
@@ -44,13 +47,11 @@ class _MediaDetailPageState extends State<MediaDetailPage> {
         widget.media.mediaType,
         widget.media.tmdbId,
       );
-      final rating = await widget.dependencies.ratings.getRating(
-        media.mediaKey,
-      );
+      final entry = await widget.dependencies.ratings.getEntry(media.mediaKey);
       if (!mounted) return;
       setState(() {
         _details = media;
-        _rating = rating;
+        _entry = entry;
       });
     } catch (error) {
       if (!mounted) return;
@@ -67,18 +68,21 @@ class _MediaDetailPageState extends State<MediaDetailPage> {
   Future<void> _rate() async {
     final media = _details;
     if (media == null) return;
-    final selected = await showModalBottomSheet<double>(
+    final selected = await showModalBottomSheet<RatingDraft>(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
-      builder: (context) => _RatingSheet(initialRating: _rating),
+      builder: (context) => RatingSheet(initial: _entry),
     );
     if (selected == null || !mounted) return;
     setState(() => _saving = true);
     try {
       await widget.dependencies.ratings.save(media, selected);
+      final updated = await widget.dependencies.ratings.getEntry(
+        media.mediaKey,
+      );
       if (!mounted) return;
-      setState(() => _rating = selected);
+      setState(() => _entry = updated);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Avaliação salva. Item removido da Watchlist.'),
@@ -229,79 +233,20 @@ class _MediaDetailPageState extends State<MediaDetailPage> {
                         )
                       : const Icon(Icons.star_rounded),
                   label: Text(
-                    _rating == null
+                    _entry == null
                         ? 'Assistido / Avaliar'
-                        : 'Sua nota: ${_rating!.toStringAsFixed(1)} • Alterar',
+                        : 'Sua nota: ${_entry!.rating.toStringAsFixed(1)} • Alterar',
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RatingSheet extends StatefulWidget {
-  const _RatingSheet({required this.initialRating});
-
-  final double? initialRating;
-
-  @override
-  State<_RatingSheet> createState() => _RatingSheetState();
-}
-
-class _RatingSheetState extends State<_RatingSheet> {
-  double? _selected;
-
-  @override
-  void initState() {
-    super.initState();
-    _selected = widget.initialRating;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Marcar como assistido',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Escolha uma nota de 0.5 a 5.0.',
-              style: TextStyle(color: AppColors.textSecondary),
-            ),
-            const SizedBox(height: 18),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (var halfStars = 1; halfStars <= 10; halfStars++)
-                  ChoiceChip(
-                    label: Text((halfStars / 2).toStringAsFixed(1)),
-                    selected: _selected == halfStars / 2,
-                    onSelected: (_) =>
-                        setState(() => _selected = halfStars / 2),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            FilledButton(
-              onPressed: _selected == null
-                  ? null
-                  : () => Navigator.of(context).pop(_selected),
-              child: const Text('Salvar avaliação'),
-            ),
+            if (_entry?.hasReview == true) ...[
+              const SizedBox(height: 24),
+              PersonalReviewCard(
+                key: ValueKey(_entry!.reviewText),
+                entry: _entry!,
+              ),
+            ],
           ],
         ),
       ),

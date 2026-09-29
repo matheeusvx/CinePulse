@@ -1,263 +1,202 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/spoiler_safe_card.dart';
+import '../../catalog/catalog_dependencies.dart';
+import '../../catalog/data/models/mood_tag.dart';
+import '../../catalog/data/models/rating_entry.dart';
+import '../../catalog/data/models/watchlist_entry.dart';
+import '../../catalog/presentation/widgets/personal_review_card.dart';
+import '../data/models/profile.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.onSignOut});
-
+  const ProfilePage({super.key, required this.onSignOut, this.dependencies});
   final Future<void> Function() onSignOut;
+  final CatalogDependencies? dependencies;
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 32),
-      children: [
-        // Profile Header
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(3),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [AppColors.primary, AppColors.secondary],
-                ),
-              ),
-              child: const CircleAvatar(
-                radius: 32,
-                backgroundColor: Color(0xFF1E1B4B),
-                child: Text(
-                  'CM',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Cauã Ferreira Muniz',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.3,
-                        ),
-                  ),
-                  const Text(
-                    '@caua.muniz • Brand & UI Designer',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              tooltip: 'Configurações',
-              onPressed: () {},
-              icon: const Icon(Icons.settings_outlined,
-                  color: AppColors.textSecondary),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-
-        // Metrics Row
-        const Row(
-          children: [
-            Expanded(child: _Metric(value: '142', label: 'Assistidos')),
-            SizedBox(width: 10),
-            Expanded(child: _Metric(value: '38', label: 'Reviews')),
-            SizedBox(width: 10),
-            Expanded(child: _Metric(value: '6', label: 'Listas')),
-          ],
-        ),
-        const SizedBox(height: 24),
-
-        // DIFFERENTIAL: PulseMatch Card
-        Container(
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.surfaceStrong),
-          ),
-          child: Row(
+  Widget build(BuildContext context) => StreamBuilder<Profile?>(
+    stream: dependencies?.profile?.watchMine(),
+    builder: (context, profileSnapshot) => StreamBuilder<List<RatingEntry>>(
+      stream: dependencies?.ratings.watchAll(),
+      builder: (context, ratingSnapshot) => StreamBuilder<List<WatchlistEntry>>(
+        stream: dependencies?.watchlist.watchAll(),
+        builder: (context, watchlistSnapshot) {
+          final profile = profileSnapshot.data;
+          final ratings = ratingSnapshot.data ?? const <RatingEntry>[];
+          final watchlist = watchlistSnapshot.data ?? const <WatchlistEntry>[];
+          final email = dependencies?.profile?.currentEmail;
+          final name = profile?.displayName?.trim().isNotEmpty == true
+              ? profile!.displayName!.trim()
+              : (email?.isNotEmpty == true ? email! : 'Seu perfil');
+          final username = profile?.username?.trim();
+          final reviews = ratings.where((entry) => entry.hasReview).toList();
+          final average = ratings.isEmpty
+              ? null
+              : ratings.map((entry) => entry.rating).reduce((a, b) => a + b) /
+                    ratings.length;
+          final counts = <MoodTag, int>{};
+          for (final entry in ratings) {
+            for (final tag in entry.moodTags) {
+              counts[tag] = (counts[tag] ?? 0) + 1;
+            }
+          }
+          final favoriteMoods = counts.entries.toList()
+            ..sort((a, b) => b.value.compareTo(a.value));
+          final loading =
+              dependencies != null &&
+              (profileSnapshot.connectionState == ConnectionState.waiting ||
+                  ratingSnapshot.connectionState == ConnectionState.waiting ||
+                  watchlistSnapshot.connectionState == ConnectionState.waiting);
+          final error =
+              profileSnapshot.hasError ||
+              ratingSnapshot.hasError ||
+              watchlistSnapshot.hasError;
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 32),
             children: [
-              // Circular Gauge
-              const Stack(
-                alignment: Alignment.center,
+              Row(
                 children: [
-                  SizedBox(
-                    width: 76,
-                    height: 76,
-                    child: CircularProgressIndicator(
-                      value: 0.88,
-                      strokeWidth: 7,
-                      backgroundColor: AppColors.surfaceStrong,
-                      valueColor:
-                          AlwaysStoppedAnimation(AppColors.secondary),
+                  Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [AppColors.primary, AppColors.secondary],
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 32,
+                      backgroundColor: const Color(0xFF1E1B4B),
+                      child: Text(
+                        name.isEmpty ? '?' : name[0].toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 20,
+                        ),
+                      ),
                     ),
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '88%',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.textPrimary,
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w900),
                         ),
-                      ),
-                      Text(
-                        'MATCH',
-                        style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.secondary,
-                        ),
-                      ),
-                    ],
+                        if (username?.isNotEmpty == true)
+                          Text(
+                            '@$username',
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 24),
+              if (loading) const Center(child: CircularProgressIndicator()),
+              if (error)
+                const Text(
+                  'Não foi possível carregar seu perfil. Verifique a conexão.',
+                ),
+              if (!loading && !error)
+                Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        'PULSE MATCH™',
-                        style: TextStyle(
-                          color: Color(0xFFC4B5FD),
-                          fontSize: 9,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'Alta afinidade comunitária',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
-                    ),
-                    const SizedBox(height: 2),
-                    const Text(
-                      'Sintonia com o grupo em Ficção Científica, Suspense e Drama.',
-                      style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 11,
-                          height: 1.3),
+                    _Metric(value: '${ratings.length}', label: 'Assistidos'),
+                    const SizedBox(width: 8),
+                    _Metric(value: '${reviews.length}', label: 'Reviews'),
+                    const SizedBox(width: 8),
+                    _Metric(value: '${watchlist.length}', label: 'Watchlist'),
+                    const SizedBox(width: 8),
+                    _Metric(
+                      value: average?.toStringAsFixed(1) ?? '—',
+                      label: 'Nota média',
                     ),
                   ],
                 ),
+              const SizedBox(height: 24),
+              const Text(
+                'MoodTags mais usadas',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
               ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 26),
-
-        // Diário Recente
-        const Text(
-          'Diário Recente',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-        ),
-        const SizedBox(height: 12),
-        const SpoilerSafeCard(
-          movieTitle: 'Duna: Parte 2 (2024)',
-          reviewAuthor: 'Avaliado com 4.8 estrelas',
-          rating: 4.8,
-          spoilerText:
-              'Obra-prima audiovisual incontestável. A direção de som nos vermes de areia e o arco de Paul Atreides elevam a ficção científica.',
-        ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.surfaceStrong),
-          ),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Interestelar (2014)',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+              const SizedBox(height: 8),
+              if (favoriteMoods.isEmpty)
+                const Text(
+                  'Avalie títulos e escolha MoodTags para ver seu progresso.',
+                  style: TextStyle(color: AppColors.textSecondary),
+                )
+              else
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    for (final mood in favoriteMoods.take(3))
+                      Chip(label: Text('${mood.key.label} • ${mood.value}')),
+                  ],
+                ),
+              const SizedBox(height: 24),
+              const Text(
+                'Reviews recentes',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 12),
+              if (reviews.isEmpty)
+                const Text(
+                  'Suas reviews aparecerão aqui depois da primeira avaliação com texto.',
+                  style: TextStyle(color: AppColors.textSecondary),
+                )
+              else
+                for (final entry in reviews.take(3)) ...[
+                  PersonalReviewCard(
+                    key: ValueKey(entry.mediaKey),
+                    entry: entry,
+                    heading:
+                        '${entry.title} • ${entry.rating.toStringAsFixed(1)} ★',
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.star_rounded,
-                          color: AppColors.warning, size: 18),
-                      SizedBox(width: 4),
-                      Text(
-                        '5.0',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 12),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 12),
                 ],
-              ),
-              SizedBox(height: 8),
-              Text(
-                '"A trilha sonora de Hans Zimmer e a viagem no buraco de minhoca continuam insuperáveis no cinema moderno."',
-                style: TextStyle(
-                    color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+              const SizedBox(height: 16),
+              TextButton.icon(
+                onPressed: () async {
+                  try {
+                    await onSignOut();
+                  } catch (_) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Não foi possível sair. Tente novamente.',
+                          ),
+                        ),
+                      );
+                    }
+                  }
+                },
+                icon: const Icon(Icons.logout_rounded),
+                label: const Text('Sair da conta'),
               ),
             ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        TextButton.icon(
-          onPressed: () async {
-            try {
-              await onSignOut();
-            } catch (_) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Não foi possível sair. Tente novamente.')),
-                );
-              }
-            }
-          },
-          icon: const Icon(Icons.logout_rounded),
-          label: const Text('Sair da conta'),
-        ),
-      ],
-    );
-  }
+          );
+        },
+      ),
+    ),
+  );
 }
 
 class _Metric extends StatelessWidget {
   const _Metric({required this.value, required this.label});
-
   final String value;
   final String label;
-
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+  Widget build(BuildContext context) => Expanded(
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 3),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
@@ -275,12 +214,11 @@ class _Metric extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: AppColors.textSecondary,
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
+              fontSize: 10,
             ),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 }

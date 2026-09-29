@@ -35,9 +35,12 @@ class _AppShellState extends State<AppShell> {
               index: _currentIndex,
               children: [
                 HomePage(catalogDependencies: widget.catalogDependencies),
-                const DiaryPage(),
-                const ListsPage(),
-                ProfilePage(onSignOut: widget.onSignOut),
+                DiaryPage(dependencies: widget.catalogDependencies),
+                ListsPage(dependencies: widget.catalogDependencies),
+                ProfilePage(
+                  onSignOut: widget.onSignOut,
+                  dependencies: widget.catalogDependencies,
+                ),
               ],
             ),
           ),

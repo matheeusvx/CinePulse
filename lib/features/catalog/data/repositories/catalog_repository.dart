@@ -1,9 +1,12 @@
 import '../models/media_item.dart';
+import '../models/mood_tag.dart';
 
 abstract class CatalogRepository {
   bool get isConfigured => true;
   Future<List<MediaItem>> search(String query);
   Future<MediaItem> getDetails(MediaType type, int tmdbId);
+  Future<List<MediaItem>> trending();
+  Future<List<MediaItem>> byMood(MoodTag mood);
 }
 
 class CatalogException implements Exception {

@@ -3,11 +3,29 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/profile.dart';
 
-class ProfileRepository {
+abstract class ProfileDataRepository {
+  String? get currentEmail;
+  Stream<Profile?> watchMine();
+}
+
+class ProfileRepository implements ProfileDataRepository {
   const ProfileRepository(this._auth, this._firestore);
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
+
+  @override
+  String? get currentEmail => _auth.currentUser?.email;
+
+  @override
+  Stream<Profile?> watchMine() {
+    final user = _auth.currentUser;
+    if (user == null) return Stream.value(null);
+    return _document(user.uid).snapshots().map((snapshot) {
+      final data = snapshot.data();
+      return data == null ? null : Profile.fromFirestore(user.uid, data);
+    });
+  }
 
   DocumentReference<Map<String, dynamic>> _document(String uid) =>
       _firestore.collection('users').doc(uid);

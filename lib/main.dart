@@ -36,6 +36,7 @@ Future<void> main() async {
           ),
           watchlist: FirestoreWatchlistRepository(auth, firestore),
           ratings: FirestoreRatingRepository(auth, firestore),
+          profile: ProfileRepository(auth, firestore),
         ),
       ),
     );
