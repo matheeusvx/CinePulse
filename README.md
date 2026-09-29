@@ -3,8 +3,8 @@
 > **Assista. Avalie. Conecte.**  
 > *O pulso da sua experiência com filmes e séries.*
 
-[![Flutter](https://img.shields.io/badge/Flutter-3.3+-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-3.3+-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-3.35+-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.9+-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![Material Design 3](https://img.shields.io/badge/Material%20Design-3-7B1FA2?style=for-the-badge&logo=materialdesign&logoColor=white)](https://m3.material.io)
 [![License](https://img.shields.io/badge/License-Academic-blue?style=for-the-badge)](LICENSE)
 
@@ -16,7 +16,7 @@ O **CinePulse** é um aplicativo mobile desenvolvido em **Flutter** voltado para
 
 Atualmente, quem consome audiovisual sofre com notas genéricas que não refletem o gosto pessoal, medo de spoilers em fóruns abertos e a fragmentação entre notas no bloco de notas, grupos de WhatsApp e múltiplos serviços de streaming. O CinePulse resolve isso centralizando o diário do usuário e aplicando inteligência social de recomendação.
 
-Este repositório consolida a entrega do **Checkpoint 4 — Idealização, Arquitetura e Protótipo do App**, estruturado com arquitetura escalável e design system pronto para as implementações de backend e persistência nos Checkpoints 5 e 6.
+Este repositório preserva a entrega do **Checkpoint 4 — Idealização, Arquitetura e Protótipo do App** e inclui a fundação Android e autenticação Supabase para os Checkpoints 5 e 6.
 
 ---
 
@@ -53,7 +53,7 @@ Atendendo aos critérios e diretrizes do projeto, documentamos a justificativa t
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Framework:** [Flutter](https://flutter.dev/) (SDK `>=3.3.0 <4.0.0`)
+- **Framework:** [Flutter](https://flutter.dev/) 3.35+ (Dart `>=3.9.0 <4.0.0`)
 - **Linguagem:** [Dart](https://dart.dev/)
 - **Design System:** Material Design 3 customizado com Dark Theme imersivo
 - **Ícones:** `cupertino_icons` e Material Symbols
@@ -84,11 +84,15 @@ cinepulse/
 │   ├── 08-checklist-checkpoint-4.md # Validação de critérios acadêmicos
 │   ├── 09-roadmap-cp5-cp6.md # Planejamento das próximas sprints
 │   └── dossie-product-ux.html # Relatório visual interativo
+├── android/                # Projeto nativo Android para build/APK
+├── config/
+│   └── local.example.json  # Exemplo de configuração Supabase
 ├── lib/
 │   ├── core/
 │   │   ├── theme/           # Tokens de cores, temas escuros e tipografia
 │   │   └── widgets/         # Componentes compartilhados (cards, botões, chips)
 │   ├── features/
+│   │   ├── auth/            # Login, cadastro, sessão e AuthGate
 │   │   ├── home/            # Tela Descobrir, destaques, trilhas e carrosséis
 │   │   ├── diary/           # Diário de consumo e registro de assistidos
 │   │   ├── lists/           # Watchlist e listas temáticas
@@ -97,6 +101,7 @@ cinepulse/
 ├── test/
 │   └── widget_test.dart     # Bateria de testes de widget
 ├── pubspec.yaml             # Manifesto de dependências e assets
+├── SETUP.md                 # Configuração local e comandos Flutter
 └── README.md                # Documentação principal
 ```
 
@@ -129,33 +134,27 @@ Siga o passo a passo abaixo no seu terminal:
    cd CinePulse
    ```
 
-2. **Baixe as dependências do projeto:**
+2. **Configure o Supabase seguindo [`SETUP.md`](SETUP.md)** e crie `config/local.json` com a URL e a chave pública anon.
+
+3. **Baixe as dependências do projeto:**
    ```bash
    flutter pub get
    ```
 
-3. **Verifique a integridade e padrões de código (Linter):**
+4. **Verifique a integridade e padrões de código (Linter):**
    ```bash
    flutter analyze
    ```
 
-4. **Execute os testes automatizados:**
+5. **Execute os testes automatizados:**
    ```bash
    flutter test
    ```
 
-5. **Inicie o aplicativo:**
+6. **Inicie o aplicativo Android:**
    - No emulador padrão ou dispositivo USB conectado:
      ```bash
-     flutter run
-     ```
-   - No navegador Google Chrome (modo Web Desktop):
-     ```bash
-     flutter run -d chrome
-     ```
-   - No Windows nativo (se habilitado):
-     ```bash
-     flutter run -d windows
+     flutter run --dart-define-from-file=config/local.json
      ```
 
 ---

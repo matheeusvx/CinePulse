@@ -1,48 +1,36 @@
-# Setup local do Flutter
+# Setup local do CinePulse
+
+O repositório já contém a estrutura Android. Não é necessário criar outro projeto Flutter nem copiar arquivos.
 
 ## Pré-requisitos
 
-- Flutter instalado.
-- Android Studio ou VS Code com extensão Flutter/Dart.
-- Android SDK configurado e/ou dispositivo físico com depuração USB.
+- Flutter 3.35+ (Dart 3.9+) e Android SDK instalados (`flutter doctor`).
+- Um projeto Supabase com autenticação por e-mail/senha habilitada.
 
-## Passos
+## Configurar Supabase
 
-Se ainda não existe projeto Flutter nativo:
+1. No painel Supabase, copie **Project URL** e a chave **publishable/anon** do projeto. Nunca use `service_role` nem secret key no aplicativo.
+2. Copie `config/local.example.json` para `config/local.json` e preencha `SUPABASE_URL` e `SUPABASE_ANON_KEY`. `config/local.json` está no `.gitignore`. A chave anon é pública por natureza; a segurança dos dados depende das políticas RLS.
+3. Execute `docs/supabase_profiles.sql` no SQL Editor do projeto. O script cria `profiles`, índices, políticas RLS, atualização de `updated_at` e criação automática de perfil para usuários novos. Se o projeto já possui tabelas/triggers com estes nomes, revise antes de executar.
+4. Em **Authentication > Providers**, confirme que o provedor Email está ativo. Se **Confirm email** estiver ativo, o cadastro mostra uma orientação para confirmar o e-mail antes do login. Configure o template/remetente de e-mail conforme o ambiente.
 
-```bash
-flutter create cinepulse
-cd cinepulse
-```
+O arquivo local é entregue ao Flutter durante o build. Portanto, a URL e a chave pública ficam no binário gerado. Não coloque credenciais privilegiadas nesse arquivo.
 
-Copie deste pacote para o projeto criado:
+## Executar e validar
 
-- `lib/`
-- `assets/`
-- `test/`
-- `docs/`
-- `README.md`
-- `pubspec.yaml`
-- `analysis_options.yaml`
-
-Depois:
-
-```bash
-flutter doctor
+```powershell
 flutter pub get
 flutter analyze
 flutter test
-flutter run
+flutter run --dart-define-from-file=config/local.json
 ```
 
-## Critério de aceite técnico do CP4
+Para gerar APK de desenvolvimento:
 
-- `flutter analyze` sem erros.
-- `flutter test` aprovado.
-- App abre sem crash.
-- Navegação inferior alterna entre Descobrir, Diário, Listas e Perfil.
-- Layout não estoura em uma tela Android comum.
+```powershell
+flutter build apk --debug --dart-define-from-file=config/local.json
+```
 
-## Se `flutter_lints` gerar conflito de versão
+O APK release exige assinatura própria antes de distribuição. A configuração Android gerada pelo Flutter ainda usa assinatura de debug no tipo `release`; substitua por uma configuração de assinatura segura quando for publicar.
 
-Use a versão sugerida automaticamente pelo `flutter pub get`, mantendo a lógica do código intacta.
+As quatro telas CP4 seguem como protótipo visual. Dados e métricas mostrados nelas ainda são demonstrativos. O perfil Supabase e sua tabela estão preparados para integração futura, sem alterar as telas do CP4 nesta etapa.

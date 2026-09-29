@@ -6,7 +6,9 @@ import '../../profile/presentation/profile_page.dart';
 import 'home_page.dart';
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({super.key, required this.onSignOut});
+
+  final Future<void> Function() onSignOut;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -14,13 +16,6 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
-
-  static const _pages = [
-    HomePage(),
-    DiaryPage(),
-    ListsPage(),
-    ProfilePage(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +27,12 @@ class _AppShellState extends State<AppShell> {
             constraints: const BoxConstraints(maxWidth: 1240),
             child: IndexedStack(
               index: _currentIndex,
-              children: _pages,
+              children: [
+                const HomePage(),
+                const DiaryPage(),
+                const ListsPage(),
+                ProfilePage(onSignOut: widget.onSignOut),
+              ],
             ),
           ),
         );
@@ -40,24 +40,24 @@ class _AppShellState extends State<AppShell> {
         return Scaffold(
           body: SafeArea(
             child: Row(
-            children: [
-              SizedBox(
-                width: isWide ? 88 : 0,
-                child: isWide
-                    ? _DesktopNavigation(
-                        selectedIndex: _currentIndex,
-                        onDestinationSelected: _selectPage,
-                      )
-                    : null,
-              ),
-              SizedBox(
-                width: isWide ? 1 : 0,
-                child: isWide
-                    ? const VerticalDivider(width: 1, thickness: 1)
-                    : null,
-              ),
-              Expanded(child: content),
-            ],
+              children: [
+                SizedBox(
+                  width: isWide ? 88 : 0,
+                  child: isWide
+                      ? _DesktopNavigation(
+                          selectedIndex: _currentIndex,
+                          onDestinationSelected: _selectPage,
+                        )
+                      : null,
+                ),
+                SizedBox(
+                  width: isWide ? 1 : 0,
+                  child: isWide
+                      ? const VerticalDivider(width: 1, thickness: 1)
+                      : null,
+                ),
+                Expanded(child: content),
+              ],
             ),
           ),
           bottomNavigationBar: isWide

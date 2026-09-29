@@ -4,7 +4,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/spoiler_safe_card.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, required this.onSignOut});
+
+  final Future<void> Function() onSignOut;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,8 @@ class ProfilePage extends StatelessWidget {
             IconButton(
               tooltip: 'Configurações',
               onPressed: () {},
-              icon: const Icon(Icons.settings_outlined, color: AppColors.textSecondary),
+              icon: const Icon(Icons.settings_outlined,
+                  color: AppColors.textSecondary),
             ),
           ],
         ),
@@ -89,7 +92,7 @@ class ProfilePage extends StatelessWidget {
           child: Row(
             children: [
               // Circular Gauge
-              Stack(
+              const Stack(
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
@@ -99,10 +102,11 @@ class ProfilePage extends StatelessWidget {
                       value: 0.88,
                       strokeWidth: 7,
                       backgroundColor: AppColors.surfaceStrong,
-                      valueColor: const AlwaysStoppedAnimation(AppColors.secondary),
+                      valueColor:
+                          AlwaysStoppedAnimation(AppColors.secondary),
                     ),
                   ),
-                  const Column(
+                  Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
@@ -131,7 +135,8 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(6),
@@ -148,12 +153,16 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 6),
                     const Text(
                       'Alta afinidade comunitária',
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                      style:
+                          TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                     ),
                     const SizedBox(height: 2),
                     const Text(
                       'Sintonia com o grupo em Ficção Científica, Suspense e Drama.',
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 11, height: 1.3),
+                      style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 11,
+                          height: 1.3),
                     ),
                   ],
                 ),
@@ -196,11 +205,13 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.star_rounded, color: AppColors.warning, size: 18),
+                      Icon(Icons.star_rounded,
+                          color: AppColors.warning, size: 18),
                       SizedBox(width: 4),
                       Text(
                         '5.0',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ],
                   ),
@@ -209,10 +220,28 @@ class ProfilePage extends StatelessWidget {
               SizedBox(height: 8),
               Text(
                 '"A trilha sonora de Hans Zimmer e a viagem no buraco de minhoca continuam insuperáveis no cinema moderno."',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.4),
+                style: TextStyle(
+                    color: AppColors.textSecondary, fontSize: 12, height: 1.4),
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 16),
+        TextButton.icon(
+          onPressed: () async {
+            try {
+              await onSignOut();
+            } catch (_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Não foi possível sair. Tente novamente.')),
+                );
+              }
+            }
+          },
+          icon: const Icon(Icons.logout_rounded),
+          label: const Text('Sair da conta'),
         ),
       ],
     );
