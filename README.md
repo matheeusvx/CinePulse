@@ -3,7 +3,6 @@
 > **Assista. Avalie. Conecte.**
 > O pulso da sua experiência com filmes e séries.
 
-**[README](README.md) | [Propósito](PROPOSITO.md) | [Contribuindo](CONTRIBUTING.md)**
 
 ![Logo oficial do CinePulse](assets/brand/cinepulse_logo_oficial.png)
 
